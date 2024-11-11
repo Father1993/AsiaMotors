@@ -75,6 +75,10 @@ body::-webkit-scrollbar-thumb:hover {
     list-style-type: none;
 }
 
+.margin__center {
+    margin: 0 auto !important;
+}
+
 /* @font-face {
   font-display: swap;
   font-family: Rostelecom Basis;

@@ -24,7 +24,7 @@ const PagesLayout = ({ children }: { children: React.ReactNode }) => {
             <Toaster position="top-right" />
             <Next13ProgressBar height="4px" color="#9466FF" showOnShallow />
             <Layout>
-                <main className="pt-24">{children}</main>
+                <main className="pt-40">{children}</main>
             </Layout>
             <AnimatePresence>
                 {cookieAlertOpen && (
