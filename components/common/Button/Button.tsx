@@ -1,4 +1,4 @@
-import { ButtonProps } from '@/types/common'
+import { ButtonProps } from '@/shared/types/common'
 
 export const Button = ({
     variant = 'primary',
@@ -12,7 +12,7 @@ export const Button = ({
         rounded-lg font-medium
         ${variant === 'primary' ? 'bg-blue-600 text-white' : 'bg-gray-200'}
         ${size === 'lg' ? 'px-8 py-4' : 'px-6 py-2'}
-      `}
+    `}
             {...props}
         >
             {children}

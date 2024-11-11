@@ -1,12 +1,11 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable max-len */
-'use client'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
     title: 'Страница не найдена | AsiaMotors',
     description:
-        'К сожалению, запрашиваемая страница не найдена. Вернитесь на главную страницу AsiaMotors для поиска нужной информации о грузоперевозках в Хабаровске.',
+        'К сожалению, запрашиваемая страница не найдена. Вернитесь на главную страницу AsiaMotors для поиска нужной информации',
     robots: {
         index: false,
         follow: false,
@@ -14,7 +13,7 @@ export const metadata: Metadata = {
     openGraph: {
         title: '404 - Страница не найдена | AsiaMotors',
         description:
-            'Извините, запрашиваемая страница не существует. Вернитесь на главную AsiaMotors для информации о грузоперевозках в Хабаровске и ДФО. Перевозка 27. Перевозка27',
+            'Извините, запрашиваемая страница не существует. Вернитесь на главную AsiaMotors для информации. Азиа моторс. АзиаМоторс',
         type: 'website',
         url: 'https://AsiaMotors.ru/404',
         images: [
@@ -30,7 +29,7 @@ export const metadata: Metadata = {
         card: 'summary',
         title: '404 - Страница не найдена | AsiaMotors',
         description:
-            'Упс! Страница, которую вы ищете, не существует. Вернитесь на главную перевозка27 для информации о наших услугах грузоперевозок.',
+            'Упс! Страница, которую вы ищете, не существует. Вернитесь на главную AsiaMotors',
         images: '/img/android-chrome-192x192.png',
     },
 }

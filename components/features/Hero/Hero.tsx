@@ -1,4 +1,4 @@
-import { Button } from '@/components/common/Button'
+import { Button } from '@/components/common/Button/Button'
 
 const Hero: React.FC = () => {
     return (
@@ -7,7 +7,7 @@ const Hero: React.FC = () => {
             role="banner"
             aria-label="Главный баннер"
         >
-            <div className="container-wrapper h-full flex items-center">
+            <div className="container h-full flex items-center">
                 <div className="max-w-3xl">
                     <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6">
                         Покупка автомобилей из Китая

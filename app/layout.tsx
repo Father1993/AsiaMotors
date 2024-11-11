@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from 'next'
 import './globalStyles/normalize.css'
 import './globalStyles/globals.css'
 import './globalStyles/cookie-popup.css'
+import PagesLayout from '@/components/layout/PageLayout'
 
 export const metadata: Metadata = {
     metadataBase: new URL('https://asiamotors.su'),
@@ -98,7 +99,10 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="ru">
-            <body>{children}</body>
+            <head />
+            <body>
+                <PagesLayout>{children}</PagesLayout>
+            </body>
         </html>
     )
 }

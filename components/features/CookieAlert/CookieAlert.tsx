@@ -1,31 +1,26 @@
-import toast from 'react-hot-toast'
+'use client'
 
-const CookieAlert = ({
-    setCookieAlertOpen,
-}: {
-    setCookieAlertOpen: (arg0: boolean) => void
-}) => {
+import toast from 'react-hot-toast'
+import { CookieAlertProps } from '@/shared/types/common'
+
+const CookieAlert = ({ setCookieAlertOpen }: CookieAlertProps) => {
     const handleAcceptCookie = () => {
-        document.cookie =
-            'CookieBy=Perevozka27.ru; max-age=' + 60 * 60 * 24 * 30
+        document.cookie = 'CookieBy=AsiaMotors; max-age=' + 60 * 60 * 24 * 30
 
         if (document.cookie) {
             setCookieAlertOpen(false)
         } else {
             toast.error(
-                // eslint-disable-next-line max-len
-                'Файл cookie не может быть установлен! Пожалуйста, разблокируйте этот сайт с помощью настроек cookie ваше браузера...'
+                'Файл cookie не может быть установлен! Пожалуйста, разблокируйте этот сайт с помощью настроек cookie вашего браузера.'
             )
         }
     }
-
-    const handleCloseAlert = () => setCookieAlertOpen(false)
 
     return (
         <div className="container cookie-popup__container">
             <button
                 className="btn-reset cookie-popup__close"
-                onClick={handleCloseAlert}
+                onClick={() => setCookieAlertOpen(false)}
             />
             <p className="cookie-popup__text">
                 Мы используем файлы cookie для улучшения работы сайта, анализа

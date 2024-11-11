@@ -30,7 +30,7 @@
         "**/*.tsx",
         ".next/types/**/*.ts",
         "app/catalog/layout.tsx",
-        "components/common/CookieAlert"
+        "components/features/CookieAlert"
     ],
     "exclude": ["node_modules"]
 }
