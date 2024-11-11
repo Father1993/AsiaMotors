@@ -17,7 +17,7 @@ const Header = () => {
                 className={`fixed w-full z-40 transition-all duration-300 ${
                     isScrolled
                         ? 'bg-white shadow-md py-1 lg:py-2'
-                        : 'bg-transparent py-2 lg:py-4'
+                        : 'bg-transparent py-0 lg:py-4'
                 }`}
             >
                 <div className="container max-w-6xl mx-auto px-4">
@@ -29,7 +29,7 @@ const Header = () => {
                         {/* Мобильная кнопка звонка */}
                         <div className="lg:hidden">
                             <a
-                                href="tel:+78005553535"
+                                href="tel:+74212935555"
                                 className="flex items-center justify-center w-10 h-10 bg-red-600 hover:bg-red-700 text-white rounded-full transition-colors"
                             >
                                 <PhoneIcon className="w-5 h-5" />
@@ -53,14 +53,11 @@ const Header = () => {
                         <div className="hidden lg:flex items-center space-x-6">
                             <div className="text-right">
                                 <a
-                                    href="tel:+79294156555"
+                                    href="tel:+74212935555"
                                     className="text-lg font-semibold text-gray-900 hover:text-red-600 transition-colors"
                                 >
-                                    8 929 415 65 55
+                                    +7 (4212) 93-5555
                                 </a>
-                                <p className="text-sm text-gray-500">
-                                    Ежедневно с 9:00 до 21:00
-                                </p>
                             </div>
                             <button className="flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white px-6 py-2.5 rounded-xl transition-colors">
                                 <PhoneIcon className="w-5 h-5" />

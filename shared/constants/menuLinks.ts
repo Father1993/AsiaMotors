@@ -11,6 +11,7 @@ export const NAVIGATION = [
     { name: 'Главная', href: '/' },
     { name: 'Каталог', href: '/catalog' },
     { name: 'Как купить', href: '/how-to-buy' },
+    { name: 'Блог', href: '/contacts' },
     { name: 'О компании', href: '/about' },
     { name: 'Контакты', href: '/contacts' },
 ]
