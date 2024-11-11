@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --background: #ffffff;
+    --foreground: #171717;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background: #0a0a0a;
+        --foreground: #ededed;
+    }
+}
+
+body {
+    font-weight: 400;
+    color: #1f2937;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, Helvetica, sans-serif;
+
+    /* Добавляем градиентный фон */
+    background: linear-gradient(
+        135deg,
+        #dfd4ff 0%,
+        #ffffff 25%,
+        #9bafff 50%,
+        #c0c6d8 75%,
+        #a046b9 100%
+    );
+    background-attachment: fixed; /* Фиксируем фон, чтобы он не прокручивался */
+}
+
+body::-webkit-scrollbar {
+    width: 8px;
+}
+
+body::-webkit-scrollbar-track {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: #e63946;
+    border-radius: 3px;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background-color: #ff4d5e;
+}
+
+.container {
+    max-width: 1385px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.btn-reset {
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+}
+
+.list-reset {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+/* @font-face {
+  font-display: swap;
+  font-family: Rostelecom Basis;
+  font-style: normal;
+  font-weight: 700;
+  src: url('../../public/fonts/Rostelecom-Basis-Bold.woff') format('woff');
+}
+
+@font-face {
+  font-display: swap;
+  font-family: Rostelecom Basis;
+  font-style: normal;
+  font-weight: 500;
+  src: url('../../public/fonts/Rostelecom-Basis-Medium.woff') format('woff');
+}
+
+@font-face {
+  font-display: swap;
+  font-family: Rostelecom Basis;
+  font-style: normal;
+  font-weight: 400;
+  src: url('../../public/fonts/Rostelecom-Basis-Regular.woff') format('woff');
+} */

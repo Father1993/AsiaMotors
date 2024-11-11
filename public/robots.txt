@@ -1,0 +1,32 @@
+User-agent: *
+Allow: /
+
+# Запрет индексации служебных страниц
+Disallow: /admin/
+Disallow: /login/
+Disallow: /signup/
+Disallow: /404
+
+# Запрет индексации дубликатов страниц
+Disallow: /*?*
+
+# Разрешение индексации важных разделов
+Allow: /blog/
+Allow: /calculate/
+Allow: /services/
+Allow: /about/
+Allow: /contact/
+
+# Запрет индексации файлов определенных типов
+Disallow: /*.json$
+Disallow: /*.xml$
+Disallow: /*.txt$
+
+# Указание местоположения Sitemap
+Sitemap: https://asiamotors.su/sitemap.xml
+
+# Указание предпочтительного домена
+Host: https://asiamotors.su/
+
+# Частота обхода страниц роботом (в секундах)
+Crawl-delay: 10
