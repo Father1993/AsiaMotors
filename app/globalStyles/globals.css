@@ -29,11 +29,11 @@ body {
     /* Добавляем градиентный фон */
     background: linear-gradient(
         135deg,
-        #dfd4ff 0%,
+        #ffffff 0%,
         #ffffff 25%,
-        #9bafff 50%,
-        #c0c6d8 75%,
-        #a046b9 100%
+        #ffebeb 50%,
+        #fff1f1 75%,
+        #ffffff 100%
     );
     background-attachment: fixed; /* Фиксируем фон, чтобы он не прокручивался */
 }

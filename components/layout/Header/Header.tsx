@@ -17,7 +17,7 @@ const Header = () => {
                 className={`fixed w-full z-40 transition-all duration-300 ${
                     isScrolled
                         ? 'bg-white shadow-md py-1 lg:py-2'
-                        : 'bg-transparent py-2 lg:py-4'
+                        : 'bg-transparent py-1 lg:py-4'
                 }`}
             >
                 <div className="container max-w-6xl mx-auto px-4">
@@ -58,9 +58,6 @@ const Header = () => {
                                 >
                                     8 929 415 65 55
                                 </a>
-                                <p className="text-sm text-gray-500">
-                                    Ежедневно с 9:00 до 21:00
-                                </p>
                             </div>
                             <button className="flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white px-6 py-2.5 rounded-xl transition-colors">
                                 <PhoneIcon className="w-5 h-5" />
