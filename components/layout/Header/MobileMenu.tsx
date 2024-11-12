@@ -11,9 +11,9 @@ const MobileMenu = ({ onClose }: MobileMenuProps) => {
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed bottom-0 left-0 right-0 bg-white z-50 shadow-lg"
+            className="fixed bottom-0 left-0 right-0 bg-white z-50 shadow-lg w-full max-w-[100vw] overflow-hidden"
         >
-            <nav className="grid grid-cols-5 gap-2 px-4 pb-3 pt-5">
+            <nav className="grid grid-cols-5 gap-2 px-2 pb-3 pt-5">
                 {MOBILE_NAVIGATION.map((item) => {
                     const Icon = item.icon
                     return (
@@ -21,10 +21,10 @@ const MobileMenu = ({ onClose }: MobileMenuProps) => {
                             key={item.name}
                             href={item.href}
                             onClick={onClose}
-                            className="flex flex-col items-center gap-1 text-gray-600 hover:text-red-600 transition-colors"
+                            className="flex flex-col items-center gap-1 text-gray-600 hover:text-red-600 transition-colors px-1"
                         >
-                            <Icon className="w-6 h-6" />
-                            <span className="text-xs font-medium">
+                            <Icon className="w-5 h-5" />
+                            <span className="text-[10px] font-medium text-center">
                                 {item.name}
                             </span>
                         </Link>

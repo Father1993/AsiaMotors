@@ -5,6 +5,7 @@ export const CARS_DATA = [
         name: 'HONGQI E-HS9',
         price: '7 500 000 ₽',
         image: '/img/cars/HONGQI-E-HS9.webp',
+        bestseller: true,
         specs: {
             year: '2023',
             engine: '4.0L',
@@ -16,6 +17,7 @@ export const CARS_DATA = [
         name: 'TANK 500',
         price: '6 800 000 ₽',
         image: '/img/cars/tank500.jpeg',
+        bestseller: false,
         specs: {
             year: '2023',
             engine: '2.0T',
@@ -27,6 +29,7 @@ export const CARS_DATA = [
         name: 'LI L9',
         price: '8 200 000 ₽',
         image: '/img/cars/lis.jpg',
+        bestseller: true,
         specs: {
             year: '2023',
             engine: '1.5T',
@@ -38,6 +41,7 @@ export const CARS_DATA = [
         name: 'TANK',
         price: '8 200 000 ₽',
         image: '/img/cars/tank500.jpeg',
+        bestseller: false,
         specs: {
             year: '2022',
             engine: '1.5',

@@ -1,9 +1,10 @@
+import AnimatedCounter from '@/components/ui/AnimatedCounter/AnimatedCounter'
 import { BENEFITS } from '@/shared/constants/benefits'
 
 const Benefits = () => {
     return (
         <section
-            className="py-20 bg-gradient-to-b from-white to-gray-50"
+            className="py-20 bg-gradient-to-b from-white to-gray-50 "
             aria-label="Преимущества компании"
         >
             <div className="container mx-auto px-4">
@@ -40,17 +41,21 @@ const Benefits = () => {
                     ))}
                 </div>
 
-                <div className="mt-16 text-center">
-                    <div className="inline-flex items-center gap-8 p-6 bg-white rounded-2xl shadow-sm">
-                        <div className="text-center px-8 border-r border-gray-200">
+                <div className="mt-16 px-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-8 max-w-3xl mx-auto bg-white rounded-2xl shadow-sm p-6">
+                        <div className="text-center border-b sm:border-b-0 sm:border-r border-gray-200 pb-4 sm:pb-0">
                             <div className="text-4xl font-bold text-red-600">
-                                270+
+                                <AnimatedCounter
+                                    startValue={270}
+                                    maxValue={300}
+                                    className="text-4xl font-bold"
+                                />
                             </div>
                             <div className="text-sm text-gray-600">
                                 Довольных клиентов
                             </div>
                         </div>
-                        <div className="text-center px-8 border-r border-gray-200">
+                        <div className="text-center border-b sm:border-b-0 sm:border-r border-gray-200 pb-4 sm:pb-0">
                             <div className="text-4xl font-bold text-red-600">
                                 2+
                             </div>
@@ -58,7 +63,7 @@ const Benefits = () => {
                                 Года на рынке
                             </div>
                         </div>
-                        <div className="text-center px-8">
+                        <div className="text-center">
                             <div className="text-4xl font-bold text-red-600">
                                 100%
                             </div>
