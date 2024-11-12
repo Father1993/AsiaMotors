@@ -75,30 +75,61 @@ body::-webkit-scrollbar-thumb:hover {
     list-style-type: none;
 }
 
-.margin__center {
-    margin: 0 auto !important;
-}
-
-/* @font-face {
-  font-display: swap;
-  font-family: Rostelecom Basis;
-  font-style: normal;
-  font-weight: 700;
-  src: url('../../public/fonts/Rostelecom-Basis-Bold.woff') format('woff');
+@font-face {
+    font-display: swap;
+    font-family: 'Asiamotors Montserrat';
+    font-style: normal;
+    font-weight: 700;
+    src: url('/fonts/Montserrat-Bold.woff') format('woff');
 }
 
 @font-face {
-  font-display: swap;
-  font-family: Rostelecom Basis;
-  font-style: normal;
-  font-weight: 500;
-  src: url('../../public/fonts/Rostelecom-Basis-Medium.woff') format('woff');
+    font-display: swap;
+    font-family: 'Asiamotors Montserrat';
+    font-style: normal;
+    font-weight: 500;
+    src: url('/fonts/Montserrat-Medium.woff') format('woff');
 }
 
 @font-face {
-  font-display: swap;
-  font-family: Rostelecom Basis;
-  font-style: normal;
-  font-weight: 400;
-  src: url('../../public/fonts/Rostelecom-Basis-Regular.woff') format('woff');
-} */
+    font-display: swap;
+    font-family: 'Asiamotors Inter';
+    font-style: normal;
+    font-weight: 400;
+    src: url('/fonts/Inter-Regular.woff') format('woff');
+}
+
+/* Заголовки */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Asiamotors Montserrat', sans-serif;
+}
+
+/* Основной текст */
+body,
+p {
+    font-family: 'Asiamotors Inter', sans-serif;
+}
+
+/* Для жирных заголовков */
+h1,
+h2 {
+    font-weight: 700;
+}
+
+/* Для средних заголовков */
+h3,
+h4 {
+    font-weight: 500;
+}
+
+/* Для обычного текста */
+p,
+span,
+div {
+    font-weight: 400;
+}

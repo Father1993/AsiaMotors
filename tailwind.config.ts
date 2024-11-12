@@ -21,7 +21,8 @@ const config: Config = {
                 },
             },
             fontFamily: {
-                sans: ['var(--font-inter)'],
+                montserrat: ['Asiamotors Montserrat', 'sans-serif'],
+                inter: ['Asiamotors Inter', 'sans-serif'],
             },
             container: {
                 center: true,
