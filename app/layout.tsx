@@ -1,9 +1,9 @@
 /* eslint-disable max-len */
 import type { Metadata, Viewport } from 'next'
+import PagesLayout from '@/components/layout/PageLayout'
 import './globalStyles/normalize.css'
 import './globalStyles/globals.css'
 import './globalStyles/cookie-popup.css'
-import PagesLayout from '@/components/layout/PageLayout'
 
 export const metadata: Metadata = {
     metadataBase: new URL('https://asiamotors.su'),

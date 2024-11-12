@@ -1,5 +1,14 @@
 import { Metadata } from 'next'
 import Hero from '@/components/features/Hero/Hero'
+import Slider from '@/components/features/Slider/Slider'
+import SmartSearch from '@/components/features/SmartSearch/SmartSearch'
+import Categories from '@/components/features/Categories/Categories'
+import LatestNews from '@/components/features/LatestNews/LatestNews'
+import Testimonials from '@/components/features/Testimonials/Testimonials'
+import CTASection from '@/components/features/CTASection/CTASection'
+import FAQ from '@/components/features/Faq/FAQ'
+import BuyingProcess from '@/components/features/BuyingProcess/BuyingProcess'
+import Benefits from '@/components/features/Benefits/Benefits'
 
 // Метаданные для конкретной страницы
 export const metadata: Metadata = {
@@ -9,5 +18,20 @@ export const metadata: Metadata = {
 }
 
 export default function Home() {
-    return <Hero />
+    return (
+        <>
+            <Hero />
+            <SmartSearch />
+            {/* Перемещаем наверх - важно дать пользователю быстрый доступ к поиску */}
+            <Categories />
+            {/* Показываем основные категории автомобилей сразу */}
+            <Slider /> {/* Популярные модели после категорий */}
+            <Benefits /> {/* Добавляем блок преимуществ */}
+            <BuyingProcess /> {/* Добавляем процесс покупки */}
+            <Testimonials /> {/* Социальное доказательство */}
+            <LatestNews /> {/* Новости и обзоры */}
+            <FAQ /> {/* Часто задаваемые вопросы */}
+            <CTASection /> {/* Финальный призыв к действию */}
+        </>
+    )
 }
