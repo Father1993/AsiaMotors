@@ -31,14 +31,14 @@ const Hero: React.FC = () => {
                                 </span>
                             </div>
 
-                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
+                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6 font-">
                                 <span className="text-red-600 block">
                                     Авто из Китая
                                 </span>
                                 <span className="block">в любой город РФ</span>
                             </h1>
 
-                            <h2 className="text-xl md:text-2xl text-gray-600 lg:text-gray-600 text-black mb-8">
+                            <h2 className="text-xl md:text-2xl text-gray-600 lg:text-gray-600 text-black mb-8 ">
                                 С гарантированной доставкой– доверяйте
                                 профессионалам из AsiaMotors!
                             </h2>
@@ -47,7 +47,7 @@ const Hero: React.FC = () => {
                                 <Button
                                     variant="primary"
                                     size="lg"
-                                    className="px-8 py-4 bg-red-600 hover:bg-red-700 text-black rounded-xl shadow-lg hover:shadow-blue-200 transition duration-300"
+                                    className="px-8 py-4 bg-red-600 hover:bg-red-700 text-black rounded-xl shadow-lg hover:shadow-blue-200 transition duration-300 font-inter"
                                 >
                                     Оставить заявку
                                 </Button>
