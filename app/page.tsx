@@ -10,7 +10,6 @@ import FAQ from '@/components/features/Faq/FAQ'
 import BuyingProcess from '@/components/features/BuyingProcess/BuyingProcess'
 import Benefits from '@/components/features/Benefits/Benefits'
 
-// Метаданные для конкретной страницы
 export const metadata: Metadata = {
     title: 'AsiaMotors — Продажа новых и БУ автомобилей из Китая | Надежные авто напрямую от поставщиков',
     description:
