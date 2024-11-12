@@ -133,3 +133,8 @@ span,
 div {
     font-weight: 400;
 }
+
+.swiper-button-prev,
+.swiper-button-next {
+    color: red !important;
+}

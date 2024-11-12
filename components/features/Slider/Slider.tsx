@@ -2,12 +2,13 @@
 
 import { useRef } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { Navigation } from 'swiper/modules'
 import Image from 'next/image'
+import { Navigation } from 'swiper/modules'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
+import { CARS_DATA } from '@/shared/constants/cars'
 import 'swiper/css'
 import 'swiper/css/navigation'
-import { CARS_DATA } from '@/shared/constants/cars'
+import { motion } from 'framer-motion'
 
 const Slider = () => {
     const swiperRef = useRef(null)
@@ -60,6 +61,27 @@ const Slider = () => {
                                             className="object-cover"
                                         />
                                     </div>
+                                    {car.bestseller && (
+                                        <div className="absolute top-4 right-4 z-10">
+                                            <motion.span
+                                                initial={{
+                                                    opacity: 0,
+                                                    scale: 0.8,
+                                                }}
+                                                animate={{
+                                                    opacity: 1,
+                                                    scale: 1,
+                                                }}
+                                                transition={{
+                                                    duration: 0.3,
+                                                    ease: 'easeOut',
+                                                }}
+                                                className="bg-gradient-to-r from-green-500 to-emerald-500 text-xs font-bold text-white px-2 py-1 rounded-full shadow-lg shadow-green-600/30 animate-pulse inline-block"
+                                            >
+                                                Выгодно!
+                                            </motion.span>
+                                        </div>
+                                    )}
                                     <div className="p-6">
                                         <h3 className="text-2xl font-bold text-gray-900 mb-2">
                                             {car.name}
@@ -104,11 +126,11 @@ const Slider = () => {
                         ))}
                     </Swiper>
 
-                    <button className="swiper-button-prev absolute left-0 top-1/2 -translate-y-1/2 -translate-x-16 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-800 hover:text-red-600 transition-colors z-10">
-                        <ChevronLeftIcon className="w-6 h-6" />
+                    <button className="swiper-button-prev absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10  backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center transition-all z-10">
+                        <ChevronLeftIcon className="w-5 h-5" />
                     </button>
-                    <button className="swiper-button-next absolute right-0 top-1/2 -translate-y-1/2 translate-x-16 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-800 hover:text-red-600 transition-colors z-10">
-                        <ChevronRightIcon className="w-6 h-6" />
+                    <button className="swiper-button-next absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10  backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center  transition-all z-10">
+                        <ChevronRightIcon className="w-5 h-5" />
                     </button>
                 </div>
             </div>

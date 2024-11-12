@@ -16,3 +16,10 @@ export interface MobileMenuProps {
 export interface CookieAlertProps {
     setCookieAlertOpen: (value: boolean) => void
 }
+
+export interface AnimatedCounterProps {
+    startValue: number
+    maxValue: number
+    interval?: number
+    className?: string
+}
