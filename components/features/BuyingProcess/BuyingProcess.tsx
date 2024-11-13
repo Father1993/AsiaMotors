@@ -5,8 +5,8 @@ import { iconVariants } from '@/shared/constants/common'
 import { STEPS } from '@/shared/constants/steps'
 
 const BuyingProcess = () => {
-    // Создаем отдельные контроллеры для каждого шага
-    const controlsArray = STEPS.map(() => useAnimation())
+    // Создаем контроллер анимации для всех шагов сразу
+    const controls = useAnimation()
 
     useEffect(() => {
         let isMounted = true
@@ -14,10 +14,11 @@ const BuyingProcess = () => {
         const animateIcons = async () => {
             if (!isMounted) return
 
-            for (let i = 0; i < controlsArray.length; i++) {
+            // Анимируем все шаги последовательно
+            for (let i = 0; i < STEPS.length; i++) {
                 if (!isMounted) break
 
-                await controlsArray[i].start({
+                await controls.start({
                     scale: [1, 1.2, 1],
                     transition: {
                         duration: 0.5,
@@ -40,9 +41,9 @@ const BuyingProcess = () => {
         return () => {
             isMounted = false
             clearTimeout(timeoutId)
-            controlsArray.forEach((control) => control.stop())
+            controls.stop()
         }
-    }, [controlsArray]) // Добавляем controlsArray в зависимости
+    }, [controls])
 
     return (
         <section className="py-16 bg-gradient-to-b from-white to-gray-50">
@@ -73,7 +74,6 @@ const BuyingProcess = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: index * 0.1 }}
                             viewport={{ once: true }}
-                            animate={controlsArray[index]}
                             className="bg-white rounded-xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 relative group z-10"
                         >
                             <div className="absolute -top-3 left-6 w-6 h-6 bg-gradient-to-br from-red-500 to-red-600 text-white rounded-full flex items-center justify-center font-bold text-xs ring-4 ring-white">
