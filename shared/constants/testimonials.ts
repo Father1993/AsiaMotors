@@ -1,0 +1,32 @@
+export const TESTIMONIALS = [
+    {
+        id: 1,
+        name: 'Александр Петров',
+        position: 'Предприниматель',
+        image: '/img/testimonials/man.avif',
+        rating: 5,
+        text: 'Отличный сервис! Помогли выбрать и доставить HONGQI H9 в идеальном состоянии. Все документы оформили быстро и без проблем.',
+        date: '15.06.2024',
+        carModel: 'HONGQI H9',
+    },
+    {
+        id: 2,
+        name: 'Елена Соколова',
+        position: 'Руководитель компании',
+        image: '/img/testimonials/woman.avif',
+        rating: 5,
+        text: 'Благодарна команде AsiaMotors за профессионализм. Привезли ZEEKR 001 даже раньше обещанного срока. Машина превзошла все ожидания!',
+        date: '02.07.2024',
+        carModel: 'ZEEKR 001',
+    },
+    {
+        id: 3,
+        name: 'Дмитрий Волков',
+        position: 'Менеджер',
+        image: '/img/testimonials/young.avif',
+        rating: 5,
+        text: 'Заказывал BYD SEAL. Порадовала прозрачность сделки и постоянная связь с менеджером. Рекомендую!',
+        date: '20.10.2024',
+        carModel: 'BYD SEAL',
+    },
+]
