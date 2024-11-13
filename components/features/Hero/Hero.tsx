@@ -36,13 +36,13 @@ const Hero: React.FC = () => {
                             </div>
 
                             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6 font-">
-                                <span className="text-red-600 block">
+                                <span className="text-red-600 block font-bold">
                                     Авто из Китая
                                 </span>
                                 <span className="block">в любой город РФ</span>
                             </h1>
 
-                            <h2 className="text-xl md:text-2xl text-gray-600 lg:text-gray-600 text-black mb-8 ">
+                            <h2 className="text-xl md:text-2xl text-black lg:text-gray-600  mb-8 ">
                                 С гарантированной доставкой– доверяйте
                                 профессионалам из AsiaMotors!
                             </h2>
