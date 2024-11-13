@@ -6,15 +6,15 @@ const CTASection = () => {
                 backgroundImage: `
                     linear-gradient(
                         to bottom,
-                        rgba(17, 24, 39, 0.8) 0%,
-                        rgba(17, 24, 39, 0.9) 50%,
-                        rgba(17, 24, 39, 0.95) 100%
+                        rgba(17, 24, 39, 0.7) 0%,
+                        rgba(17, 24, 39, 0.8) 50%,
+                        rgba(17, 24, 39, 0.85) 100%
                     ),
                     url('/img/bg-cta.webp')
                 `,
             }}
         >
-            <div className="absolute inset-0 bg-black/20" />
+            <div className="absolute inset-0 bg-black/10" />
             <div className="container relative z-10 text-center">
                 <h2 className="text-4xl font-bold mb-8 text-white/90">
                     Готовы приобрести автомобиль мечты?
