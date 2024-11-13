@@ -2,7 +2,7 @@ export const POSTS = [
     {
         id: '1',
         title: 'Новый Hongqi E-HS9 2024: роскошный электрический SUV',
-        slug: 'hongqi-e-hs9-2024',
+        slug: 'Hongqi-E-HS9-2024',
         excerpt:
             'Обзор нового премиального электрического внедорожника из Китая',
         content: `
@@ -12,7 +12,7 @@ export const POSTS = [
           
           Запас хода составляет до 465 км (WLTP), а батарея емкостью 99 кВт⋅ч поддерживает быструю зарядку...
       `,
-        image: '/img/blog/hongqi-e-hs9.jpg',
+        image: '/img/news/hongqi-e-hs9_4.jpg',
         date: '2024-03-20',
         author: 'AsiaMotors',
     },
@@ -25,7 +25,7 @@ export const POSTS = [
           Tank 500 - новый игрок на рынке премиальных внедорожников, который бросает вызов 
           признанным лидерам сегмента. В этом материале мы сравним его с BMW X5 по ключевым параметрам...
       `,
-        image: '/img/blog/tank-500.jpg',
+        image: '/img/news/tank-500.jpeg',
         date: '2024-03-18',
         author: 'AsiaMotors',
     },
