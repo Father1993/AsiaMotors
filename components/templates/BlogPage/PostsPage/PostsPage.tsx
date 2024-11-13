@@ -1,3 +1,4 @@
+'use client'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Post } from '@/shared/types/common'
@@ -8,8 +9,8 @@ const PostsPage = ({ post }: { post: Post }) => {
             <article className="max-w-4xl mx-auto">
                 <div className="relative h-[400px] mb-8 rounded-2xl overflow-hidden">
                     <Image
-                        src={post.image} // Было POSTS.image
-                        alt={post.title} // Было POSTS.title
+                        src={post.image}
+                        alt={post.title}
                         fill
                         className="object-cover"
                     />
