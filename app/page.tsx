@@ -3,12 +3,12 @@ import Hero from '@/components/features/Hero/Hero'
 import Slider from '@/components/features/Slider/Slider'
 import SmartSearch from '@/components/features/SmartSearch/SmartSearch'
 import Categories from '@/components/features/Categories/Categories'
-import LatestNews from '@/components/features/LatestNews/LatestNews'
-import Testimonials from '@/components/features/Testimonials/Testimonials'
 import CTASection from '@/components/features/CTASection/CTASection'
-import FAQ from '@/components/features/Faq/FAQ'
-import BuyingProcess from '@/components/features/BuyingProcess/BuyingProcess'
 import Benefits from '@/components/features/Benefits/Benefits'
+import BuyingProcess from '@/components/features/BuyingProcess/BuyingProcess'
+import Testimonials from '@/components/features/Testimonials/Testimonials'
+import News from '@/components/features/News/News'
+import FAQ from '@/components/features/Faq/FAQ'
 
 export const metadata: Metadata = {
     title: 'AsiaMotors — Продажа новых и БУ автомобилей из Китая | Надежные авто напрямую от поставщиков',
@@ -28,7 +28,7 @@ export default function Home() {
             <Benefits /> {/* Добавляем блок преимуществ */}
             <BuyingProcess /> {/* Добавляем процесс покупки */}
             <Testimonials /> {/* Социальное доказательство */}
-            <LatestNews /> {/* Новости и обзоры */}
+            <News /> {/* Новости и обзоры */}
             <FAQ /> {/* Часто задаваемые вопросы */}
             <CTASection /> {/* Финальный призыв к действию */}
         </>
