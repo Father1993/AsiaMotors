@@ -10,7 +10,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { NEWS_DATA } from '@/shared/constants/newsData'
 
-const LatestNews = () => {
+const News = () => {
     return (
         <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
             <div className="container">
@@ -100,4 +100,4 @@ const LatestNews = () => {
     )
 }
 
-export default LatestNews
+export default News
