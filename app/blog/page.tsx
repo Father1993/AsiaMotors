@@ -1,6 +1,5 @@
 /* eslint-disable max-len */
 import { Metadata } from 'next'
-import PrivacyPolicyPage from '@/components/templates/PrivacyPolicyPage/PrivacyPolicyPage'
 import BlogPage from '@/components/templates/BlogPage/BlogPage'
 
 export const metadata: Metadata = {
