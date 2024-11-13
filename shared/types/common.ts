@@ -23,3 +23,14 @@ export interface AnimatedCounterProps {
     interval?: number
     className?: string
 }
+
+export interface Post {
+    id: string
+    title: string
+    slug: string
+    excerpt: string
+    content: string
+    image: string
+    date: string
+    author: string
+}
