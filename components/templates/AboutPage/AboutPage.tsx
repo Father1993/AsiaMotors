@@ -1,12 +1,15 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
+import { motion } from 'framer-motion'
 import { advantagesList, teamMembers } from '@/shared/constants/team'
 import TestimonialsBlock from './TestimonialsBlock'
 import Questions from './Questions'
 import Social from './Social'
+import VideoBlock from './VideoBlock'
+import SuccessCase from './SuccessCase'
+import ContactsBlock from './ContactsBlock'
 
 const AboutPage = () => {
     return (
@@ -14,7 +17,7 @@ const AboutPage = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="bg-gradient-to-b from-white to-gray-50 pb-20"
+            className="bg-gradient-to-b from-white to-gray-50"
         >
             <div className="container mx-auto px-4 py-16">
                 {/* Героический блок */}
@@ -127,6 +130,9 @@ const AboutPage = () => {
             <TestimonialsBlock />
             <Questions />
             <Social />
+            <VideoBlock />
+            <SuccessCase />
+            <ContactsBlock />
         </motion.div>
     )
 }
