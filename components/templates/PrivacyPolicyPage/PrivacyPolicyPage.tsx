@@ -16,7 +16,7 @@ const PrivacyPolicyPage = () => (
                             Этот сайт использует файлы cookie для улучшения
                             вашего опыта использования. Продолжая пользоваться
                             сайтом, вы соглашаетесь с использованием нами файлов
-                            cookie.
+                            cookie
                         </p>
 
                         <h2 className="text-2xl font-semibold text-gray-800 mt-8 mb-4">
