@@ -1,13 +1,14 @@
 'use client'
 
 import { useState, ChangeEvent, FormEvent, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import dynamic from 'next/dynamic'
-import Link from 'next/link'
-import { FaWhatsapp, FaTelegramPlane, FaUser, FaPhoneAlt } from 'react-icons/fa'
-import { errorVariants } from '@/shared/constants/common'
+import { IMaskInput } from 'react-imask'
+import { FaWhatsapp, FaTelegramPlane } from 'react-icons/fa'
+import { HiOutlineUser, HiOutlinePhone } from 'react-icons/hi'
+import { useInView } from 'react-intersection-observer'
+import toast from 'react-hot-toast'
 
-// Динамическая загрузка с отключением SSR
 const DynamicImage = dynamic(() => import('next/image'), {
     ssr: false,
     loading: () => (
@@ -21,276 +22,247 @@ const ContactsBlock = () => {
     const [phone, setPhone] = useState('')
     const [nameError, setNameError] = useState('')
     const [phoneError, setPhoneError] = useState('')
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
-    // Хук для предотвращения гидратационной ошибки
     useEffect(() => {
         setIsClient(true)
     }, [])
 
-    // Функция валидации имени
-    const validateName = (value: string) => {
-        const nameRegex = /^[А-Яа-яЁёA-Za-z\s-]{2,50}$/
+    const [ref, inView] = useInView({
+        threshold: 0.2,
+        triggerOnce: true,
+    })
 
-        if (!value.trim()) {
-            setNameError('Введите имя')
-            return false
+    const validateForm = (): boolean => {
+        let isValid = true
+
+        // Валидация имени
+        const nameRegex = /^[а-яА-ЯёЁa-zA-Z\s]+$/
+        const trimmedName = name.trim()
+
+        if (trimmedName.length < 2) {
+            setNameError('Имя должно содержать минимум 2 символа')
+            isValid = false
+        } else if (!nameRegex.test(trimmedName)) {
+            setNameError('Имя может содержать только буквы и пробелы')
+            isValid = false
+        } else if (trimmedName.length > 50) {
+            setNameError('Имя не должно превышать 50 символов')
+            isValid = false
+        } else {
+            setNameError('')
         }
 
-        if (!nameRegex.test(value)) {
-            setNameError(
-                'Имя может содержать русские, английские буквы, пробелы и дефисы'
-            )
-            return false
+        // Валидация телефона
+        if (phone.replace(/\D/g, '').length !== 11) {
+            setPhoneError('Введите корректный номер телефона')
+            isValid = false
+        } else {
+            setPhoneError('')
         }
 
-        setNameError('')
-        return true
+        return isValid
     }
 
-    // Функция обработки изменения имени
     const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const sanitizedName = e.target.value.replace(
-            /[^А-Яа-яЁёA-Za-z\s-]/g,
-            ''
-        )
-        setName(sanitizedName)
-        validateName(sanitizedName)
+        // Разрешаем только буквы и пробелы при вводе
+        const value = e.target.value.replace(/[^а-яА-ЯёЁa-zA-Z\s]/g, '')
+        setName(value)
+        if (nameError) setNameError('')
+    }
+    const handlePhoneAccept = (value: string) => {
+        setPhone(value)
+        if (phoneError) setPhoneError('')
     }
 
-    // Обработка изменения номера телефона
-    const handlePhoneChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const inputPhone = e.target.value
-
-        // Если пользователь пытается удалить номер полностью
-        if (inputPhone.length <= 2) {
-            setPhone('+7 ')
-            setPhoneError('Номер телефона должен содержать 11 цифр')
-            return
-        }
-
-        const formattedPhone = formatPhoneNumber(inputPhone)
-
-        setPhone(formattedPhone)
-        validatePhone(formattedPhone)
-    }
-
-    // Обновленная функция форматирования номера телефона
-    const formatPhoneNumber = (value: string) => {
-        const phoneDigits = value.replace(/\D/g, '')
-
-        if (phoneDigits.length === 0) return '+7 '
-
-        // Различные варианты форматирования в зависимости от длины
-        if (phoneDigits.length <= 1) return `+7 (${phoneDigits}`
-        if (phoneDigits.length <= 4) return `+7 (${phoneDigits.slice(1, 4)}`
-        if (phoneDigits.length <= 7)
-            return `+7 (${phoneDigits.slice(1, 4)}) ${phoneDigits.slice(4, 7)}`
-        if (phoneDigits.length <= 9)
-            return `+7 (${phoneDigits.slice(1, 4)}) ${phoneDigits.slice(
-                4,
-                7
-            )}-${phoneDigits.slice(7, 9)}`
-
-        return `+7 (${phoneDigits.slice(1, 4)}) ${phoneDigits.slice(
-            4,
-            7
-        )}-${phoneDigits.slice(7, 9)}-${phoneDigits.slice(9)}`
-    }
-
-    // Функция валидации номера телефона
-    const validatePhone = (value: string) => {
-        const phoneDigits = value.replace(/\D/g, '')
-
-        if (phoneDigits.length !== 11) {
-            setPhoneError('Номер телефона должен содержать 11 цифр')
-            return false
-        }
-
-        if (!['7', '8'].includes(phoneDigits[0])) {
-            setPhoneError('Номер должен начинаться с 7 или 8')
-            return false
-        }
-
-        setPhoneError('')
-        return true
-    }
-
-    // Обработка отправки формы
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        const isNameValid = validateName(name)
-        const isPhoneValid = validatePhone(phone)
+        if (!validateForm() || isSubmitting) return
 
-        if (isNameValid && isPhoneValid) {
-            // Логика отправки заявки
-            const cleanedPhone = phone.replace(/\D/g, '')
-            console.log('Отправка заявки:', {
-                name,
-                phone: cleanedPhone,
-            })
-            // Здесь будет ваш API-запрос
+        setIsSubmitting(true)
+
+        try {
+            // Здесь должна быть логика отправки формы на сервер
+            await new Promise((resolve) => setTimeout(resolve, 1000)) // Имитация запроса
+
+            // Очистка формы после успешной отправки
+            setName('')
+            setPhone('')
+            toast.success(
+                'Форма успешно отправлена! Мы свяжемся с вами в ближайшее время',
+                {
+                    duration: 4000,
+                    position: 'top-center',
+                    style: {
+                        background: '#10B981',
+                        color: '#fff',
+                        borderRadius: '1rem',
+                    },
+                }
+            )
+        } catch (error) {
+            console.error('Ошибка при отправке формы:', error)
+            toast.error(
+                'Произошла ошибка при отправке формы. Пожалуйста, попробуйте позже',
+                {
+                    duration: 4000,
+                    position: 'top-center',
+                    style: {
+                        background: '#EF4444',
+                        color: '#fff',
+                        borderRadius: '1rem',
+                    },
+                }
+            )
+        } finally {
+            setIsSubmitting(false)
         }
     }
 
-    // Предотвращение гидратационной ошибки
-    if (!isClient) {
-        return null
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: { staggerChildren: 0.2 },
+        },
     }
+
+    const itemVariants = {
+        hidden: { y: 20, opacity: 0 },
+        visible: {
+            y: 0,
+            opacity: 1,
+            transition: { duration: 0.6 },
+        },
+    }
+
     return (
-        <section className="bg-gradient-to-br from-red-500 to-red-800 py-16">
-            <div className="container mx-auto px-4">
-                <motion.div
-                    initial={{ opacity: 0, y: 50 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                    className="max-w-6xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden grid md:grid-cols-2"
-                >
-                    {/* Левая часть - форма */}
-                    <div className="p-10 bg-gray-50">
-                        <h3 className="text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-red-600 to-red-400">
-                            Получите консультацию за 1 минуту
-                        </h3>
-                        <p className="text-gray-600 mb-8">
-                            Наши эксперты помогут подобрать идеальный автомобиль
-                            из Китая с учетом ваших индивидуальных потребностей
-                        </p>
+        <section className="relative min-h-screen py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
+            <div className="absolute inset-0 bg-[url('/img/grid.svg')] opacity-10"></div>
 
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            <div className="relative">
-                                <FaUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                                <input
-                                    type="text"
-                                    value={name}
-                                    onChange={handleNameChange}
-                                    placeholder="Ваше имя"
-                                    className={`
-                                        w-full pl-10 pr-4 py-3 rounded-full border 
-                                        ${
-                                            nameError
-                                                ? 'border-red-500 focus:ring-red-500'
-                                                : 'border-gray-300 focus:ring-red-500'
-                                        }
-                                        focus:outline-none focus:ring-2
-                                    `}
-                                />
-                                {/* Контейнер с фиксированной высотой */}
-                                <div className="h-6 mt-1">
-                                    <AnimatePresence>
-                                        {nameError && (
-                                            <motion.p
-                                                key="name-error"
-                                                variants={errorVariants}
-                                                initial="hidden"
-                                                animate="visible"
-                                                exit="exit"
-                                                className="text-red-500 text-sm absolute"
-                                            >
-                                                {nameError}
-                                            </motion.p>
-                                        )}
-                                    </AnimatePresence>
-                                </div>
-                            </div>
-                            <div className="relative">
-                                <FaPhoneAlt className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                                <input
-                                    type="tel"
-                                    value={phone}
-                                    onChange={handlePhoneChange}
-                                    placeholder="+7 (___) ___-__-__"
-                                    maxLength={18}
-                                    className={`
-                                                  w-full pl-10 pr-4 py-3 rounded-full border 
-                                                  ${
-                                                      phoneError
-                                                          ? 'border-red-500 focus:ring-red-500'
-                                                          : 'border-gray-300 focus:ring-red-500'
-                                                  }
-                                                  focus:outline-none focus:ring-2
-                                              `}
-                                />
-                                {/* Контейнер с фиксированной высотой */}
-                                <div className="h-6 mt-1">
-                                    <AnimatePresence>
-                                        {phoneError && (
-                                            <motion.p
-                                                key="phone-error"
-                                                variants={errorVariants}
-                                                initial="hidden"
-                                                animate="visible"
-                                                exit="exit"
-                                                className="text-red-500 text-sm absolute"
-                                            >
-                                                {phoneError}
-                                            </motion.p>
-                                        )}
-                                    </AnimatePresence>
-                                </div>
-                            </div>
-                            <button
-                                type="submit"
-                                className="w-full py-4 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-full hover:scale-105 transition-transform"
+            <motion.div
+                ref={ref}
+                variants={containerVariants}
+                initial="hidden"
+                animate={inView ? 'visible' : 'hidden'}
+                className="container mx-auto px-4 relative z-10"
+            >
+                <div className="max-w-7xl mx-auto bg-white/10 backdrop-blur-xl rounded-[2.5rem] border border-white/20 shadow-2xl overflow-hidden">
+                    <div className="grid lg:grid-cols-2 gap-0">
+                        <motion.div
+                            variants={itemVariants}
+                            className="p-12 lg:p-16"
+                        >
+                            <h2 className="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300 mb-6">
+                                Начните свой путь к идеальному авто
+                            </h2>
+
+                            <form
+                                onSubmit={handleSubmit}
+                                className="space-y-6 mt-12"
                             >
-                                Получить бесплатную консультацию
-                            </button>
-                        </form>
+                                <div className="relative group">
+                                    <HiOutlineUser className="absolute left-4 top-1/2 -translate-y-1/2 text-white/60 text-xl group-focus-within:text-red-500 transition-colors" />
+                                    <input
+                                        type="text"
+                                        value={name}
+                                        onChange={handleNameChange}
+                                        placeholder="Ваше имя"
+                                        className="w-full pl-12 pr-4 py-4 bg-white/5 border border-white/10 rounded-2xl text-white placeholder:text-white/40 focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+                                    />
+                                    {nameError && (
+                                        <p className="text-red-500 text-sm mt-1">
+                                            {nameError}
+                                        </p>
+                                    )}
+                                </div>
 
-                        <div className="mt-6 text-center">
-                            <p className="text-gray-500 mb-4">
-                                Или свяжитесь мгновенно:
-                            </p>
-                            <div className="flex justify-center space-x-4">
-                                <Link
-                                    href="https://wa.me/79999999999"
-                                    target="_blank"
-                                    className="text-green-500 hover:text-green-600"
+                                <div className="relative group">
+                                    <HiOutlinePhone className="absolute left-4 top-1/2 -translate-y-1/2 text-white/60 text-xl group-focus-within:text-red-500 transition-colors" />
+                                    <IMaskInput
+                                        mask="+{7} (000) 000-00-00"
+                                        value={phone}
+                                        onAccept={handlePhoneAccept}
+                                        placeholder="+7 (___) ___-__-__"
+                                        className="w-full pl-12 pr-4 py-4 bg-white/5 border border-white/10 rounded-2xl text-white placeholder:text-white/40 focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+                                    />
+                                    {phoneError && (
+                                        <p className="text-red-500 text-sm mt-1">
+                                            {phoneError}
+                                        </p>
+                                    )}
+                                </div>
+
+                                <motion.button
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                    className="w-full py-4 px-8 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-2xl font-medium shadow-xl shadow-red-500/20 hover:shadow-red-500/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                    <FaWhatsapp className="w-8 h-8" />
-                                </Link>
-                                <Link
-                                    href="https://t.me/asiamotors_bot"
-                                    target="_blank"
-                                    className="text-blue-500 hover:text-blue-600"
-                                >
-                                    <FaTelegramPlane className="w-8 h-8" />
-                                </Link>
+                                    {isSubmitting
+                                        ? 'Отправка...'
+                                        : 'Получить консультацию'}
+                                </motion.button>
+                            </form>
+
+                            <div className="mt-12">
+                                <p className="text-white/60 text-center mb-6">
+                                    Или свяжитесь напрямую:
+                                </p>
+                                <div className="flex justify-center space-x-6">
+                                    <motion.a
+                                        whileHover={{ scale: 1.1 }}
+                                        whileTap={{ scale: 0.9 }}
+                                        href="https://wa.me/+79999999999"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="p-3 bg-white/5 rounded-full hover:bg-white/10 transition-colors"
+                                    >
+                                        <FaWhatsapp className="text-2xl text-white" />
+                                    </motion.a>
+                                    <motion.a
+                                        whileHover={{ scale: 1.1 }}
+                                        whileTap={{ scale: 0.9 }}
+                                        href="https://t.me/username"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="p-3 bg-white/5 rounded-full hover:bg-white/10 transition-colors"
+                                    >
+                                        <FaTelegramPlane className="text-2xl text-white" />
+                                    </motion.a>
+                                </div>
                             </div>
-                        </div>
-                    </div>
+                        </motion.div>
 
-                    {/* Правая часть - менеджер */}
-                    <motion.div
-                        initial={{ x: 100, opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        transition={{ duration: 0.8, delay: 0.3 }}
-                        className="relative overflow-hidden"
-                    >
-                        <DynamicImage
-                            src="/img/team/Mihail.png"
-                            alt="Михаил Ананьев - менеджер по продажам"
-                            width={500}
-                            height={700}
-                            className="w-full h-full object-cover absolute inset-0"
-                        />
-                        <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 p-6 text-white">
-                            <h4 className="text-2xl font-bold">
-                                Михаил Ананьев
-                            </h4>
-                            <p className="text-sm">
-                                Менеджер отдела продаж, автоэксперт на портале
-                                <Link
-                                    href="https://www.dvhab.ru/"
-                                    className="text-blue-500 hover:text-blue-600 font-bold underline"
-                                >
-                                    {' '}
-                                    DVHAB.RU
-                                </Link>
-                            </p>
-                        </div>
-                    </motion.div>
-                </motion.div>
-            </div>
+                        <motion.div className="relative lg:h-auto">
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10"></div>
+                            {isClient && (
+                                <DynamicImage
+                                    src="/img/team/Mihail.png"
+                                    alt="Михаил Ананьев Азиа Моторс"
+                                    width={800}
+                                    height={1000}
+                                    className="w-full h-full object-cover"
+                                    priority
+                                />
+                            )}
+                            <motion.div
+                                variants={itemVariants}
+                                className="absolute bottom-0 left-0 right-0 p-8 z-20"
+                            >
+                                <h3 className="text-3xl font-bold text-white mb-2">
+                                    Михаил Ананьев
+                                </h3>
+                                <p className="text-white/80">
+                                    Ведущий эксперт по подбору автомобилей
+                                </p>
+                            </motion.div>
+                        </motion.div>
+                    </div>
+                </div>
+            </motion.div>
         </section>
     )
 }
