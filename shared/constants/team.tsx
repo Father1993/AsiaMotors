@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { FaHandshake, FaCar } from 'react-icons/fa'
 import { FaGlobe } from 'react-icons/fa'
 import { FaShieldAlt } from 'react-icons/fa'
@@ -18,8 +19,18 @@ export const teamMembers = [
     {
         name: 'Михаил Иванов',
         role: 'Менеджер',
-        image: '/img/team/3.jpeg',
-        description: 'Специалист по подбору и техническому осмотру авто',
+        image: '/img/team/Mihail.png',
+        description: (
+            <>
+                Менеджер отдела продаж, автоэксперт на портале{' '}
+                <Link
+                    href="https://www.dvhab.ru/"
+                    className="text-blue-500 hover:text-blue-600 font-bold underline"
+                >
+                    DVHAB.RU
+                </Link>
+            </>
+        ),
     },
 ]
 

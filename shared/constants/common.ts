@@ -26,3 +26,30 @@ export const iconVariants = {
         },
     },
 }
+
+// Анимация для ошибок
+export const errorVariants = {
+    hidden: {
+        opacity: 0,
+        y: -10,
+        scale: 0.9,
+    },
+    visible: {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        transition: {
+            type: 'spring',
+            stiffness: 300,
+            damping: 10,
+        },
+    },
+    exit: {
+        opacity: 0,
+        y: 10,
+        scale: 0.9,
+        transition: {
+            duration: 0.2,
+        },
+    },
+}
