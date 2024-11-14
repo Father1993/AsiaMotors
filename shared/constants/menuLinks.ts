@@ -11,7 +11,7 @@ export const NAVIGATION = [
     { name: 'Главная', href: '/' },
     { name: 'Каталог', href: '/catalog' },
     { name: 'Как купить', href: '/how-to-buy' },
-    { name: 'Блог', href: '/contacts' },
+    { name: 'Блог', href: '/blog' },
     { name: 'О компании', href: '/about' },
     { name: 'Контакты', href: '/contacts' },
 ]
@@ -21,6 +21,6 @@ export const MOBILE_NAVIGATION = [
     { name: 'Главная', href: '/', icon: HomeIcon },
     { name: 'Каталог', href: '/catalog', icon: ShoppingBagIcon },
     { name: 'Как купить', href: '/how-to-buy', icon: QuestionMarkCircleIcon },
-    { name: 'О компании', href: '/about', icon: BuildingOfficeIcon },
+    { name: 'Блог', href: '/blog', icon: BuildingOfficeIcon },
     { name: 'Контакты', href: '/contacts', icon: PhoneIcon },
 ]
