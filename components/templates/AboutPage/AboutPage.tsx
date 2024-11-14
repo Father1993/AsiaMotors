@@ -10,7 +10,6 @@ import Social from './Social'
 import VideoBlock from './VideoBlock'
 import SuccessCase from './SuccessCase'
 import ContactsBlock from './ContactsBlock'
-import { Links } from './Links'
 
 const AboutPage = () => {
     return (
@@ -134,7 +133,6 @@ const AboutPage = () => {
             <VideoBlock />
             <SuccessCase />
             <ContactsBlock />
-            <Links />
         </motion.div>
     )
 }
