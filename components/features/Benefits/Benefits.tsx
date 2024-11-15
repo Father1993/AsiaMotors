@@ -28,7 +28,7 @@ const Benefits = () => {
                                 className={`w-16 h-16 bg-${benefit.color}-100 rounded-xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300`}
                             >
                                 <benefit.icon
-                                    className={`w-8 h-8 text-${benefit.color}-600`}
+                                    className={`w-14 h-14 text-${benefit.color}-600`}
                                 />
                             </div>
                             <h3 className="text-xl font-bold mb-4 text-gray-900">

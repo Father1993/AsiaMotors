@@ -6,14 +6,11 @@ import { teamMembersKhv } from '@/shared/constants/team'
 const Team = () => {
     return (
         <section className="mb-16">
-            <h2
-                className="text-4xl font-bold text-center mb-12 text-gray-800"
-                id="team"
-            >
+            <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">
                 Наша команда
             </h2>
             <h3>Офис в Хабаровске</h3>
-            <div className="grid md:grid-cols-3 gap-8 mb-10">
+            <div className="grid md:grid-cols-3 gap-8 mb-10" id="team">
                 {teamMembersKhv.map((member, index) => (
                     <motion.div
                         key={index}

@@ -8,7 +8,9 @@ import { Post } from '@/shared/types/common'
 const BlogPage = ({ posts }: { posts: Post[] }) => {
     return (
         <div className="container py-16">
-            <h1 className="font-bold text-4xl mb-12">Блог об автомобилях</h1>
+            <h1 className="font-bold text-4xl mb-12 mt-10">
+                Блог компании AsiaMotors
+            </h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {posts.map((post, index) => (
                     <motion.div
@@ -16,7 +18,7 @@ const BlogPage = ({ posts }: { posts: Post[] }) => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.1 }}
-                        className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+                        className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow mb-16"
                     >
                         <Link href={`/blog/${post.slug}`}>
                             <div className="relative h-48">

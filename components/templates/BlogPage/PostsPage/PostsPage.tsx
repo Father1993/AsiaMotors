@@ -7,7 +7,7 @@ import ArrowLeft from '@/components/ui/ArrowLeft'
 const PostsPage = ({ post }: { post: Post }) => {
     return (
         <div className="container py-16">
-            <article className="max-w-4xl mx-auto">
+            <article className="max-w-4xl mx-auto mt-12">
                 <div className="relative h-[400px] mb-8 rounded-2xl overflow-hidden shadow-lg">
                     <Image
                         src={post.image}
@@ -31,7 +31,7 @@ const PostsPage = ({ post }: { post: Post }) => {
                 <div className="prose prose-lg max-w-none whitespace-pre-wrap text-gray-700">
                     {post.content}
                 </div>
-                <div className="flex justify-center mt-10">
+                <div className="flex justify-center mt-10 mb-16">
                     <Link
                         href="/blog"
                         className="px-6 py-3 rounded-full bg-gradient-to-r from-purple-500 to-red-600 text-white 
