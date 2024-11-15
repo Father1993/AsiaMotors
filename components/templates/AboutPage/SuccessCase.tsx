@@ -7,7 +7,7 @@ import { FaTelegramPlane } from 'react-icons/fa'
 const SuccessCase = () => {
     // Секция с кейсами
     return (
-        <section className="mb-16 bg-gray-50 py-16">
+        <section className="bg-gray-50 py-16">
             <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">
                 Кейсы клиентов
             </h2>
@@ -24,6 +24,8 @@ const SuccessCase = () => {
                             width={600}
                             height={400}
                             className="w-full h-64 object-cover"
+                            quality={65}
+                            loading="lazy"
                         />
                         <div className="p-6">
                             <h3 className="text-2xl font-bold mb-4">

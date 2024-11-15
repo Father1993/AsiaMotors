@@ -1,75 +1,173 @@
 'use client'
+
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { FaWhatsapp, FaTelegramPlane, FaHeadset } from 'react-icons/fa'
+import { BsArrowRight } from 'react-icons/bs'
 
 const Questions = () => {
-    return (
-        <section className="bg-gradient-to-br from-red-500 to-red-700 py-16">
-            <div className="container mx-auto px-4">
-                <motion.div
-                    initial={{ opacity: 0, y: 50 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                    className="max-w-5xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden"
-                >
-                    <div className="grid md:grid-cols-2 items-center">
-                        {/* Левая часть с анимированной иконкой */}
-                        <div className="bg-gradient-to-br from-red-50 to-red-100 p-8 flex justify-center items-center relative">
-                            <div className="absolute inset-0 bg-red-50 opacity-50 animate-pulse"></div>
-                            <motion.div
-                                animate={{
-                                    rotate: [0, 10, -10, 0],
-                                    scale: [1, 1.05, 1],
-                                }}
-                                transition={{
-                                    duration: 2,
-                                    repeat: Infinity,
-                                    repeatType: 'loop',
-                                }}
-                            >
-                                <FaHeadset className="text-red-600 w-40 h-40 relative z-10" />
-                            </motion.div>
-                        </div>
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.2,
+            },
+        },
+    }
 
-                        {/* Правая часть с контентом */}
-                        <div className="p-10 text-center md:text-left">
-                            <h3 className="text-4xl font-bold mb-4 text-gray-800 bg-clip-text text-transparent bg-gradient-to-r from-red-600 to-red-400">
-                                Есть вопрос?
-                            </h3>
-                            <p className="text-gray-600 mb-8 text-lg leading-relaxed">
+    const itemVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0 },
+    }
+
+    return (
+        <section className="relative py-24 overflow-hidden" id="contact-us">
+            <div className="absolute inset-0 bg-gradient-to-br from-red-500/90 to-red-700/90" />
+            <div
+                className="absolute inset-0 opacity-10"
+                style={{
+                    backgroundImage: 'url("/img/patterns/circuit-board.svg")',
+                    backgroundRepeat: 'repeat',
+                    backgroundSize: '80px',
+                }}
+            />
+
+            <div className="container relative z-10">
+                <motion.div
+                    variants={containerVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    className="max-w-5xl mx-auto"
+                >
+                    <div className="grid lg:grid-cols-2 gap-12 items-center">
+                        {/* Левая колонка */}
+                        <motion.div
+                            variants={itemVariants}
+                            className="text-center lg:text-left"
+                        >
+                            <span className="inline-block px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white/90 text-sm font-medium mb-6">
+                                Поддержка 24/7
+                            </span>
+
+                            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+                                Остались вопросы?
+                                <span className="block text-2xl md:text-3xl mt-2 text-white/80">
+                                    Мы всегда на связи!
+                                </span>
+                            </h2>
+
+                            <p className="text-lg text-white/80 mb-8 leading-relaxed">
                                 Наши эксперты готовы проконсультировать вас по
-                                любым вопросам импорта автомобилей из Китая
+                                любым вопросам импорта автомобилей из Китая.
+                                Выберите удобный способ связи
                             </p>
 
-                            <div className="flex flex-col md:flex-row justify-center md:justify-start space-y-4 md:space-y-0 md:space-x-4">
+                            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                                 <Link
                                     href="https://wa.me/79999999999"
                                     target="_blank"
-                                    className="flex items-center justify-center space-x-2 px-6 py-3 bg-green-500 text-white rounded-full hover:bg-green-600 transition-all shadow-md hover:shadow-lg"
+                                    className="group flex items-center justify-center gap-3 px-8 py-4 bg-green-500 hover:bg-green-600 text-white rounded-xl transition-all duration-300 transform hover:scale-105"
                                 >
-                                    <FaWhatsapp className="w-6 h-6" />
+                                    <FaWhatsapp className="text-2xl" />
                                     <span>WhatsApp</span>
+                                    <BsArrowRight className="opacity-0 group-hover:opacity-100 transform group-hover:translate-x-1 transition-all" />
                                 </Link>
+
                                 <Link
                                     href="https://t.me/asiamotors_bot"
                                     target="_blank"
-                                    className="flex items-center justify-center space-x-2 px-6 py-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-all shadow-md hover:shadow-lg"
+                                    className="group flex items-center justify-center gap-3 px-8 py-4 bg-blue-500 hover:bg-blue-600 text-white rounded-xl transition-all duration-300 transform hover:scale-105"
                                 >
-                                    <FaTelegramPlane className="w-6 h-6" />
+                                    <FaTelegramPlane className="text-2xl" />
                                     <span>Telegram</span>
+                                    <BsArrowRight className="opacity-0 group-hover:opacity-100 transform group-hover:translate-x-1 transition-all" />
                                 </Link>
                             </div>
-
-                            <div className="mt-6 text-center md:text-left">
+                            {/* 
+                            <div className="mt-8">
                                 <Link
                                     href="/contact"
-                                    className="inline-block px-8 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-full hover:scale-105 transition-transform shadow-lg"
+                                    className="group inline-flex items-center gap-3 text-white/90 hover:text-white"
                                 >
-                                    Написать менеджеру
+                                    <FaComments className="text-xl" />
+                                    <span>Написать в чат поддержки</span>
+                                    <BsArrowRight className="transform group-hover:translate-x-1 transition-transform" />
                                 </Link>
+                            </div> */}
+                        </motion.div>
+
+                        {/* Правая колонка */}
+                        <motion.div
+                            variants={itemVariants}
+                            className="relative"
+                        >
+                            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm rounded-3xl transform rotate-6" />
+                            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm rounded-3xl transform -rotate-3" />
+
+                            <div className="relative bg-white/10 backdrop-blur-md p-8 rounded-3xl">
+                                <div className="flex justify-center mb-6">
+                                    <motion.div
+                                        animate={{
+                                            y: [0, -10, 0],
+                                        }}
+                                        transition={{
+                                            duration: 2,
+                                            repeat: Infinity,
+                                            ease: 'easeInOut',
+                                        }}
+                                    >
+                                        <FaHeadset className="text-white w-24 h-24" />
+                                    </motion.div>
+                                </div>
+
+                                <div className="space-y-6">
+                                    <div className="flex items-center gap-4 text-white/90">
+                                        <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
+                                            <span className="text-2xl">🚗</span>
+                                        </div>
+                                        <div>
+                                            <h3 className="font-semibold">
+                                                Подбор автомобиля
+                                            </h3>
+                                            <p className="text-sm text-white/70">
+                                                Поможем выбрать идеальный
+                                                вариант
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center gap-4 text-white/90">
+                                        <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
+                                            <span className="text-2xl">💰</span>
+                                        </div>
+                                        <div>
+                                            <h3 className="font-semibold">
+                                                Расчет стоимости
+                                            </h3>
+                                            <p className="text-sm text-white/70">
+                                                Полная калькуляция расходов
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center gap-4 text-white/90">
+                                        <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
+                                            <span className="text-2xl">📋</span>
+                                        </div>
+                                        <div>
+                                            <h3 className="font-semibold">
+                                                Оформление
+                                            </h3>
+                                            <p className="text-sm text-white/70">
+                                                Поможем с документами
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        </motion.div>
                     </div>
                 </motion.div>
             </div>
