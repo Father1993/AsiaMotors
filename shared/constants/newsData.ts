@@ -15,7 +15,7 @@ export const NEWS_DATA = [
         title: 'Как изменился авторынок Китая в 2024 году',
         excerpt:
             'Анализ текущих трендов и перспектив развития автомобильного рынка Поднебесной',
-        image: '/img/news/export.jpeg',
+        image: '/img/news/export.jpg',
         category: 'Аналитика',
         date: '10 мая 2024',
         readTime: '6 мин',

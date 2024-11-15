@@ -10,7 +10,7 @@ const CTASection = () => {
                         rgba(17, 24, 39, 0.8) 50%,
                         rgba(17, 24, 39, 0.85) 100%
                     ),
-                    url('/img/bg-cta.webp')
+                    url('/img/bg-cta.jpg')
                 `,
             }}
         >

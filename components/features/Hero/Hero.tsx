@@ -155,8 +155,9 @@ const Hero: React.FC = () => {
                                     alt="Премиальный автомобиль из Китая"
                                     fill
                                     className="object-cover object-[30%_center] rounded-l-[3rem]"
-                                    priority
-                                    quality={90}
+                                    sizes="(max-width: 768px) 100vw, 50vw"
+                                    quality={75}
+                                    priority={true}
                                 />
                             </div>
                         </motion.div>
@@ -186,9 +187,10 @@ const Hero: React.FC = () => {
                     src="/img/bg.jpeg"
                     alt="Премиальный автомобиль из Китая"
                     fill
+                    sizes="100vw"
                     className="object-cover object-[23%_center]"
-                    priority
-                    quality={90}
+                    priority={true}
+                    quality={75}
                 />
             </motion.div>
         </section>

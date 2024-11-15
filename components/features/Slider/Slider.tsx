@@ -59,6 +59,9 @@ const Slider = () => {
                                             alt={car.name}
                                             fill
                                             className="object-cover"
+                                            sizes="(max-width: 768px) 100vw, 50vw"
+                                            quality={75}
+                                            loading="lazy"
                                         />
                                     </div>
                                     {car.bestseller && (
