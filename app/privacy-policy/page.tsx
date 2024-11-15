@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
 import { Metadata } from 'next'
 import PrivacyPolicyPage from '@/components/templates/PrivacyPolicyPage/PrivacyPolicyPage'
-import { Suspense } from 'react'
 
 export const metadata: Metadata = {
     title: 'Политика конфиденциальности | Asiamotors',
@@ -39,9 +38,5 @@ export const metadata: Metadata = {
 }
 
 export default function PersonalDataPolicy() {
-    return (
-        <Suspense fallback={<div>Loading...</div>}>
-            <PrivacyPolicyPage />
-        </Suspense>
-    )
+    return <PrivacyPolicyPage />
 }
