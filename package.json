@@ -20,7 +20,8 @@
     "react-imask": "^7.6.1",
     "react-input-mask": "^2.0.4",
     "react-intersection-observer": "^9.13.1",
-    "swiper": "^11.1.14"
+    "swiper": "^11.1.14",
+    "video.js": "^8.19.1"
   },
   "devDependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.2",

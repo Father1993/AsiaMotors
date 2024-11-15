@@ -55,6 +55,8 @@ const TestimonialsBlock = () => {
                                     width={100}
                                     height={40}
                                     className="h-10 w-auto object-contain"
+                                    quality={65}
+                                    loading="lazy"
                                 />
                                 <div className="flex items-center text-yellow-500">
                                     {[...Array(5)].map((_, i) => (

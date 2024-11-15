@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
 import Image from 'next/image'
 import { Button } from '@/components/common/Button/Button'
@@ -10,6 +10,10 @@ import OfficialIcon from '@/components/ui/OfficialIcon'
 import ConditionIcon from '@/components/ui/ConditionIcon'
 
 const Hero: React.FC = () => {
+    const [currentWord, setCurrentWord] = useState(0)
+    const words = ['Надежно', 'Выгодно', 'Быстро']
+    const colors = ['text-green-500', 'text-blue-500', 'text-red-500']
+
     const count = useMotionValue(0)
     const rounded = useTransform(count, Math.round)
 
@@ -19,11 +23,18 @@ const Hero: React.FC = () => {
             ease: 'easeOut',
         })
 
-        return animation.stop
+        const wordInterval = setInterval(() => {
+            setCurrentWord((prev) => (prev + 1) % words.length)
+        }, 2000)
+
+        return () => {
+            animation.stop()
+            clearInterval(wordInterval)
+        }
     }, [])
 
     return (
-        <section className="relative min-h-screen bg-white">
+        <section className="relative min-h-screen bg-white pb-10">
             <div className="container mx-auto px-4">
                 <div className="flex min-h-screen">
                     {/* Левая часть с текстом */}
@@ -35,33 +46,64 @@ const Hero: React.FC = () => {
                                 </span>
                             </div>
 
-                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6 font-">
-                                <span className="text-red-600 block font-bold">
-                                    Авто из Китая
+                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
+                                <span className="text-black-600 block font-bold">
+                                    Импорт автомобилей из Китая.{' '}
+                                    <span className="relative inline-block">
+                                        <span
+                                            className={`${colors[currentWord]} transition-colors duration-300`}
+                                        >
+                                            {words[currentWord]}
+                                        </span>
+                                        <motion.span
+                                            initial={{ width: '0%' }}
+                                            animate={{ width: '100%' }}
+                                            transition={{
+                                                duration: 0.5,
+                                                repeat: Infinity,
+                                                repeatDelay: 1.5,
+                                            }}
+                                            className="absolute bottom-0 left-0 h-1 bg-red-500"
+                                        />
+                                    </span>
                                 </span>
                                 <span className="block">в любой город РФ</span>
                             </h1>
 
-                            <h2 className="text-xl md:text-2xl text-black lg:text-gray-600  mb-8 ">
-                                С гарантированной доставкой– доверяйте
-                                профессионалам из AsiaMotors!
+                            <h2 className="text-xl md:text-2xl text-black lg:text-gray-600 mb-8">
+                                Профессиональны с собственными офисами в Китае.
+                                Делаем покупку автомобиля простой и безопасной
                             </h2>
 
                             <div className="flex flex-col sm:flex-row gap-4 mb-12">
-                                <Button
-                                    variant="primary"
-                                    size="lg"
-                                    className="px-8 py-4 bg-red-600 hover:bg-red-700 text-black rounded-xl shadow-lg hover:shadow-blue-200 transition duration-300 font-inter"
+                                <motion.button
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className="px-8 py-4 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl font-medium 
+        shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:shadow-[0_0_25px_rgba(239,68,68,0.45)] 
+        transition-all duration-300 flex items-center justify-center gap-2 group"
                                 >
                                     Оставить заявку
-                                </Button>
-                                <Button
-                                    variant="secondary"
-                                    size="lg"
-                                    className="px-8 py-4 bg-gray-50 hover:bg-gray-100 text-black-800 rounded-xl transition duration-300"
+                                    <motion.span
+                                        className="inline-block"
+                                        initial={{ x: 0 }}
+                                        whileHover={{ x: 3 }}
+                                        transition={{ duration: 0.2 }}
+                                    >
+                                        →
+                                    </motion.span>
+                                </motion.button>
+
+                                <motion.button
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className="px-8 py-4 border-2 border-red-500 text-red-500 rounded-xl font-medium
+        hover:bg-red-50/50 transition-all duration-300 backdrop-blur-sm
+        flex items-center justify-center gap-2 group"
                                 >
+                                    <span className="text-xl">₽</span>
                                     Узнать стоимость
-                                </Button>
+                                </motion.button>
                             </div>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 border-t pt-8 max-w-2xl">

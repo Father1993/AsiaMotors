@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Post } from '@/shared/types/common'
+import ArrowLeft from '@/components/ui/ArrowLeft'
 
 const PostsPage = ({ post }: { post: Post }) => {
     return (
@@ -13,6 +14,8 @@ const PostsPage = ({ post }: { post: Post }) => {
                         alt={post.title}
                         fill
                         className="object-cover transition-transform duration-300 hover:scale-105"
+                        quality={75}
+                        loading="lazy"
                     />
                 </div>
                 <h1 className="text-4xl font-bold mb-4 text-gray-800">
@@ -36,18 +39,7 @@ const PostsPage = ({ post }: { post: Post }) => {
                         transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-offset-2 
                         focus:ring-blue-500 flex items-center gap-2"
                     >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                        >
-                            <path
-                                fillRule="evenodd"
-                                d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
-                                clipRule="evenodd"
-                            />
-                        </svg>
+                        <ArrowLeft />
                         Обратно к списку постов
                     </Link>
                 </div>

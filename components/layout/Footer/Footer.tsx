@@ -12,7 +12,7 @@ import Logo from '@/components/common/Logo/Logo'
 
 const Footer = () => {
     return (
-        <footer className="bg-gray-900 text-gray-300 pt-16 pb-8 mt-2">
+        <footer className="bg-gray-900 text-gray-300 pt-16 pb-8">
             <div className="container mx-auto px-4">
                 {/* Основной контент футера */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">

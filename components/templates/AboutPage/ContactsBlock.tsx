@@ -245,7 +245,8 @@ const ContactsBlock = () => {
                                     width={800}
                                     height={1000}
                                     className="w-full h-full object-cover"
-                                    priority
+                                    quality={75}
+                                    loading="lazy"
                                 />
                             )}
                             <motion.div

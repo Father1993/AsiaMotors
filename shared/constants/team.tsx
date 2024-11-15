@@ -3,26 +3,20 @@ import { FaHandshake, FaCar } from 'react-icons/fa'
 import { FaGlobe } from 'react-icons/fa'
 import { FaShieldAlt } from 'react-icons/fa'
 
-export const teamMembers = [
+export const teamMembersKhv = [
     {
         name: 'Андрей Чжан',
         role: 'Основатель',
-        image: '/img/team/2.jpeg',
+        image: '/img/team/Andrey.png',
         description: 'Эксперт с 15-летним опытом международной автологистики',
     },
     {
-        name: 'Анна Смирнова',
-        role: 'Логистический директор',
-        image: '/img/team/1.jpeg',
-        description: 'Профессионал в организации международных автоперевозок',
-    },
-    {
-        name: 'Михаил Иванов',
-        role: 'Менеджер',
+        name: 'Михаил Ананьев',
+        role: 'Ведущий эксперт по подбору автомобилей',
         image: '/img/team/Mihail.png',
         description: (
             <>
-                Менеджер отдела продаж, автоэксперт на портале{' '}
+                Автоэксперт на портале{' '}
                 <Link
                     href="https://www.dvhab.ru/"
                     className="text-blue-500 hover:text-blue-600 font-bold underline"
@@ -31,6 +25,12 @@ export const teamMembers = [
                 </Link>
             </>
         ),
+    },
+    {
+        name: 'Владимир Карпыш',
+        role: 'Менеджер отдела продаж',
+        image: '/img/team/Vladimir-man.png',
+        description: 'Профессионал, находящий решения для каждого клиента',
     },
 ]
 
