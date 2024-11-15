@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
 import Image from 'next/image'
-import { Button } from '@/components/common/Button/Button'
 import ClientIcon from '@/components/ui/ClientIcon'
 import GarantiesIcons from '@/components/ui/GarantiesIcons'
 import OfficialIcon from '@/components/ui/OfficialIcon'
@@ -31,7 +30,7 @@ const Hero: React.FC = () => {
             animation.stop()
             clearInterval(wordInterval)
         }
-    }, [])
+    }, [count, words.length])
 
     return (
         <section className="relative min-h-screen bg-white pb-10">
