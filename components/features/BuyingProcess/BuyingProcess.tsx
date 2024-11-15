@@ -1,50 +1,9 @@
 'use client'
-import { useEffect } from 'react'
-import { motion, useAnimation } from 'framer-motion'
-import { iconVariants } from '@/shared/constants/common'
+
+import { motion } from 'framer-motion'
 import { STEPS } from '@/shared/constants/steps'
 
 const BuyingProcess = () => {
-    // Создаем контроллер анимации для всех шагов сразу
-    const controls = useAnimation()
-
-    useEffect(() => {
-        let isMounted = true
-
-        const animateIcons = async () => {
-            if (!isMounted) return
-
-            // Анимируем все шаги последовательно
-            for (let i = 0; i < STEPS.length; i++) {
-                if (!isMounted) break
-
-                await controls.start({
-                    scale: [1, 1.2, 1],
-                    transition: {
-                        duration: 0.5,
-                        ease: 'easeInOut',
-                    },
-                })
-                await new Promise((resolve) => setTimeout(resolve, 300))
-            }
-
-            await new Promise((resolve) => setTimeout(resolve, 2000))
-            if (isMounted) {
-                animateIcons()
-            }
-        }
-
-        const timeoutId = setTimeout(() => {
-            animateIcons()
-        }, 100)
-
-        return () => {
-            isMounted = false
-            clearTimeout(timeoutId)
-            controls.stop()
-        }
-    }, [controls])
-
     return (
         <section className="py-16 bg-gradient-to-b from-white to-gray-50">
             <div className="container">
@@ -58,13 +17,9 @@ const BuyingProcess = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 relative max-w-5xl mx-auto">
-                    {/* Первый ряд */}
+                    {/* Линии соединения */}
                     <div className="absolute top-[15%] left-0 right-0 h-0.5 bg-gradient-to-r from-red-500/20 via-red-500/40 to-red-500/20 transform -translate-y-1/2 z-0" />
-
-                    {/* Второй ряд */}
                     <div className="absolute top-[50%] left-0 right-0 h-0.5 bg-gradient-to-r from-red-500/20 via-red-500/40 to-red-500/20 transform -translate-y-1/2 z-0" />
-
-                    {/* Третий ряд */}
                     <div className="absolute top-[85%] left-0 right-0 h-0.5 bg-gradient-to-r from-red-500/20 via-red-500/40 to-red-500/20 transform -translate-y-1/2 z-0" />
 
                     {STEPS.map((step, index) => (
@@ -83,11 +38,12 @@ const BuyingProcess = () => {
                             <div className="flex items-start gap-4">
                                 <motion.div
                                     className="mt-4 text-red-600"
-                                    variants={iconVariants}
-                                    custom={index}
-                                    initial="hidden"
-                                    whileInView="visible"
-                                    whileHover="hover"
+                                    initial={{ scale: 0.8, opacity: 0 }}
+                                    whileInView={{ scale: 1, opacity: 1 }}
+                                    transition={{
+                                        duration: 0.5,
+                                        delay: index * 0.2,
+                                    }}
                                     viewport={{ once: true }}
                                 >
                                     <step.icon className="w-8 h-8" />

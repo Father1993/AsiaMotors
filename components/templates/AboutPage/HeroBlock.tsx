@@ -3,6 +3,17 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 
 const HeroBlock = () => {
+    const scrollToTeam = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        e.preventDefault()
+        const teamSection = document.querySelector('#team')
+        if (teamSection) {
+            teamSection.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+            })
+        }
+    }
+
     return (
         <section className="relative mb-16 overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-red-50 to-white -z-10" />
@@ -50,6 +61,7 @@ const HeroBlock = () => {
                             >
                                 <Link
                                     href="/about#team"
+                                    onClick={scrollToTeam}
                                     className="flex items-center justify-center gap-2 px-8 py-4 border-2 border-red-500 text-red-500 rounded-xl font-medium hover:bg-red-50 transition-all duration-300"
                                 >
                                     Познакомиться с командой
@@ -70,7 +82,8 @@ const HeroBlock = () => {
                                 alt="Команда Asia Motors в офисе в Китае"
                                 fill
                                 className="object-cover"
-                                priority
+                                priority={true}
+                                quality={75}
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                             <div className="absolute bottom-6 left-6 right-6 text-white">
