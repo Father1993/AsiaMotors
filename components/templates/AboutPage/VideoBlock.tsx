@@ -58,13 +58,10 @@ const VideoBlock = () => {
                     <video
                         ref={videoRef}
                         className="video-js vjs-big-play-centered"
-                        poster="/video/obzor-tank300.jpg"
+                        poster="/video/tank300.jpg"
                         playsInline
                     >
-                        <source
-                            src="/video/obzor-tank300.mp4"
-                            type="video/mp4"
-                        />
+                        <source src="/video/tank300.mp4" type="video/mp4" />
                     </video>
                 </motion.div>
             </div>
