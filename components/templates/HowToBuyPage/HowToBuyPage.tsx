@@ -132,7 +132,12 @@ const HowToBuyPage = () => {
                                 className="bg-gray-50 rounded-2xl p-8 hover:shadow-lg transition-all duration-300 border border-gray-100"
                             >
                                 <div className="flex items-center mb-6">
-                                    <div className="w-14 h-14 bg-gradient-to-br from-red-500 to-red-600 text-white rounded-2xl flex items-center justify-center text-xl font-bold mr-4">
+                                    <div
+                                        className="w-14 h-14 bg-gradient-to-br from-red-400 via-red-500 to-red-600 
+                                    text-white rounded-[1.2rem] flex items-center justify-center text-xl font-bold mr-4
+                                    shadow-lg shadow-red-500/30 border border-red-400/20 backdrop-blur-sm
+                                    transform hover:scale-105 transition-all duration-300"
+                                    >
                                         {step.id}
                                     </div>
                                     <h3 className="text-xl font-bold text-gray-800">
@@ -148,7 +153,7 @@ const HowToBuyPage = () => {
                 </div>
 
                 {/* Гарантии */}
-                <div className="bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-3xl p-12 mb-20">
+                <div className="bg-gradient-to-br from-gray-900 to-gray-400 text-white rounded-3xl p-12 mb-20">
                     <h2 className="text-3xl font-bold text-center mb-12">
                         Наши гарантии
                     </h2>
@@ -170,11 +175,11 @@ const HowToBuyPage = () => {
                                 </svg>
                             </div>
                             <h3 className="text-xl font-semibold mb-2">
-                                100% гарантия возврата
+                                Гарантия качества
                             </h3>
                             <p className="text-black">
-                                Полный возврат средств, если автомобиль не
-                                соответствует заявленным характеристикам
+                                Предпродажная проверка каждого автомобиля по
+                                100+ параметрам.
                             </p>
                         </div>
                         <div className="text-center">
@@ -194,11 +199,11 @@ const HowToBuyPage = () => {
                                 </svg>
                             </div>
                             <h3 className="text-xl font-semibold mb-2">
-                                Фиксированные сроки
+                                Прозрачные условия
                             </h3>
                             <p className="text-black">
-                                Доставка точно в срок или компенсация за каждый
-                                день просрочки
+                                Фиксированная цена в договоре и отсутствие
+                                скрытых платежей на всех этапах сделки
                             </p>
                         </div>
                         <div className="text-center">
