@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
-import ContactsPage from '@/components/templates/ContactsPage/ContactsPage'
-
 import { Metadata } from 'next'
+import ContactsPage from '@/components/templates/ContactsPage/ContactsPage'
 
 export const metadata: Metadata = {
     title: 'Блог об автомобилях | Asiamotors',
