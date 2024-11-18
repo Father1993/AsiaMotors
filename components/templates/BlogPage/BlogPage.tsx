@@ -4,10 +4,13 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Post } from '@/shared/types/common'
+import Breadcrumbs from '@/components/features/Breadcrumbs/Breadcrumbs'
+import { BLOG_BREADCRUMBS } from '@/shared/constants/breadcrumbs'
 
 const BlogPage = ({ posts }: { posts: Post[] }) => {
     return (
         <div className="container py-16">
+            <Breadcrumbs items={BLOG_BREADCRUMBS} />
             <h1 className="font-bold text-4xl mb-12 mt-10">
                 Блог компании AsiaMotors
             </h1>

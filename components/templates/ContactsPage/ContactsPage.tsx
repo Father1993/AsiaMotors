@@ -10,8 +10,8 @@ import {
     EnvelopeIcon,
     ClockIcon,
 } from '@heroicons/react/24/outline'
-import ContactForm from '@/components/templates/AboutPage/ContactsBlock'
 import { FaTelegramPlane, FaWhatsapp, FaVk } from 'react-icons/fa'
+import ContactForm from '@/components/templates/AboutPage/ContactsBlock'
 import { offices } from '@/shared/constants/offices'
 import { Office, OfficeKey } from '@/shared/types/offices'
 import Khv from '@/components/common/Maps/Khv'
