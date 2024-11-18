@@ -8,6 +8,8 @@ import { HiOutlineAdjustments } from 'react-icons/hi'
 import { CountryId } from '@/shared/types/catalog'
 import { carsData, countries } from '@/shared/constants/catalog'
 import CarCard from './CarCard'
+import Breadcrumbs from '@/components/features/Breadcrumbs/Breadcrumbs'
+import { CATALOG } from '@/shared/constants/breadcrumbs'
 
 const CatalogPage = () => {
     const [selectedCountry, setSelectedCountry] = useState<CountryId>('china')
@@ -34,6 +36,7 @@ const CatalogPage = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
             <div className="container mx-auto px-4 py-8">
+                <Breadcrumbs items={CATALOG} />
                 {/* Hero секция */}
                 <motion.div
                     initial={{ opacity: 0 }}
@@ -41,7 +44,7 @@ const CatalogPage = () => {
                     className="relative rounded-3xl overflow-hidden mb-12 h-[400px]"
                 >
                     <Image
-                        src="/img/office.jpeg"
+                        src="/img/catalog/bg.jpg"
                         alt="Каталог автомобилей"
                         fill
                         className="object-cover"

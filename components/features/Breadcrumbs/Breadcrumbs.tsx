@@ -4,7 +4,7 @@ import { BreadcrumbsProps } from '@/shared/types/breadcrumbs'
 
 const Breadcrumbs = ({ items }: BreadcrumbsProps) => {
     return (
-        <nav className="flex items-center space-x-2 text-sm text-gray-500 mb-6 mt-4">
+        <nav className="flex items-center space-x-2 text-sm text-gray-500 mb-6 pt-4">
             <Link href="/" className="hover:text-red-600 transition-colors">
                 Главная
             </Link>

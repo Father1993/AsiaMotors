@@ -1,3 +1,5 @@
+import { ReactNode } from 'react'
+
 export type CountryId = 'china' | 'japan' | 'korea'
 
 export interface Country {
@@ -5,16 +7,34 @@ export interface Country {
     name: string
 }
 
-export interface CarData {
+export interface Car {
     id: number
+    brand: string
     name: string
     category: string
     price: string
+    oldPrice?: string
     image: string
-    specs: string[]
+    specs: Array<{
+        icon: ReactNode
+        value: string
+    }>
+    isNew?: boolean
+    discount?: number
     available: boolean
 }
 
-export interface CarsDataType {
-    [key: string]: CarData[]
+export type CarsDataType = {
+    [key in CountryId]: Car[]
+}
+
+export interface CarCardProps {
+    car: Car
+    viewMode: 'grid' | 'list'
+}
+
+export interface PageProps {
+    params: {
+        slug: string
+    }
 }
