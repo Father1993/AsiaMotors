@@ -215,7 +215,7 @@ const ContactsBlock = () => {
                                     <motion.a
                                         whileHover={{ scale: 1.1 }}
                                         whileTap={{ scale: 0.9 }}
-                                        href="https://wa.me/+79999999999"
+                                        href="https://wa.me/79294156555"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="p-3 bg-white/5 rounded-full hover:bg-white/10 transition-colors"
@@ -225,7 +225,7 @@ const ContactsBlock = () => {
                                     <motion.a
                                         whileHover={{ scale: 1.1 }}
                                         whileTap={{ scale: 0.9 }}
-                                        href="https://t.me/username"
+                                        href="https://t.me/asiamotors_su"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="p-3 bg-white/5 rounded-full hover:bg-white/10 transition-colors"
