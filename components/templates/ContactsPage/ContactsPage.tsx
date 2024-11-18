@@ -42,7 +42,7 @@ const ContactsPage = () => {
                 {/* Фоновый градиент */}
                 <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-white" />
 
-                <div className="container relative z-10">
+                <div className="container relative z-10 custom__margin">
                     <Breadcrumbs items={CONTACTS} />
                     {/* SEO-оптимизированный заголовок */}
                     <div className="text-center mb-16">
@@ -218,10 +218,9 @@ const ContactsPage = () => {
                         </motion.div>
                     </AnimatePresence>
                 </div>
+                {/* Форма обратной связи */}
+                <ContactForm />
             </section>
-
-            {/* Форма обратной связи */}
-            <ContactForm />
         </>
     )
 }

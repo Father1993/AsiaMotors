@@ -138,3 +138,7 @@ div {
 .swiper-button-next {
     color: red !important;
 }
+
+.custom__margin {
+    padding-bottom: 70px !important;
+}
