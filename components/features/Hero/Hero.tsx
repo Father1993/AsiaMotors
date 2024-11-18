@@ -7,11 +7,13 @@ import ClientIcon from '@/components/ui/ClientIcon'
 import GarantiesIcons from '@/components/ui/GarantiesIcons'
 import OfficialIcon from '@/components/ui/OfficialIcon'
 import ConditionIcon from '@/components/ui/ConditionIcon'
+import { useModalStore } from '@/components/provider/ModalProvider'
 
 const Hero: React.FC = () => {
     const [currentWord, setCurrentWord] = useState(0)
     const words = ['Надежно', 'Выгодно', 'Быстро']
     const colors = ['text-green-500', 'text-blue-500', 'text-red-500']
+    const openPopup = useModalStore((state) => state.openPopup)
 
     const count = useMotionValue(0)
     const rounded = useTransform(count, Math.round)
@@ -94,11 +96,12 @@ const Hero: React.FC = () => {
                                 </motion.button>
 
                                 <motion.button
+                                    onClick={openPopup}
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
                                     className="px-8 py-4 border-2 border-red-500 text-red-500 rounded-xl font-medium
-        hover:bg-red-50/50 transition-all duration-300 backdrop-blur-sm
-        flex items-center justify-center gap-2 group"
+                hover:bg-red-50/50 transition-all duration-300 backdrop-blur-sm
+                flex items-center justify-center gap-2 group"
                                 >
                                     <span className="text-xl">₽</span>
                                     Узнать стоимость

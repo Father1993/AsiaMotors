@@ -142,3 +142,8 @@ div {
 .custom__margin {
     padding-bottom: 70px !important;
 }
+
+#customPopup {
+    top: 20% !important;
+    left: 40% !important;
+}
