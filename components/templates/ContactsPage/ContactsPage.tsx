@@ -20,6 +20,8 @@ import {
     telegramAsiaLink,
     whatsAppAsiaLink,
 } from '@/shared/constants/socialLinks'
+import Breadcrumbs from '@/components/features/Breadcrumbs/Breadcrumbs'
+import { CONTACTS } from '@/shared/constants/breadcrumbs'
 
 const ContactsPage = () => {
     const MapComponents = {
@@ -36,11 +38,12 @@ const ContactsPage = () => {
 
     return (
         <>
-            <section className="relative py-20 overflow-hidden">
+            <section className="relative overflow-hidden pb-16">
                 {/* Фоновый градиент */}
                 <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-white" />
 
                 <div className="container relative z-10">
+                    <Breadcrumbs items={CONTACTS} />
                     {/* SEO-оптимизированный заголовок */}
                     <div className="text-center mb-16">
                         <h1 className="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-red-600 to-red-400 mb-6">

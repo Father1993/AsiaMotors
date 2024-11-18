@@ -15,3 +15,7 @@ export const HOW_TO_BUY_BREADCRUMBS: BreadcrumbItem[] = [
 export const CATALOG: BreadcrumbItem[] = [
     { label: 'Каталог', href: '/catalog' },
 ]
+
+export const CONTACTS: BreadcrumbItem[] = [
+    { label: 'Контакты', href: '/contacts' },
+]

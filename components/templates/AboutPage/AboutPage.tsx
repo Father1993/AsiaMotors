@@ -11,6 +11,8 @@ import Statistics from './Statistics'
 import Team from './Team'
 import HeroBlock from './HeroBlock'
 import AdvantagesBlock from './AdvantagesBlock'
+import Breadcrumbs from '@/components/features/Breadcrumbs/Breadcrumbs'
+import { ABOUT_BREADCRUMBS } from '@/shared/constants/breadcrumbs'
 
 const AboutPage = () => {
     return (
@@ -21,6 +23,7 @@ const AboutPage = () => {
             className="bg-gradient-to-b from-white to-gray-50"
         >
             <div className="container mx-auto px-4 py-16">
+                <Breadcrumbs items={ABOUT_BREADCRUMBS} />
                 {/* Героический блок */}
                 <HeroBlock />
                 {/* Статистика */}
