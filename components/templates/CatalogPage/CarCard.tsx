@@ -4,12 +4,7 @@ import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { FiHeart, FiShare2, FiInfo } from 'react-icons/fi'
 import { useState } from 'react'
-import { Car } from '@/shared/types/catalog'
-
-interface CarCardProps {
-    car: Car
-    viewMode: 'grid' | 'list'
-}
+import { CarCardProps } from '@/shared/types/catalog'
 
 const CarCard = ({ car, viewMode }: CarCardProps) => {
     const [isLiked, setIsLiked] = useState(false)

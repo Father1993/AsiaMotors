@@ -1,3 +1,4 @@
+import { FiSettings, FiZap, FiBox } from 'react-icons/fi'
 import { CarsDataType, Country } from '../types/catalog'
 
 export const countries: Country[] = [
@@ -26,42 +27,62 @@ export const carsData: CarsDataType = {
     china: [
         {
             id: 1,
-            name: 'Haval H6',
+            brand: 'Haval',
+            name: 'H6',
             category: 'Кроссоверы',
             price: '2 890 000 ₽',
             image: '/img/cars/catalog/china/haval_h6_new_gen_5_1000.jpg',
-            specs: ['2.0L', '150 л.с.', 'АКПП'],
+            specs: [
+                { icon: <FiSettings />, value: '2.0L' },
+                { icon: <FiZap />, value: '150 л.с.' },
+                { icon: <FiBox />, value: 'АКПП' },
+            ],
             available: true,
         },
         {
             id: 2,
-            name: 'TANK 300',
+            brand: 'TANK',
+            name: '300',
             category: 'Кроссоверы',
             price: '2 890 000 ₽',
             image: '/img/cars/catalog/china/tank500.jpeg',
-            specs: ['2.0L', '150 л.с.', 'АКПП'],
+            specs: [
+                { icon: <FiSettings />, value: '2.0L' },
+                { icon: <FiZap />, value: '150 л.с.' },
+                { icon: <FiBox />, value: 'АКПП' },
+            ],
             available: true,
         },
     ],
     japan: [
         {
             id: 1,
-            name: 'Toyota Camry',
+            brand: 'Toyota',
+            name: 'Camry',
             category: 'Седаны',
             price: '3 890 000 ₽',
             image: '/img/cars/catalog/japan/camry.jpg',
-            specs: ['2.5L', '200 л.с.', 'АКПП'],
+            specs: [
+                { icon: <FiSettings />, value: '2.5L' },
+                { icon: <FiZap />, value: '200 л.с.' },
+                { icon: <FiBox />, value: 'АКПП' },
+            ],
             available: true,
         },
     ],
     korea: [
         {
             id: 1,
-            name: 'Hyundai Tucson',
+            brand: 'Hyundai',
+            name: 'Tucson',
             category: 'Кроссоверы',
             price: '3 290 000 ₽',
             image: '/img/cars/catalog/korea/tucson.jpeg',
-            specs: ['2.0L', '180 л.с.', 'АКПП'],
+            specs: [
+                { icon: <FiSettings />, value: '2.0L' },
+                { icon: <FiZap />, value: '180 л.с.' },
+                { icon: <FiBox />, value: 'АКПП' },
+            ],
             available: true,
         },
     ],
