@@ -36,3 +36,7 @@ export interface Post {
     tags?: string[]
     readingTime?: string
 }
+export interface PricePopupProps {
+    isOpen: boolean
+    onClose: () => void
+}

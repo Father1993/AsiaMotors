@@ -5,6 +5,7 @@ import './globalStyles/normalize.css'
 import './globalStyles/globals.css'
 import './globalStyles/cookie-popup.css'
 import { LoadingProvider } from '@/components/provider/CustomProviderSpinner'
+import ModalProvider from '@/components/provider/ModalProvider'
 
 export const metadata: Metadata = {
     metadataBase: new URL('https://asiamotors.su'),
@@ -103,7 +104,9 @@ export default function RootLayout({
             <head />
             <body>
                 <PagesLayout>
-                    <LoadingProvider>{children}</LoadingProvider>
+                    <LoadingProvider>
+                        <ModalProvider>{children}</ModalProvider>
+                    </LoadingProvider>
                 </PagesLayout>
             </body>
         </html>
