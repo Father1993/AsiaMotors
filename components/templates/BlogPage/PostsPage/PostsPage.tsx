@@ -12,7 +12,7 @@ const PostsPage = ({ post }: { post: Post }) => {
 
     return (
         <div className="container py-16">
-            {breadcrumbs.length > 0 && <Breadcrumbs items={breadcrumbs} />}
+            <Breadcrumbs items={breadcrumbs} />
             <article className="max-w-4xl mx-auto mt-12">
                 <div className="relative h-[400px] mb-8 rounded-2xl overflow-hidden shadow-lg">
                     <Image
