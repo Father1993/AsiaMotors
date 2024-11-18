@@ -38,7 +38,7 @@ const ContactsPage = () => {
 
     return (
         <>
-            <section className="relative overflow-hidden pb-16">
+            <section className="relative overflow-hidden">
                 {/* Фоновый градиент */}
                 <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-white" />
 
