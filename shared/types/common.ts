@@ -33,4 +33,6 @@ export interface Post {
     image: string
     date: string
     author: string
+    tags?: string[]
+    readingTime?: string
 }

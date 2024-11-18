@@ -1,8 +1,8 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import { useState } from 'react'
 import Image from 'next/image'
+import { motion } from 'framer-motion'
 import { FiSearch, FiGrid, FiList } from 'react-icons/fi'
 import { HiOutlineAdjustments } from 'react-icons/hi'
 import { CountryId } from '@/shared/types/catalog'
