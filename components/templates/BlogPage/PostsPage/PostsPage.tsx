@@ -1,12 +1,28 @@
 'use client'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Post } from '@/shared/types/common'
 import ArrowLeft from '@/components/ui/ArrowLeft'
+import Breadcrumbs from '@/components/features/Breadcrumbs/Breadcrumbs'
+import { useBreadcrumbs } from '@/shared/hooks/useBreadcrumbs'
 
 const PostsPage = ({ post }: { post: Post }) => {
+    const [mounted, setMounted] = useState(false)
+    const breadcrumbs = useBreadcrumbs(post?.title)
+
+    // Добавляем эффект для client-side рендеринга
+    useEffect(() => {
+        setMounted(true)
+    }, [])
+
+    // Не показываем ничего до первого рендера на клиенте
+    if (!mounted) return null
+
     return (
         <div className="container py-16">
+            {/* Добавляем проверку наличия breadcrumbs */}
+            {breadcrumbs.length > 0 && <Breadcrumbs items={breadcrumbs} />}
             <article className="max-w-4xl mx-auto mt-12">
                 <div className="relative h-[400px] mb-8 rounded-2xl overflow-hidden shadow-lg">
                     <Image

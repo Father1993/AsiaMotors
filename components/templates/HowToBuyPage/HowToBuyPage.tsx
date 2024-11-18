@@ -1,12 +1,15 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { STEPS } from '@/shared/constants/steps'
+import Breadcrumbs from '@/components/features/Breadcrumbs/Breadcrumbs'
+import { HOW_TO_BUY_BREADCRUMBS } from '@/shared/constants/breadcrumbs'
 
 const HowToBuyPage = () => {
     return (
         <div className="bg-gradient-to-b from-white to-gray-50">
             {/* Hero секция */}
             <div className="container mx-auto px-4 py-16">
+                <Breadcrumbs items={HOW_TO_BUY_BREADCRUMBS} />
                 <div className="max-w-4xl mx-auto text-center mb-16">
                     <h1 className="text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-red-600 to-red-400">
                         Полное руководство по покупке автомобиля с компанией
