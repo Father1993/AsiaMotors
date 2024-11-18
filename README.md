@@ -128,9 +128,7 @@ asia-motors/
 
 ## 👥 Команда разработки
 
--   Frontend Developer - Andrej Spinej
--   UI/UX Designer - Andrej Spinej
--   Project Manager - Andrej Spinej
+-   Developer - Andrej Spinej
 
 ## 📄 Лицензия
 
