@@ -19,7 +19,7 @@ const BlogPage = ({ posts }: { posts: Post[] }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {posts.map((post, index) => (
                     <motion.div
-                        key={post.id}
+                        key={post.title}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.1 }}
