@@ -1,11 +1,12 @@
 /* eslint-disable max-len */
 import type { Metadata, Viewport } from 'next'
 import PagesLayout from '@/components/layout/PageLayout'
+import { LoadingProvider } from '@/components/provider/CustomProviderSpinner'
+import ModalProvider from '@/components/provider/ModalProvider'
 import './globalStyles/normalize.css'
 import './globalStyles/globals.css'
 import './globalStyles/cookie-popup.css'
-import { LoadingProvider } from '@/components/provider/CustomProviderSpinner'
-import ModalProvider from '@/components/provider/ModalProvider'
+import './globalStyles/posts.css'
 
 export const metadata: Metadata = {
     metadataBase: new URL('https://asiamotors.su'),

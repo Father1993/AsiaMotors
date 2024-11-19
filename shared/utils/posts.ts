@@ -9,7 +9,7 @@ const postsDirectory = path.join(process.cwd(), 'public', 'posts')
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {
     try {
-        const fullPath = path.join(postsDirectory, `${slug}.md`)
+        const fullPath = path.join(postsDirectory, `${slug}.mdx`)
         const fileContents = await fs.promises.readFile(fullPath, 'utf8')
 
         // Используем gray-matter для парсинга frontmatter
@@ -42,10 +42,14 @@ export async function getAllPosts(): Promise<Post[]> {
     try {
         const slugs = await fs.promises.readdir(postsDirectory)
         const posts = await Promise.all(
-            slugs.map(async (fileName) => {
-                const slug = fileName.replace(/\.md$/, '')
-                return getPostBySlug(slug)
-            })
+            slugs
+                // Изменяем фильтр для .mdx файлов
+                .filter((fileName) => fileName.endsWith('.mdx'))
+                .map(async (fileName) => {
+                    // Изменяем замену расширения
+                    const slug = fileName.replace(/\.mdx$/, '')
+                    return getPostBySlug(slug)
+                })
         )
 
         return posts
@@ -64,7 +68,10 @@ export async function getAllPosts(): Promise<Post[]> {
 export async function getAllPostSlugs(): Promise<string[]> {
     try {
         const fileNames = await fs.promises.readdir(postsDirectory)
-        return fileNames.map((fileName) => fileName.replace(/\.md$/, ''))
+        // Изменяем фильтр и замену расширения для .mdx файлов
+        return fileNames
+            .filter((fileName) => fileName.endsWith('.mdx'))
+            .map((fileName) => fileName.replace(/\.mdx$/, ''))
     } catch (error) {
         console.error('Error loading post slugs:', error)
         return []
