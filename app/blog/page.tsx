@@ -1,7 +1,6 @@
-/* eslint-disable max-len */
 import { Metadata } from 'next'
 import BlogPage from '@/components/templates/BlogPage/BlogPage'
-import { POSTS } from '@/shared/constants/posts'
+import { getAllPosts } from '@/shared/utils/posts'
 
 export const metadata: Metadata = {
     title: 'Блог об автомобилях | Asiamotors',
@@ -32,6 +31,7 @@ export const metadata: Metadata = {
     },
 }
 
-export default function BlogPages() {
-    return <BlogPage posts={POSTS} />
+export default async function BlogPages() {
+    const posts = await getAllPosts()
+    return <BlogPage posts={posts} />
 }

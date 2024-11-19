@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface ButtonProps
     extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     variant?: 'primary' | 'secondary'
@@ -25,18 +26,50 @@ export interface AnimatedCounterProps {
 }
 
 export interface Post {
-    id: string
+    id?: string
     title: string
-    slug: string
     excerpt: string
     content: string
-    image: string
     date: string
     author: string
-    tags?: string[]
+    image: string
+    slug: string
     readingTime?: string
+    tags?: string[]
 }
+
+export interface PostsPageProps {
+    post: Post
+}
+
+export interface Props {
+    params: any
+    searchParams?: any
+}
+
 export interface PricePopupProps {
     isOpen: boolean
     onClose: () => void
+}
+
+export interface ArrowLeftProps {
+    className?: string
+}
+
+// Определяем правильные типы для параметров
+export type PropsPost = {
+    params: any
+    searchParams?: any
+}
+
+// Обновляем тип для параметров страницы
+export type PageParams = {
+    params: any
+    searchParams?: any
+}
+
+// Определяем типы
+export type PageProps = {
+    params: any
+    searchParams?: any
 }

@@ -1,13 +1,29 @@
 import type { Config } from 'tailwindcss'
+import typography from '@tailwindcss/typography'
 
 const config: Config = {
     content: [
         './pages/**/*.{js,ts,jsx,tsx,mdx}',
         './components/**/*.{js,ts,jsx,tsx,mdx}',
         './app/**/*.{js,ts,jsx,tsx,mdx}',
+        './posts/**/*.{md,mdx}',
     ],
     theme: {
         extend: {
+            typography: {
+                DEFAULT: {
+                    css: {
+                        maxWidth: 'none',
+                        color: '#333',
+                        a: {
+                            color: '#3182ce',
+                            '&:hover': {
+                                color: '#2c5282',
+                            },
+                        },
+                    },
+                },
+            },
             colors: {
                 primary: {
                     DEFAULT: '#FF9100',
@@ -43,7 +59,7 @@ const config: Config = {
             },
         },
     },
-    plugins: [],
+    plugins: [typography],
     darkMode: 'class',
 }
 
