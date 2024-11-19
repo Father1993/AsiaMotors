@@ -1,0 +1,280 @@
+.intro-block {
+    background: linear-gradient(to right, #e8f4ff, #fff4e4);
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    margin: 2rem 0;
+}
+
+.intro-text {
+    font-size: 1.25rem;
+    line-height: 1.75;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+@media (min-width: 768px) {
+    .features-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.feature-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.feature-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.feature-value {
+    font-size: 1.875rem;
+    font-weight: bold;
+    color: #dc2626;
+}
+
+.feature-description {
+    color: #4b5563;
+}
+
+.image-container {
+    margin: 2rem 0;
+}
+
+.full-width-image {
+    width: 100%;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.image-caption {
+    text-align: center;
+    color: #4b5563;
+    margin-top: 0.5rem;
+    font-style: italic;
+}
+
+.specs-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+@media (min-width: 768px) {
+    .specs-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.specs-section h3 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.specs-list {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+}
+
+.specs-list li {
+    margin: 0.5rem 0;
+}
+
+.interior-images {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+@media (min-width: 768px) {
+    .interior-images {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.interior-image {
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.features-box {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    margin: 2rem 0;
+}
+
+.features-box h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.features-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .features-list {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.feature-check {
+    color: #dc2626;
+}
+
+.specs-table {
+    width: 100%;
+    background: white;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin: 2rem 0;
+}
+
+.specs-table th,
+.specs-table td {
+    padding: 0.75rem 1.5rem;
+    text-align: left;
+}
+
+.specs-table thead {
+    background-color: #f9fafb;
+}
+
+.specs-table tr:nth-child(even) {
+    background-color: #f9fafb;
+}
+
+.conclusions-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+@media (min-width: 768px) {
+    .conclusions-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.pros-box {
+    background-color: #f0fdf4;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+}
+
+.pros-box h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #15803d;
+}
+
+.cons-box {
+    background-color: #fef2f2;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+}
+
+.cons-box h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #dc2626;
+}
+
+.cta-box {
+    background: linear-gradient(to right, #f3e8ff, #ffe4e4);
+    padding: 2rem;
+    border-radius: 0.75rem;
+    margin: 3rem 0;
+}
+
+.cta-box h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.cta-box p {
+    font-size: 1.125rem;
+    color: #4b5563;
+    margin-bottom: 1.5rem;
+}
+
+.cta-button {
+    display: block;
+    padding: 1rem 2rem;
+    color: white;
+    background-color: #dc2626;
+    border-radius: 9999px;
+    transition: background-color 0.3s;
+    text-align: center;
+}
+
+.cta-button:hover {
+    background-color: #b91c1c;
+    color: white;
+}
+
+/* Стили для сравнения автомобилей */
+.comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+@media (min-width: 768px) {
+    .comparison-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.car-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.car-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #1e40af;
+}
+
+.car-specs {
+    list-style-type: none;
+    padding: 0;
+}
+
+.car-specs li {
+    margin: 0.75rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+}

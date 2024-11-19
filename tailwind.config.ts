@@ -15,8 +15,47 @@ const config: Config = {
                     css: {
                         maxWidth: 'none',
                         color: '#333',
+                        h1: {
+                            marginTop: '2rem',
+                            marginBottom: '1rem',
+                            fontSize: '2.5rem',
+                        },
+                        h2: {
+                            marginTop: '2rem',
+                            marginBottom: '1rem',
+                            fontSize: '2rem',
+                        },
+                        h3: {
+                            marginTop: '1.5rem',
+                            marginBottom: '0.75rem',
+                            fontSize: '1.5rem',
+                        },
+                        p: {
+                            marginTop: '1.25rem',
+                            marginBottom: '1.25rem',
+                        },
+                        ul: {
+                            marginTop: '1.25rem',
+                            marginBottom: '1.25rem',
+                        },
+                        li: {
+                            marginTop: '0.5rem',
+                            marginBottom: '0.5rem',
+                        },
+                        img: {
+                            marginTop: '2rem',
+                            marginBottom: '2rem',
+                            borderRadius: '0.75rem',
+                        },
+                        table: {
+                            marginTop: '2rem',
+                            marginBottom: '2rem',
+                            borderRadius: '0.75rem',
+                            overflow: 'hidden',
+                        },
                         a: {
                             color: '#3182ce',
+                            textDecoration: 'none',
                             '&:hover': {
                                 color: '#2c5282',
                             },

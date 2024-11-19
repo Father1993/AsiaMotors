@@ -147,3 +147,59 @@ div {
     top: 20% !important;
     left: 40% !important;
 }
+.intro-block {
+    background: linear-gradient(to right, #e8f4ff, #fff4e4);
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    margin: 2rem 0;
+}
+
+.intro-text {
+    font-size: 1.25rem;
+    line-height: 1.75;
+}
+
+.comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+@media (min-width: 768px) {
+    .comparison-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.car-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.car-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #1e40af;
+}
+
+.car-specs {
+    list-style-type: none;
+    padding: 0;
+}
+
+.car-specs li {
+    margin: 0.75rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.car-specs li:before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: #1e40af;
+}
