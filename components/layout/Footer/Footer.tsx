@@ -9,6 +9,7 @@ import WhatsAppIcon from '@/components/ui/WhatsAppIcon'
 import VkIcon from '@/components/ui/VkIcon'
 import TelegramIcon from '@/components/ui/TelegramIcon'
 import Logo from '@/components/common/Logo/Logo'
+import Creator from './Creator'
 
 const Footer = () => {
     return (
@@ -227,6 +228,7 @@ const Footer = () => {
                         </div>
                     </div>
                 </div>
+                <Creator />
             </div>
         </footer>
     )
