@@ -3,9 +3,12 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import { FAQS } from '@/shared/constants/faqs'
+import QuestionPopup from '../QuestionPopup/QuestionPopup'
 
 const FAQ = () => {
     const [activeIndex, setActiveIndex] = useState<number | null>(null)
+    // В компоненте где нужно открыть попап
+    const [isQuestionPopupOpen, setIsQuestionPopupOpen] = useState(false)
 
     return (
         <section className="py-20 bg-gradient-to-b from-white to-gray-50">
@@ -77,6 +80,7 @@ const FAQ = () => {
                         Не нашли ответ на свой вопрос?
                     </p>
                     <motion.button
+                        onClick={() => setIsQuestionPopupOpen(true)}
                         whileHover={{ scale: 1.03 }}
                         whileTap={{ scale: 0.98 }}
                         className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-xl font-semibold transition-colors duration-300 shadow-lg hover:shadow-xl shadow-red-500/20"
@@ -85,6 +89,10 @@ const FAQ = () => {
                     </motion.button>
                 </motion.div>
             </div>
+            <QuestionPopup
+                isOpen={isQuestionPopupOpen}
+                onClose={() => setIsQuestionPopupOpen(false)}
+            />
         </section>
     )
 }
