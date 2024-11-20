@@ -23,6 +23,7 @@ const ContactsBlock = () => {
     const [phone, setPhone] = useState('')
     const [nameError, setNameError] = useState('')
     const [phoneError, setPhoneError] = useState('')
+
     // Используем хук emailService вместо локального состояния isSubmitting
     const {
         formRef,
