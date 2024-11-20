@@ -7,7 +7,8 @@ import { IMaskInput } from 'react-imask'
 import { FaWhatsapp, FaTelegramPlane } from 'react-icons/fa'
 import { HiOutlineUser, HiOutlinePhone } from 'react-icons/hi'
 import { useInView } from 'react-intersection-observer'
-import toast from 'react-hot-toast'
+import { useEmailService } from '@/shared/hooks/useEmailService'
+import { emailConfig } from '@/shared/config/emailService'
 
 const DynamicImage = dynamic(() => import('next/image'), {
     ssr: false,
@@ -22,7 +23,12 @@ const ContactsBlock = () => {
     const [phone, setPhone] = useState('')
     const [nameError, setNameError] = useState('')
     const [phoneError, setPhoneError] = useState('')
-    const [isSubmitting, setIsSubmitting] = useState(false)
+    // Используем хук emailService вместо локального состояния isSubmitting
+    const {
+        formRef,
+        isLoading: isSubmitting,
+        sendEmail,
+    } = useEmailService(emailConfig)
 
     useEffect(() => {
         setIsClient(true)
@@ -77,47 +83,11 @@ const ContactsBlock = () => {
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-
         if (!validateForm() || isSubmitting) return
-
-        setIsSubmitting(true)
-
-        try {
-            // Здесь должна быть логика отправки формы на сервер
-            await new Promise((resolve) => setTimeout(resolve, 1000)) // Имитация запроса
-
-            // Очистка формы после успешной отправки
+        await sendEmail(() => {
             setName('')
             setPhone('')
-            toast.success(
-                'Форма успешно отправлена! Мы свяжемся с вами в ближайшее время',
-                {
-                    duration: 4000,
-                    position: 'top-center',
-                    style: {
-                        background: '#10B981',
-                        color: '#fff',
-                        borderRadius: '1rem',
-                    },
-                }
-            )
-        } catch (error) {
-            console.error('Ошибка при отправке формы:', error)
-            toast.error(
-                'Произошла ошибка при отправке формы. Пожалуйста, попробуйте позже',
-                {
-                    duration: 4000,
-                    position: 'top-center',
-                    style: {
-                        background: '#EF4444',
-                        color: '#fff',
-                        borderRadius: '1rem',
-                    },
-                }
-            )
-        } finally {
-            setIsSubmitting(false)
-        }
+        })
     }
 
     const containerVariants = {
@@ -159,6 +129,7 @@ const ContactsBlock = () => {
                             </h2>
 
                             <form
+                                ref={formRef}
                                 onSubmit={handleSubmit}
                                 className="space-y-6 mt-12"
                             >
@@ -166,6 +137,7 @@ const ContactsBlock = () => {
                                     <HiOutlineUser className="absolute left-4 top-1/2 -translate-y-1/2 text-white/60 text-xl group-focus-within:text-red-500 transition-colors" />
                                     <input
                                         type="text"
+                                        name="user_name" // Важно! Добавляем name для EmailJS
                                         value={name}
                                         onChange={handleNameChange}
                                         placeholder="Ваше имя"
@@ -182,6 +154,7 @@ const ContactsBlock = () => {
                                     <HiOutlinePhone className="absolute left-4 top-1/2 -translate-y-1/2 text-white/60 text-xl group-focus-within:text-red-500 transition-colors" />
                                     <IMaskInput
                                         mask="+{7} (000) 000-00-00"
+                                        name="user_phone" // Важно! Добавляем name для EmailJS
                                         value={phone}
                                         onAccept={handlePhoneAccept}
                                         placeholder="+7 (___) ___-__-__"
