@@ -203,3 +203,13 @@ div {
     left: 0;
     color: #1e40af;
 }
+
+#customPopupQuestion {
+    top: 10% !important;
+    left: 37% !important;
+}
+
+#customPopupPersonal {
+    top: 10% !important;
+    left: 37% !important;
+}

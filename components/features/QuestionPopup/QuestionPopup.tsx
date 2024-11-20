@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FiX, FiUser, FiPhone, FiMail, FiMessageSquare } from 'react-icons/fi'
+import { FiX, FiUser, FiPhone, FiMessageSquare } from 'react-icons/fi'
 import { PricePopupProps } from '@/shared/types/common'
 import { useEmailService } from '@/shared/hooks/useEmailService'
 import { emailConfig } from '@/shared/config/emailService'
@@ -35,15 +35,23 @@ const QuestionPopup = ({ isOpen, onClose }: PricePopupProps) => {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
-                        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[999]"
+                        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[999] overflow-hidden flex items-center justify-center"
                     />
 
                     <motion.div
+                        id="customPopupQuestion"
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-[80%] md:w-[60%] lg:w-[50%] max-w-lg
-                            bg-white rounded-3xl shadow-2xl z-[1000] p-6 md:p-8"
+                        className="fixed w-[90%] sm:w-[80%] md:w-[60%] lg:w-[50%] max-w-lg
+                            bg-white rounded-3xl shadow-2xl z-[1000]
+                            overflow-y-auto max-h-[90vh]
+                            p-6 md:p-8
+                            flex flex-col"
+                        style={{
+                            margin: 'auto',
+                            position: 'fixed',
+                        }}
                     >
                         <button
                             onClick={onClose}
@@ -108,22 +116,6 @@ const QuestionPopup = ({ isOpen, onClose }: PricePopupProps) => {
                             </div>
 
                             <div className="relative group">
-                                <FiMail
-                                    className="absolute top-1/2 -translate-y-1/2 left-4 text-gray-400 
-                                    group-focus-within:text-blue-500 transition-colors"
-                                />
-                                <input
-                                    type="email"
-                                    name="user_email"
-                                    placeholder="Email для ответа"
-                                    required
-                                    className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200
-                                    focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none
-                                    transition-all duration-200"
-                                />
-                            </div>
-
-                            <div className="relative group">
                                 <FiMessageSquare
                                     className="absolute top-4 left-4 text-gray-400 
                                     group-focus-within:text-blue-500 transition-colors"
@@ -143,9 +135,9 @@ const QuestionPopup = ({ isOpen, onClose }: PricePopupProps) => {
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                                 disabled={isLoading}
-                                className="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600
-                                text-white font-medium rounded-xl shadow-lg shadow-blue-500/30
-                                hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300
+                                className="w-full py-4 bg-gradient-to-r from-red-600 to-purple-600
+                                text-white font-medium rounded-xl shadow-lg shadow-red-500/30
+                                hover:shadow-xl hover:shadow-red-500/40 transition-all duration-300
                                 disabled:opacity-70 disabled:cursor-not-allowed"
                             >
                                 {isLoading ? (
