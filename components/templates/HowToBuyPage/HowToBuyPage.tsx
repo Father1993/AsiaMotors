@@ -1,10 +1,15 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import { STEPS } from '@/shared/constants/steps'
 import Breadcrumbs from '@/components/features/Breadcrumbs/Breadcrumbs'
 import { HOW_TO_BUY_BREADCRUMBS } from '@/shared/constants/breadcrumbs'
+import { useModalStore } from '@/components/provider/ModalProvider'
 
 const HowToBuyPage = () => {
+    const openPopup = useModalStore((state) => state.openPopup)
+
     return (
         <div className="bg-gradient-to-b from-white to-gray-50">
             {/* Hero секция */}
@@ -26,12 +31,12 @@ const HowToBuyPage = () => {
                         >
                             Смотреть каталог
                         </Link>
-                        <Link
-                            href="/contact"
+                        <button
+                            onClick={openPopup}
                             className="px-8 py-3 border-2 border-red-600 text-red-600 rounded-full hover:bg-red-50 transition-colors"
                         >
                             Получить консультацию
-                        </Link>
+                        </button>
                     </div>
                 </div>
 
@@ -262,12 +267,12 @@ const HowToBuyPage = () => {
 
                 {/* CTA */}
                 <div className="text-center pb-16">
-                    <Link
-                        href="/contact"
+                    <button
+                        onClick={openPopup}
                         className="inline-block px-12 p-8 bg-gradient-to-r from-red-500 to-red-600 text-white text-lg font-bold rounded-full hover:scale-105 transition-transform shadow-lg mt-12"
                     >
                         Хочу купить автомобиль
-                    </Link>
+                    </button>
                     <p className="mt-4 text-gray-500 pb-10">
                         *Бесплатная консультация и расчет стоимости
                     </p>

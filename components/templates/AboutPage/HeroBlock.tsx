@@ -1,8 +1,12 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
+import { useState } from 'react'
+import PersonalPopup from '@/components/features/PersonalPopup/PersonalPopup'
 
 const HeroBlock = () => {
+    const [isQuestionPopupOpen, setIsQuestionPopupOpen] = useState(false)
+
     const scrollToTeam = (e: React.MouseEvent<HTMLAnchorElement>) => {
         e.preventDefault()
         const teamSection = document.querySelector('#team')
@@ -46,13 +50,13 @@ const HeroBlock = () => {
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                             >
-                                <Link
-                                    href="/contact"
+                                <button
+                                    onClick={() => setIsQuestionPopupOpen(true)}
                                     className="flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl font-medium shadow-lg hover:shadow-red-200 transition-all duration-300"
                                 >
                                     Получить консультацию
                                     <span className="text-xl">→</span>
-                                </Link>
+                                </button>
                             </motion.div>
 
                             <motion.div
@@ -95,6 +99,10 @@ const HeroBlock = () => {
                     </motion.div>
                 </div>
             </div>
+            <PersonalPopup
+                isOpen={isQuestionPopupOpen}
+                onClose={() => setIsQuestionPopupOpen(false)}
+            />
         </section>
     )
 }
