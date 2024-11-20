@@ -64,10 +64,10 @@ const Popup = ({ isOpen, onClose }: PricePopupProps) => {
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
                         className="fixed w-[90%] sm:w-[80%] md:w-[60%] lg:w-[50%] max-w-lg
-                          bg-white rounded-3xl shadow-2xl z-[1000]
-                          overflow-y-auto max-h-[90vh]
-                          p-6 md:p-8
-                          flex flex-col"
+                            bg-white rounded-3xl shadow-2xl z-[1000]
+                            overflow-y-auto max-h-[90vh]
+                            p-6 md:p-8
+                            flex flex-col"
                         style={{
                             margin: 'auto',
                             position: 'fixed',

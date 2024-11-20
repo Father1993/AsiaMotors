@@ -78,11 +78,12 @@ const Hero: React.FC = () => {
 
                             <div className="flex flex-col sm:flex-row gap-4 mb-12">
                                 <motion.button
+                                    onClick={openPopup}
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
                                     className="px-8 py-4 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl font-medium 
-        shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:shadow-[0_0_25px_rgba(239,68,68,0.45)] 
-        transition-all duration-300 flex items-center justify-center gap-2 group"
+                                    shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:shadow-[0_0_25px_rgba(239,68,68,0.45)] 
+                                    transition-all duration-300 flex items-center justify-center gap-2 group"
                                 >
                                     Оставить заявку
                                     <motion.span
@@ -100,8 +101,8 @@ const Hero: React.FC = () => {
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
                                     className="px-8 py-4 border-2 border-red-500 text-red-500 rounded-xl font-medium
-                hover:bg-red-50/50 transition-all duration-300 backdrop-blur-sm
-                flex items-center justify-center gap-2 group"
+                                    hover:bg-red-50/50 transition-all duration-300 backdrop-blur-sm
+                                    flex items-center justify-center gap-2 group"
                                 >
                                     <span className="text-xl">₽</span>
                                     Узнать стоимость
