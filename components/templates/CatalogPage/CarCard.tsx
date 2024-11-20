@@ -3,18 +3,58 @@
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { FiHeart, FiShare2, FiInfo } from 'react-icons/fi'
-import { useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { CarCardProps } from '@/shared/types/catalog'
+import {
+    TelegramShareButton,
+    WhatsappShareButton,
+    VKShareButton,
+    TelegramIcon,
+    WhatsappIcon,
+    VKIcon,
+} from 'react-share'
 
 const CarCard = ({ car, viewMode }: CarCardProps) => {
     const [isLiked, setIsLiked] = useState(false)
     const [showDetails, setShowDetails] = useState(false)
+    const [isShareModalOpen, setIsShareModalOpen] = useState(false)
+    const [isCopied, setIsCopied] = useState(false)
+
+    // Функция для копирования ссылки
+    const copyToClipboard = async () => {
+        const url = `https://asiamotors.su/catalog/${car.id}`
+        try {
+            await navigator.clipboard.writeText(url)
+            setIsCopied(true)
+            // Сбрасываем состояние через 2 секунды
+            setTimeout(() => setIsCopied(false), 2000)
+        } catch (err) {
+            console.error('Failed to copy:', err)
+        }
+    }
 
     // Анимация для карточки
     const cardVariants = {
         hidden: { opacity: 0, y: 20 },
         visible: { opacity: 1, y: 0 },
     }
+
+    const shareModalRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                shareModalRef.current &&
+                !shareModalRef.current.contains(event.target as Node)
+            ) {
+                setIsShareModalOpen(false)
+            }
+        }
+
+        document.addEventListener('mousedown', handleClickOutside)
+        return () =>
+            document.removeEventListener('mousedown', handleClickOutside)
+    }, [])
 
     const gridCard = (
         <motion.div
@@ -62,12 +102,84 @@ const CarCard = ({ car, viewMode }: CarCardProps) => {
                     >
                         <FiHeart className={isLiked ? 'fill-current' : ''} />
                     </motion.button> */}
-                    <motion.button
+                    <motion.div
                         whileTap={{ scale: 0.9 }}
-                        className="p-2 rounded-full bg-white text-gray-700"
+                        onClick={() => setIsShareModalOpen(!isShareModalOpen)}
+                        className="p-2 rounded-full bg-white text-gray-700 relative cursor-pointer"
                     >
                         <FiShare2 />
-                    </motion.button>
+
+                        {/* Модальное окно шеринга */}
+                        {isShareModalOpen && (
+                            <div className="absolute right-0 top-12 bg-white p-4 rounded-xl shadow-lg z-50 flex gap-2">
+                                <WhatsappShareButton
+                                    url={`https://asiamotors.su/catalog/${car.id}`}
+                                    title={`${car.brand} ${car.name} - ${car.price}`}
+                                >
+                                    <WhatsappIcon size={32} round />
+                                </WhatsappShareButton>
+
+                                <TelegramShareButton
+                                    url={`https://asiamotors.su/catalog/${car.id}`}
+                                    title={`${car.brand} ${car.name} - ${car.price}`}
+                                >
+                                    <TelegramIcon size={32} round />
+                                </TelegramShareButton>
+
+                                <VKShareButton
+                                    url={`https://asiamotors.su/catalog/${car.id}`}
+                                    title={`${car.brand} ${car.name} - ${car.price}`}
+                                    image={car.image}
+                                >
+                                    <VKIcon size={32} round />
+                                </VKShareButton>
+
+                                {/* Кнопка копирования ссылки */}
+                                <div className="relative">
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation() // Предотвращаем закрытие модального окна
+                                            copyToClipboard()
+                                        }}
+                                        className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full hover:bg-gray-200 transition-colors"
+                                        title="Копировать ссылку"
+                                    >
+                                        {isCopied ? (
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                className="h-4 w-4 text-green-500"
+                                                viewBox="0 0 20 20"
+                                                fill="currentColor"
+                                            >
+                                                <path
+                                                    fillRule="evenodd"
+                                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                    clipRule="evenodd"
+                                                />
+                                            </svg>
+                                        ) : (
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                className="h-4 w-4"
+                                                viewBox="0 0 20 20"
+                                                fill="currentColor"
+                                            >
+                                                <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+                                                <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+                                            </svg>
+                                        )}
+                                    </button>
+
+                                    {/* Всплывающее уведомление */}
+                                    {isCopied && (
+                                        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">
+                                            Ссылка скопирована!
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+                    </motion.div>
                 </div>
             </div>
 
