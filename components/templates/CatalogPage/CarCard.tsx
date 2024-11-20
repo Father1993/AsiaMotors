@@ -50,7 +50,8 @@ const CarCard = ({ car, viewMode }: CarCardProps) => {
 
                 {/* Кнопки действий */}
                 <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <motion.button
+                    {/* TODO в будущем можем сохранить понравившейся авто в localStorage */}
+                    {/* <motion.button
                         whileTap={{ scale: 0.9 }}
                         onClick={() => setIsLiked(!isLiked)}
                         className={`p-2 rounded-full ${
@@ -60,7 +61,7 @@ const CarCard = ({ car, viewMode }: CarCardProps) => {
                         }`}
                     >
                         <FiHeart className={isLiked ? 'fill-current' : ''} />
-                    </motion.button>
+                    </motion.button> */}
                     <motion.button
                         whileTap={{ scale: 0.9 }}
                         className="p-2 rounded-full bg-white text-gray-700"
