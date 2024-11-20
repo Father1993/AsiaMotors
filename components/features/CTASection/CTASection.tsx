@@ -1,4 +1,11 @@
+'use client'
+
+import { useState } from 'react'
+import PersonalPopup from '../PersonalPopup/PersonalPopup'
+
 const CTASection = () => {
+    const [isQuestionPopupOpen, setIsQuestionPopupOpen] = useState(false)
+
     return (
         <section
             className="py-20 relative bg-cover bg-center bg-fixed bg-no-repeat text-white overflow-hidden"
@@ -23,10 +30,17 @@ const CTASection = () => {
                     Оставьте заявку прямо сейчас и получите персональное
                     предложение
                 </p>
-                <button className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-red-600/20">
+                <button
+                    onClick={() => setIsQuestionPopupOpen(true)}
+                    className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-red-600/20"
+                >
                     Получить предложение
                 </button>
             </div>
+            <PersonalPopup
+                isOpen={isQuestionPopupOpen}
+                onClose={() => setIsQuestionPopupOpen(false)}
+            />
         </section>
     )
 }

@@ -7,7 +7,6 @@ import QuestionPopup from '../QuestionPopup/QuestionPopup'
 
 const FAQ = () => {
     const [activeIndex, setActiveIndex] = useState<number | null>(null)
-    // В компоненте где нужно открыть попап
     const [isQuestionPopupOpen, setIsQuestionPopupOpen] = useState(false)
 
     return (
