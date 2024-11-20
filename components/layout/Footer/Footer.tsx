@@ -213,7 +213,7 @@ const Footer = () => {
                         <div className="text-sm">
                             © 2024 Asia Motors. Все права защищены.
                             <Link
-                                href="/privacy-policy"
+                                href="/privacy"
                                 className="hover:text-red-500 transition-colors ml-2"
                             >
                                 Политика конфиденциальности
