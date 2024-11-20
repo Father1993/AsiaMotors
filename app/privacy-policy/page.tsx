@@ -3,15 +3,15 @@ import { Metadata } from 'next'
 import PrivacyPolicyPage from '@/components/templates/PrivacyPolicyPage/PrivacyPolicyPage'
 
 export const metadata: Metadata = {
-    title: 'Политика конфиденциальности | Asiamotors',
+    title: 'Политика использования файлов cookie | Asiamotors',
     description:
-        'Ознакомьтесь с политикой конфиденциальности Asiamotors. Мы заботимся о защите ваших персональных данных и обеспечиваем прозрачность в обработке информации наших клиентов',
+        'Узнайте, как Asiamotors использует файлы cookie для улучшения работы сайта. Информация о типах cookie-файлов, их назначении и управлении ими',
     openGraph: {
-        title: 'Политика конфиденциальности Asiamotors | Защита ваших данных',
+        title: 'Политика использования файлов cookie | Asiamotors',
         description:
-            'Узнайте, как AsiaMotors обеспечивает безопасность ваших персональных данных. Наша политика конфиденциальности гарантирует прозрачность и надежность в обработке информации.',
+            'Узнайте, как Asiamotors использует файлы cookie для улучшения вашего опыта использования сайта. Информация о настройках и управлении cookie-файлами',
         type: 'website',
-        url: 'https://asiamotors.su/privacy-policy',
+        url: 'https://asiamotors.su/cookie-policy',
         images: [
             {
                 url: '/img/android-chrome-192x192.png',
@@ -23,9 +23,9 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: 'summary',
-        title: 'Политика конфиденциальности Asiamotors | Ваши данные под защитой',
+        title: 'Политика cookie-файлов Asiamotors | Прозрачность и контроль',
         description:
-            'Asiamotors гарантирует безопасность ваших персональных данных. Ознакомьтесь с нашей политикой конфиденциальности для полной информации',
+            'Информация об использовании cookie-файлов на сайте Asiamotors. Узнайте, как управлять настройками cookie для комфортного использования сайта',
         images: '/img/android-chrome-192x192.png',
     },
     icons: {

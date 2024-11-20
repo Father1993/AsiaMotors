@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import ArrowLeft from '@/components/ui/ArrowLeft'
 
 const PrivacyPolicyPage = () => (
     <main>
@@ -13,10 +14,10 @@ const PrivacyPolicyPage = () => (
 
                     <div className="text-gray-700">
                         <p>
-                            Этот сайт использует файлы cookie для улучшения
-                            вашего опыта использования. Продолжая пользоваться
-                            сайтом, вы соглашаетесь с использованием нами файлов
-                            cookie
+                            Сайт Asia Motors использует файлы cookie для
+                            улучшения вашего опыта использования. Продолжая
+                            пользоваться сайтом, вы соглашаетесь с
+                            использованием нами файлов cookie
                         </p>
 
                         <h2 className="text-2xl font-semibold text-gray-800 mt-8 mb-4">
@@ -69,10 +70,14 @@ const PrivacyPolicyPage = () => (
                     </div>
                     {/* Кнопка для возврата на главную, выровненная по центру */}
                     <div className="flex justify-center mt-8">
-                        <Link href="/">
-                            <button className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition duration-200">
-                                На главную
-                            </button>
+                        <Link
+                            href="/"
+                            className="group px-6 py-3 rounded-full bg-gradient-to-r from-purple-500 to-red-600 
+                            text-white font-semibold tracking-wider shadow-md hover:shadow-lg transition-all 
+                            duration-300 transform hover:-translate-y-1 flex items-center gap-2"
+                        >
+                            <ArrowLeft className="transition-transform group-hover:-translate-x-1" />
+                            На главную
                         </Link>
                     </div>
                 </div>
