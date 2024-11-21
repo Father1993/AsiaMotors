@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { FiSearch, FiShoppingCart } from 'react-icons/fi'
@@ -11,8 +10,6 @@ import {
 } from '@/shared/constants/spares'
 
 const SparesPage = () => {
-    const [searchQuery, setSearchQuery] = useState('')
-
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pb-16">
             {/* Hero Section */}
@@ -55,8 +52,8 @@ const SparesPage = () => {
                             <input
                                 type="text"
                                 placeholder="Введите название или номер детали..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
+                                // value={searchQuery}
+                                // onChange={(e) => setSearchQuery(e.target.value)}
                                 className="w-full pl-12 pr-4 py-4 rounded-xl bg-white/95 backdrop-blur-sm
                                 border-2 border-transparent focus:border-red-500 outline-none
                                 text-gray-800 placeholder-gray-400 shadow-lg transition-all"
@@ -67,7 +64,6 @@ const SparesPage = () => {
             </section>
 
             {/* More info block */}
-            {/* Добавляем новую секцию после категорий */}
             <section className="py-16 bg-gradient-to-br from-gray-50 to-white">
                 <div className="container mx-auto px-4">
                     <motion.h2
@@ -233,12 +229,11 @@ const SparesPage = () => {
                         </h2>
                         <p className="text-xl mb-8 text-white/90 text-center">
                             Заполните форму, и наши специалисты подберут
-                            необходимые детали для вашего автомобиля
+                            необходимые детали
                         </p>
 
                         <form className="space-y-6">
                             <div className="grid md:grid-cols-2 gap-6">
-                                {/* Марка и модель */}
                                 <motion.div
                                     initial={{ opacity: 0, x: -20 }}
                                     whileInView={{ opacity: 1, x: 0 }}
@@ -249,6 +244,7 @@ const SparesPage = () => {
                                     </label>
                                     <input
                                         type="text"
+                                        name="car_model"
                                         placeholder="Например: Haval F7"
                                         className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20
                             text-white placeholder-white/50 focus:outline-none focus:border-white
@@ -268,6 +264,7 @@ const SparesPage = () => {
                                     </label>
                                     <input
                                         type="text"
+                                        name="car_year"
                                         placeholder="Например: 2021"
                                         className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20
                             text-white placeholder-white/50 focus:outline-none focus:border-white
@@ -288,6 +285,7 @@ const SparesPage = () => {
                                 </label>
                                 <input
                                     type="text"
+                                    name="vin_number"
                                     placeholder="Введите VIN или номер кузова"
                                     className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20
                         text-white placeholder-white/50 focus:outline-none focus:border-white
@@ -307,6 +305,7 @@ const SparesPage = () => {
                                     </label>
                                     <input
                                         type="text"
+                                        name="part_name"
                                         placeholder="Например: Передний бампер"
                                         className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20
                             text-white placeholder-white/50 focus:outline-none focus:border-white
@@ -326,6 +325,7 @@ const SparesPage = () => {
                                     </label>
                                     <input
                                         type="text"
+                                        name="part_number"
                                         placeholder="Если известен"
                                         className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20
                             text-white placeholder-white/50 focus:outline-none focus:border-white
@@ -346,6 +346,7 @@ const SparesPage = () => {
                                     </label>
                                     <input
                                         type="text"
+                                        name="user_name"
                                         placeholder="Как к вам обращаться"
                                         className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20
                             text-white placeholder-white/50 focus:outline-none focus:border-white
@@ -364,6 +365,7 @@ const SparesPage = () => {
                                     </label>
                                     <input
                                         type="tel"
+                                        name="user_phone"
                                         placeholder="+7 (___) ___-__-__"
                                         className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20
                             text-white placeholder-white/50 focus:outline-none focus:border-white
@@ -384,7 +386,7 @@ const SparesPage = () => {
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
                                     className="px-8 py-4 bg-white text-red-600 rounded-xl font-medium
-                        hover:bg-gray-100 transition-colors flex items-center gap-2"
+                            hover:bg-gray-100 transition-colors flex items-center gap-2"
                                     type="submit"
                                 >
                                     <FiShoppingCart className="text-xl" />
