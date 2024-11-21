@@ -26,7 +26,19 @@ const Popup = ({ isOpen, onClose }: PricePopupProps) => {
     // Обновляем handleSubmit для использования sendEmail из хука
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
-        await sendEmail(onClose)
+        const form = formRef.current
+        if (!form) return
+
+        // Создаем объект с данными формы
+        const templateParams = {
+            form_name: 'Форма расчета стоимости', // Указываем название формы
+            user_name: form.user_name.value,
+            user_phone: form.user_phone.value,
+            user_city: form.user_city.value,
+            car_model: form.car_model.value,
+        }
+
+        await sendEmail(onClose, templateParams)
     }
 
     return (

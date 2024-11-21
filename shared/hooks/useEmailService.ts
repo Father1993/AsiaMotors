@@ -1,26 +1,30 @@
 import { useRef, useState } from 'react'
 import emailjs from '@emailjs/browser'
 import { toast } from 'react-hot-toast'
-import { EmailConfig } from '../types/emailService'
+import { EmailConfig, EmailTemplateParams } from '../types/emailService'
 
 export const useEmailService = (config: EmailConfig) => {
     const formRef = useRef<HTMLFormElement>(null)
     const [isLoading, setIsLoading] = useState(false)
 
-    const sendEmail = async (onSuccess?: () => void) => {
+    const sendEmail = async (
+        onClose: () => void,
+        templateParams: EmailTemplateParams
+    ) => {
         setIsLoading(true)
         try {
-            await emailjs.sendForm(
+            await emailjs.send(
                 config.serviceId,
                 config.templateId,
-                formRef.current!,
+                templateParams,
                 config.publicKey
             )
             toast.success('Сообщение успешно отправлено!')
-            onSuccess?.()
+            if (formRef.current) formRef.current.reset()
+            onClose()
         } catch (error) {
-            toast.error('Произошла ошибка при отправке')
-            console.error(error)
+            console.error('Ошибка отправки:', error)
+            toast.error('Ошибка при отправке сообщения')
         } finally {
             setIsLoading(false)
         }
