@@ -278,3 +278,28 @@
     padding-left: 1.5rem;
     position: relative;
 }
+
+.specs-table {
+    width: 100%;
+    background: white;
+    border-radius: 0.75rem;
+    overflow-x: auto; /* Добавляем горизонтальную прокрутку */
+    display: block; /* Важно для работы overflow на мобильных */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin: 2rem 0;
+    white-space: nowrap; /* Предотвращает перенос текста */
+}
+
+@media (min-width: 768px) {
+    .specs-table {
+        display: table; /* Возвращаем стандартное отображение на десктопе */
+        white-space: normal; /* Разрешаем перенос на десктопе */
+    }
+}
+
+.specs-table th,
+.specs-table td {
+    padding: 0.75rem 1.5rem;
+    text-align: left;
+    min-width: 120px; /* Минимальная ширина ячеек */
+}

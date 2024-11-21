@@ -85,10 +85,17 @@ const ContactsBlock = () => {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (!validateForm() || isSubmitting) return
+
+        const templateParams = {
+            form_name: 'Форма консультации',
+            user_name: name,
+            user_phone: phone,
+        }
+
         await sendEmail(() => {
             setName('')
             setPhone('')
-        })
+        }, templateParams)
     }
 
     const containerVariants = {

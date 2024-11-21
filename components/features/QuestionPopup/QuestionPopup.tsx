@@ -23,7 +23,17 @@ const QuestionPopup = ({ isOpen, onClose }: PricePopupProps) => {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
-        await sendEmail(onClose)
+        const form = formRef.current
+        if (!form) return
+
+        const templateParams = {
+            form_name: 'Форма вопроса',
+            user_name: form.user_name.value,
+            user_phone: form.user_phone.value,
+            message: form.message.value,
+        }
+
+        await sendEmail(onClose, templateParams)
     }
 
     return (

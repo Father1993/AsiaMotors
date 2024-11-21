@@ -23,7 +23,16 @@ const PersonalPopup = ({ isOpen, onClose }: PricePopupProps) => {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
-        await sendEmail(onClose)
+        const form = formRef.current
+        if (!form) return
+
+        const templateParams = {
+            form_name: 'Форма специального предложения',
+            user_name: form.user_name.value,
+            user_phone: form.user_phone.value,
+        }
+
+        await sendEmail(onClose, templateParams)
     }
 
     return (
@@ -60,7 +69,7 @@ const PersonalPopup = ({ isOpen, onClose }: PricePopupProps) => {
                             transition-colors duration-200"
                             aria-label="Закрыть окно"
                         >
-                            <FiX className="w-6 h-6" />
+                            <FiX className="w-6 h-6 text-black" />
                         </button>
 
                         <div className="text-center mb-8">
@@ -139,7 +148,7 @@ const PersonalPopup = ({ isOpen, onClose }: PricePopupProps) => {
                                     required
                                     className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200
                                     focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none
-                                    transition-all duration-200"
+                                    transition-all duration-200 text-black"
                                 />
                             </div>
 
@@ -155,7 +164,7 @@ const PersonalPopup = ({ isOpen, onClose }: PricePopupProps) => {
                                     required
                                     className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200
                                     focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none
-                                    transition-all duration-200"
+                                    transition-all duration-200 text-black"
                                 />
                             </div>
 

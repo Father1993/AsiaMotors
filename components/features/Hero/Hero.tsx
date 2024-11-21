@@ -72,8 +72,9 @@ const Hero: React.FC = () => {
                             </h1>
 
                             <h2 className="text-xl md:text-2xl text-black lg:text-gray-600 mb-8">
-                                Профессиональны с собственными офисами в Китае.
-                                Делаем покупку автомобиля простой и безопасной
+                                Профессиональная команда с собственными офисами
+                                в Китае. Делаем покупку автомобиля простой и
+                                безопасной
                             </h2>
 
                             <div className="flex flex-col sm:flex-row gap-4 mb-12">
@@ -121,7 +122,7 @@ const Hero: React.FC = () => {
                                             </motion.span>
                                             +
                                         </div>
-                                        <div className="text-black-600 text-m">
+                                        <div className="text-black-600 text-m font-bold lg:font-normal">
                                             Довольных клиентов
                                         </div>
                                     </div>
@@ -135,7 +136,7 @@ const Hero: React.FC = () => {
                                         <div className="text-3xl font-bold text-black-900">
                                             100%
                                         </div>
-                                        <div className="text-black-600 text-m">
+                                        <div className="text-black-600 text-m font-bold lg:font-normal">
                                             Гарантия на всех этапах
                                         </div>
                                     </div>
@@ -150,7 +151,7 @@ const Hero: React.FC = () => {
                                         <div className="text-xl font-bold text-black-900 leading-tight">
                                             Официальные представители
                                         </div>
-                                        <div className="text-m text-black-600">
+                                        <div className="text-black-600 text-m font-bold lg:font-normal">
                                             Офисы в Китае и в РФ
                                         </div>
                                     </div>
@@ -165,7 +166,7 @@ const Hero: React.FC = () => {
                                         <div className="text-xl font-bold text-black-900 leading-tight">
                                             Прозрачные условия
                                         </div>
-                                        <div className="text-m text-black-600">
+                                        <div className="text-black-600 text-m font-bold lg:font-normal">
                                             Без скрытых комиссий
                                         </div>
                                     </div>
