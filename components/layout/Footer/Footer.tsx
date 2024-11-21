@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import Link from 'next/link'
 import {
     PhoneIcon,
@@ -209,10 +210,10 @@ const Footer = () => {
                 </div>
 
                 {/* Нижняя часть футера */}
-                <div className="border-t border-gray-800 pt-8">
+                <div className="border-t border-gray-800 pt-8 mb-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
                         <div className="text-sm">
-                            © 2024 Asia Motors. Все права защищены.
+                            © 2024 ООО "Азиа моторс". Все права защищены.
                             <Link
                                 href="/privacy"
                                 className="hover:text-red-500 transition-colors ml-2"
