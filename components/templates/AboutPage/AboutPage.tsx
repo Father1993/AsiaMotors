@@ -13,6 +13,7 @@ import HeroBlock from './HeroBlock'
 import AdvantagesBlock from './AdvantagesBlock'
 import Breadcrumbs from '@/components/features/Breadcrumbs/Breadcrumbs'
 import { ABOUT_BREADCRUMBS } from '@/shared/constants/breadcrumbs'
+import CompanyCard from '@/components/common/CompanyCard/CompanyCard'
 
 const AboutPage = () => {
     return (
@@ -28,6 +29,7 @@ const AboutPage = () => {
                 <HeroBlock />
                 {/* Статистика */}
                 <Statistics />
+                <CompanyCard />
 
                 {/* Преимущества */}
                 <AdvantagesBlock />
