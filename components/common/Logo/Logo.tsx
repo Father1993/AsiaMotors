@@ -6,7 +6,7 @@ const Logo = ({ className = '' }: LogoProps) => {
     return (
         <Link href="/" className={`flex items-center space-x-2 ${className}`}>
             <Image
-                src="/img/logo.png"
+                src="/img/asiamotors-logo.png"
                 alt="Asia Motors логотип"
                 width={120} // Укажите реальную ширину вашего логотипа
                 height={30} // Укажите реальную высоту вашего логотипа
