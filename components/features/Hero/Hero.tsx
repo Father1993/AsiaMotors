@@ -82,9 +82,7 @@ const Hero: React.FC = () => {
                                     onClick={openPopup}
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
-                                    className="px-8 py-4 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl font-medium 
-                                    shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:shadow-[0_0_25px_rgba(239,68,68,0.45)] 
-                                    transition-all duration-300 flex items-center justify-center gap-2 group"
+                                    className="flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-[#2F3136] to-[#2C2C2E] text-white rounded-xl font-medium shadow-lg hover:shadow-gray-200 transition-all duration-300"
                                 >
                                     Оставить заявку
                                     <motion.span
@@ -101,7 +99,7 @@ const Hero: React.FC = () => {
                                     onClick={openPopup}
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
-                                    className="px-8 py-4 border-2 border-red-500 text-red-500 rounded-xl font-medium
+                                    className="px-8 py-4 border-2 border-[#2C2C2E] text-[#2C2C2E] rounded-xl font-medium
                                     hover:bg-red-50/50 transition-all duration-300 backdrop-blur-sm
                                     flex items-center justify-center gap-2 group"
                                 >
