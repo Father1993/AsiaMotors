@@ -86,6 +86,14 @@ const Footer = () => {
                             </li>
                             <li>
                                 <Link
+                                    href="/services/customs"
+                                    className="hover:text-red-500 transition-colors"
+                                >
+                                    Новые запчасти для любых авто
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
                                     href="/services/delivery"
                                     className="hover:text-red-500 transition-colors"
                                 >
@@ -127,14 +135,6 @@ const Footer = () => {
                             </li>
                             <li>
                                 <Link
-                                    href="/blog"
-                                    className="hover:text-red-500 transition-colors"
-                                >
-                                    Блог об автомобилях
-                                </Link>
-                            </li>
-                            <li>
-                                <Link
                                     href="/reviews"
                                     className="hover:text-red-500 transition-colors"
                                 >
@@ -143,10 +143,27 @@ const Footer = () => {
                             </li>
                             <li>
                                 <Link
+                                    href="/blog"
+                                    className="hover:text-red-500 transition-colors"
+                                >
+                                    Лента новостей
+                                </Link>
+                            </li>
+
+                            <li>
+                                <Link
                                     href="/faq"
                                     className="hover:text-red-500 transition-colors"
                                 >
                                     Частые вопросы
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href="/contacts"
+                                    className="hover:text-red-500 transition-colors"
+                                >
+                                    Вакансии
                                 </Link>
                             </li>
                             <li>
