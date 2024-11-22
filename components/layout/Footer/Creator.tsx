@@ -1,6 +1,6 @@
 const Creator = () => {
     return (
-        <div className="flex flex-col items-center justify-center pt-4 border-t border-gray-800">
+        <div className="flex flex-col items-center justify-center pt-2 border-t border-gray-800">
             <div className="group relative inline-block">
                 <div className="flex items-center space-x-2 opacity-60 hover:opacity-100 transition-all duration-300">
                     <svg
