@@ -37,7 +37,7 @@ const Hero: React.FC = () => {
     return (
         <section className="relative min-h-screen bg-white pb-10">
             <div className="container mx-auto px-4">
-                <div className="flex min-h-screen">
+                <div className="flex min-h-screen gap-4">
                     {/* Левая часть с текстом */}
                     <div className="w-full lg:w-1/2 flex flex-col justify-center py-12 lg:py-0 relative z-10">
                         <div className="max-w-xl">
@@ -140,7 +140,7 @@ const Hero: React.FC = () => {
                                     </div>
                                 </div>
 
-                                {/* Новый блок - Офисы */}
+                                {/* блок - Офисы */}
                                 <div className="flex items-center gap-4">
                                     <div className="p-3 bg-red-50 rounded-lg">
                                         <OfficialIcon />
@@ -155,7 +155,7 @@ const Hero: React.FC = () => {
                                     </div>
                                 </div>
 
-                                {/* Новый блок - Прозрачные условия */}
+                                {/* блок - Прозрачные условия */}
                                 <div className="flex items-center gap-4">
                                     <div className="p-3 bg-red-50 rounded-lg">
                                         <ConditionIcon />
@@ -175,7 +175,7 @@ const Hero: React.FC = () => {
 
                     {/* Правая часть с изображением */}
                     <motion.div
-                        className="hidden lg:block w-1/2 relative"
+                        className="hidden lg:block w-1/2 relative ml-16"
                         initial={{ opacity: 0, x: 100 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{

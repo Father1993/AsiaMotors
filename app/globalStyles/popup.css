@@ -1,0 +1,26 @@
+#customPopup,
+#customPopupQuestion,
+#customPopupPersonal {
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 90vw !important;
+    max-width: 500px !important;
+}
+
+@media (min-width: 768px) {
+    #customPopup {
+        top: 20% !important;
+        left: 37% !important;
+        transform: none !important;
+        width: auto !important;
+    }
+
+    #customPopupQuestion,
+    #customPopupPersonal {
+        top: 10% !important;
+        left: 37% !important;
+        transform: none !important;
+        width: auto !important;
+    }
+}

@@ -5,6 +5,7 @@ import { LoadingProvider } from '@/components/provider/CustomProviderSpinner'
 import ModalProvider from '@/components/provider/ModalProvider'
 import './globalStyles/normalize.css'
 import './globalStyles/globals.css'
+import './globalStyles/popup.css'
 import './globalStyles/cookie-popup.css'
 import './globalStyles/posts.css'
 

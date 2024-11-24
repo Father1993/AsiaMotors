@@ -143,10 +143,6 @@ div {
     padding-bottom: 70px !important;
 }
 
-#customPopup {
-    top: 20% !important;
-    left: 37% !important;
-}
 .intro-block {
     background: linear-gradient(to right, #e8f4ff, #fff4e4);
     padding: 1.5rem;
@@ -202,14 +198,4 @@ div {
     position: absolute;
     left: 0;
     color: #1e40af;
-}
-
-#customPopupQuestion {
-    top: 10% !important;
-    left: 37% !important;
-}
-
-#customPopupPersonal {
-    top: 10% !important;
-    left: 37% !important;
 }
