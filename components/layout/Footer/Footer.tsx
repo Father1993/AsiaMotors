@@ -14,7 +14,7 @@ import Creator from './Creator'
 
 const Footer = () => {
     return (
-        <footer className="bg-gray-900 text-gray-300 pt-16 pb-2">
+        <footer className="bg-gray-900 text-gray-300 pt-16 md:pb-2 pb-20">
             <div className="container mx-auto px-4">
                 {/* Основной контент футера */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
@@ -303,7 +303,8 @@ const Footer = () => {
                         {/* Статус компании */}
                         <div className="text-sm space-y-2">
                             <div className="flex flex-col space-y-3">
-                                <div className="flex items-center justify-end gap-2">
+                                <hr className="footer__spec-hr" />
+                                <div className="flex items-center justify-end gap-2 justify-center md:justify-end">
                                     <svg
                                         className="w-5 h-5 text-red-500 flex-shrink-0"
                                         fill="currentColor"
@@ -318,7 +319,7 @@ const Footer = () => {
                                         Импортер китайских автомобилей в России
                                     </span>
                                 </div>
-                                <div className="flex items-center justify-end text-gray-400">
+                                <div className="flex items-center justify-center md:justify-end text-gray-400">
                                     <span>Работаем с 2022 года</span>
                                 </div>
                             </div>

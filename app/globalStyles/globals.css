@@ -134,6 +134,10 @@ div {
     font-weight: 400;
 }
 
+.footer__spec-hr {
+    display: none;
+}
+
 .swiper-button-prev,
 .swiper-button-next {
     color: red !important;
@@ -198,4 +202,13 @@ div {
     position: absolute;
     left: 0;
     color: #1e40af;
+}
+
+@media (max-width: 768px) {
+    .footer__spec-hr {
+        display: block;
+        margin: 0 auto;
+        opacity: 7%;
+        width: 77%;
+    }
 }
