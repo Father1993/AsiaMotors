@@ -160,7 +160,7 @@ const Footer = () => {
                             </li>
                             <li>
                                 <Link
-                                    href="/contacts"
+                                    href="/vacancies"
                                     className="hover:text-red-500 transition-colors"
                                 >
                                     Вакансии
