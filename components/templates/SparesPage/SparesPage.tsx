@@ -1,5 +1,5 @@
 'use client'
-
+import { FormEvent } from 'react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { FiSearch, FiShoppingCart } from 'react-icons/fi'
@@ -10,8 +10,29 @@ import {
 } from '@/shared/constants/spares'
 import Breadcrumbs from '@/components/features/Breadcrumbs/Breadcrumbs'
 import { SPARES } from '@/shared/constants/breadcrumbs'
+import { useEmailService } from '@/shared/hooks/useEmailService'
+import { sparesEmailConfig } from '@/shared/config/emailService'
 
 const SparesPage = () => {
+    const { formRef, isLoading, sendEmail } = useEmailService(sparesEmailConfig)
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault()
+        const form = formRef.current
+        if (!form) return
+        const templateParams = {
+            form_name: 'Форма заказа запчастей',
+            user_name: form.user_name.value,
+            user_phone: form.user_phone.value,
+            car_model: form.car_model.value,
+            car_year: form.car_year.value,
+            vin_number: form.vin_number.value,
+            part_name: form.part_name.value,
+            part_number: form.part_number.value,
+        }
+        await sendEmail(() => {
+            form.reset()
+        }, templateParams)
+    }
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pb-16">
             <div className="container">
@@ -238,7 +259,11 @@ const SparesPage = () => {
                             необходимые детали
                         </p>
 
-                        <form className="space-y-6">
+                        <form
+                            ref={formRef}
+                            onSubmit={handleSubmit}
+                            className="space-y-6"
+                        >
                             <div className="grid md:grid-cols-2 gap-6">
                                 <motion.div
                                     initial={{ opacity: 0, x: -20 }}
@@ -391,12 +416,32 @@ const SparesPage = () => {
                                 <motion.button
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
+                                    disabled={isLoading}
                                     className="px-8 py-4 bg-white text-red-600 rounded-xl font-medium
-                            hover:bg-gray-100 transition-colors flex items-center gap-2"
+                                    hover:bg-gray-100 transition-colors flex items-center gap-2
+                                    disabled:opacity-70 disabled:cursor-not-allowed"
                                     type="submit"
                                 >
-                                    <FiShoppingCart className="text-xl" />
-                                    Отправить заявку
+                                    {isLoading ? (
+                                        <span className="flex items-center gap-2">
+                                            <motion.span
+                                                animate={{ rotate: 360 }}
+                                                transition={{
+                                                    duration: 1,
+                                                    repeat: Infinity,
+                                                    ease: 'linear',
+                                                }}
+                                            >
+                                                ⚡
+                                            </motion.span>
+                                            Отправка...
+                                        </span>
+                                    ) : (
+                                        <>
+                                            <FiShoppingCart className="text-xl" />
+                                            Отправить заявку
+                                        </>
+                                    )}
                                 </motion.button>
                             </motion.div>
 
