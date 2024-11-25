@@ -28,6 +28,7 @@ const SparesPage = () => {
             vin_number: form.vin_number.value,
             part_name: form.part_name.value,
             part_number: form.part_number.value,
+            message: form.message.value,
         }
         await sendEmail(() => {
             form.reset()
@@ -405,6 +406,25 @@ const SparesPage = () => {
                                     />
                                 </motion.div>
                             </div>
+
+                            {/* Сообщение */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                            >
+                                <label className="block text-white text-sm font-medium mb-2">
+                                    Введите комментарии
+                                </label>
+                                <input
+                                    type="text"
+                                    name="message"
+                                    placeholder="Например: Нужно 5шт."
+                                    className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20
+                        text-white placeholder-white/50 focus:outline-none focus:border-white
+                        transition-colors"
+                                />
+                            </motion.div>
 
                             {/* Submit Button */}
                             <motion.div
