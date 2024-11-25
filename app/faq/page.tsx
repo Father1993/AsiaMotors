@@ -1,6 +1,8 @@
 /* eslint-disable max-len */
 import { Metadata } from 'next'
 import FAQ from '@/components/features/Faq/FAQ'
+import Breadcrumbs from '@/components/features/Breadcrumbs/Breadcrumbs'
+import { FAQ as BreadcrumbsFAQ } from '@/shared/constants/breadcrumbs'
 
 export const metadata: Metadata = {
     title: 'Часто задаваемые вопросы (FAQ) | AsiaMotors - автомобили из Китая',
@@ -40,5 +42,12 @@ export const metadata: Metadata = {
 }
 
 export default function BlogPages() {
-    return <FAQ />
+    return (
+        <>
+            <div className="container">
+                <Breadcrumbs items={BreadcrumbsFAQ} />
+            </div>
+            <FAQ />
+        </>
+    )
 }

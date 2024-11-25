@@ -1,3 +1,5 @@
+import Breadcrumbs from '@/components/features/Breadcrumbs/Breadcrumbs'
+import { VACANCIES } from '@/shared/constants/breadcrumbs'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -30,6 +32,8 @@ const VacanciesPage = () => {
     ]
     return (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <Breadcrumbs items={VACANCIES} />
+
             {/* Hero секция */}
             <div className="text-center mb-12">
                 <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
