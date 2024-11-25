@@ -34,7 +34,7 @@ const testimonials = [
 
 const TestimonialsBlock = () => {
     return (
-        <section className="bg-gray-50 py-16">
+        <section className="bg-gray-50 py-16" id="testimonials__section">
             <div className="container mx-auto px-4">
                 <div className="text-center max-w-3xl mx-auto mb-16">
                     <h2 className="text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600">

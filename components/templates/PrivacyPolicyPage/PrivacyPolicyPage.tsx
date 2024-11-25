@@ -6,7 +6,7 @@ import ArrowLeft from '@/components/ui/ArrowLeft'
 const PrivacyPolicyPage = () => (
     <main>
         <section className="container mx-auto">
-            <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-10">
+            <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-10 mb-10">
                 <div className="px-6 py-8">
                     <h1 className="text-3xl font-bold text-gray-900 mb-6">
                         Политика использования файлов cookie

@@ -26,24 +26,14 @@ const AboutPage = () => {
         >
             <div className="container mx-auto px-4 py-16">
                 <Breadcrumbs items={ABOUT_BREADCRUMBS} />
-                {/* Героический блок */}
                 <HeroBlock />
-                {/* Статистика */}
                 <Statistics />
-                <CompanyCard />
-
-                {/* Преимущества */}
+                <Team />
                 <AdvantagesBlock />
             </div>
-
             <VideoBlock />
             <SuccessCase />
             <TestimonialsBlock />
-
-            <div className="container">
-                {/* Команда */}
-                <Team />
-            </div>
             <Social />
             <FAQAbout />
             <Questions />
