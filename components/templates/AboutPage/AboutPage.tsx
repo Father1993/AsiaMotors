@@ -14,6 +14,7 @@ import AdvantagesBlock from './AdvantagesBlock'
 import Breadcrumbs from '@/components/features/Breadcrumbs/Breadcrumbs'
 import { ABOUT_BREADCRUMBS } from '@/shared/constants/breadcrumbs'
 import CompanyCard from '@/components/common/CompanyCard/CompanyCard'
+import FAQAbout from '@/components/features/Faq/FAQAbout'
 
 const AboutPage = () => {
     return (
@@ -44,6 +45,7 @@ const AboutPage = () => {
                 <Team />
             </div>
             <Social />
+            <FAQAbout />
             <Questions />
             <ContactsBlock />
         </motion.div>
