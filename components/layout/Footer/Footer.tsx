@@ -89,7 +89,7 @@ const Footer = () => {
                             </li>
                             <li>
                                 <Link
-                                    href="/services/customs"
+                                    href="/spares"
                                     className="hover:text-red-500 transition-colors"
                                 >
                                     Новые запчасти для любых авто

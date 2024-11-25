@@ -43,7 +43,7 @@ const VideoBlock = () => {
     }, [])
 
     return (
-        <section className="mb-16">
+        <section className="mb-16" id="video__test">
             <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">
                 Своя команда и офисы в Китае. Гарантия качества!
             </h2>
