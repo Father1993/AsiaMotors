@@ -8,10 +8,16 @@ import {
     sparesBenefits,
     sparesCategories,
 } from '@/shared/constants/spares'
+import Breadcrumbs from '@/components/features/Breadcrumbs/Breadcrumbs'
+import { SPARES } from '@/shared/constants/breadcrumbs'
 
 const SparesPage = () => {
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pb-16">
+            <div className="container">
+                <Breadcrumbs items={SPARES} />
+            </div>
+
             {/* Hero Section */}
             <section className="relative h-[60vh] flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 bg-black/50 z-10" />

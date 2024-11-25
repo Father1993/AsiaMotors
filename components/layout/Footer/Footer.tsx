@@ -11,6 +11,9 @@ import VkIcon from '@/components/ui/VkIcon'
 import TelegramIcon from '@/components/ui/TelegramIcon'
 import Logo from '@/components/common/Logo/Logo'
 import Creator from './Creator'
+import CompanyCard from '@/components/ui/Footer/CompanyCardIcon'
+import PrivacyPolicyIcon from '@/components/ui/Footer/PrivacyPolicyIcon'
+import ImportIcon from '@/components/ui/Footer/ImportIcon'
 
 const Footer = () => {
     return (
@@ -160,7 +163,7 @@ const Footer = () => {
                             </li>
                             <li>
                                 <Link
-                                    href="/contacts"
+                                    href="/vacancies"
                                     className="hover:text-red-500 transition-colors"
                                 >
                                     Вакансии
@@ -263,38 +266,14 @@ const Footer = () => {
                                     href="/about#company-card"
                                     className="hover:text-red-500 transition-colors flex items-center gap-2 w-fit"
                                 >
-                                    <svg
-                                        className="w-4 h-4"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={1.5}
-                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z M12 3v6a1 1 0 001 1h6M15 13a2 2 0 100 4 2 2 0 000-4z"
-                                        />
-                                    </svg>
+                                    <CompanyCard />
                                     Карточка предприятия
                                 </Link>
                                 <Link
                                     href="/privacy"
                                     className="hover:text-red-500 transition-colors flex items-center gap-2 w-fit"
                                 >
-                                    <svg
-                                        className="w-4 h-4"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                                        />
-                                    </svg>
+                                    <PrivacyPolicyIcon />
                                     Политика конфиденциальности
                                 </Link>
                             </div>
@@ -305,16 +284,7 @@ const Footer = () => {
                             <div className="flex flex-col space-y-3">
                                 <hr className="footer__spec-hr" />
                                 <div className="flex items-center justify-end gap-2 justify-center md:justify-end">
-                                    <svg
-                                        className="w-5 h-5 text-red-500 flex-shrink-0"
-                                        fill="currentColor"
-                                        viewBox="0 0 20 20"
-                                    >
-                                        <path
-                                            fillRule="evenodd"
-                                            d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                        />
-                                    </svg>
+                                    <ImportIcon />
                                     <span itemProp="description">
                                         Импортер китайских автомобилей в России
                                     </span>

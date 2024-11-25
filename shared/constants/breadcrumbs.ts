@@ -19,3 +19,11 @@ export const CATALOG: BreadcrumbItem[] = [
 export const CONTACTS: BreadcrumbItem[] = [
     { label: 'Контакты', href: '/contacts' },
 ]
+
+export const VACANCIES: BreadcrumbItem[] = [
+    { label: 'Вакансии', href: '/vacancies' },
+]
+
+export const FAQ: BreadcrumbItem[] = [{ label: 'FAQ', href: '/faq' }]
+
+export const SPARES: BreadcrumbItem[] = [{ label: 'Запчасти', href: '/spares' }]
