@@ -3,6 +3,34 @@ import { FaHandshake, FaCar } from 'react-icons/fa'
 import { FaGlobe } from 'react-icons/fa'
 import { FaShieldAlt } from 'react-icons/fa'
 
+export const advantagesList = [
+    {
+        icon: <FaShieldAlt className="text-red-500 w-12 h-12" />,
+        title: 'Гарантированное качество',
+        description:
+            'Тщательный отбор и проверка каждого автомобиля перед отправкой',
+    },
+    {
+        icon: <FaGlobe className="text-red-500 w-12 h-12" />,
+        description:
+            'Собственные офисы в Китае - никаких посредников и переплат',
+    },
+    {
+        icon: <FaCar className="text-red-500 w-12 h-12" />,
+        title: 'Эксклюзивные автомобили',
+        description:
+            'Возможность привезти авто до официального старта продаж в РФ',
+    },
+    {
+        icon: <FaHandshake className="text-red-500 w-12 h-12" />,
+        title: 'Индивидуальный подход',
+        description: 'Кастомизация под любые требования клиента',
+    },
+]
+
+{
+    /* Команда Хабаровск*/
+}
 export const teamMembersKhv = [
     {
         name: 'Андрей Чжан',
@@ -32,30 +60,110 @@ export const teamMembersKhv = [
         image: '/img/team/Vladimir-man.png',
         description: 'Профессионал, находящий решения для каждого клиента',
     },
+    {
+        name: 'Спиней Андрей',
+        role: 'Разработка/Маркетинг',
+        image: '/img/team/Andrej.webp',
+        description:
+            'Специализируется на комплексной веб-разработке и digital-маркетингу',
+    },
 ]
 
-export const advantagesList = [
+{
+    /* Команда Владивосток*/
+}
+export const teamMembersVdk = [
     {
-        icon: <FaShieldAlt className="text-red-500 w-12 h-12" />,
-        title: 'Гарантированное качество',
-        description:
-            'Тщательный отбор и проверка каждого автомобиля перед отправкой',
+        name: 'Сергей Иванов',
+        role: 'Руководитель филиала',
+        image: '/img/team/vdk/vdk1.webp',
+        description: 'Более 10 лет опыта в автомобильном бизнесе',
     },
     {
-        icon: <FaGlobe className="text-red-500 w-12 h-12" />,
-        title: 'Прямые поставки из Китая',
-        description:
-            'Собственные офисы в Китае - никаких посредников и переплат',
+        name: 'Екатерина Петрова',
+        role: 'Старший менеджер по продажам',
+        image: '/img/team/vdk/vdk2.jpeg',
+        description: 'Эксперт по работе с корпоративными клиентами',
     },
     {
-        icon: <FaCar className="text-red-500 w-12 h-12" />,
-        title: 'Эксклюзивные автомобили',
-        description:
-            'Возможность привезти авто до официального старта продаж в РФ',
+        name: 'Алексей Смирнов',
+        role: 'Специалист по логистике',
+        image: '/img/team/vdk/vdk3.webp',
+        description: 'Организация поставок автомобилей из Азии',
+    },
+]
+
+{
+    /* Команда Китай*/
+}
+export const teamMembersChina = [
+    {
+        name: 'Ли Вэй',
+        role: 'Директор китайского офиса',
+        image: '/img/team/china/1.jpg',
+        description: 'Специалист по работе с китайскими производителями',
     },
     {
-        icon: <FaHandshake className="text-red-500 w-12 h-12" />,
-        title: 'Индивидуальный подход',
-        description: 'Кастомизация под любые требования клиента',
+        name: 'Чжан Мин',
+        role: 'Технический инспектор',
+        image: '/img/team/china/2.png',
+        description: 'Контроль качества и предпродажная подготовка',
     },
+    {
+        name: 'Ван Хуа',
+        role: 'Координатор поставок',
+        image: '/img/team/china/3.jpeg',
+        description: 'Организация логистики и таможенного оформления',
+    },
+]
+
+{
+    /* Команда Китай*/
+}
+export const teamMembersKamch = [
+    {
+        name: 'Дмитрий Волков',
+        role: 'Региональный менеджер',
+        image: '/img/team/kamch/2.jpg',
+
+        description: 'Развитие бизнеса на Камчатке',
+    },
+    {
+        name: 'Анна Морозова',
+        role: 'Менеджер по работе с клиентами',
+        image: '/img/team/kamch/1.jpg',
+        description: 'Сопровождение сделок и консультации',
+    },
+]
+
+{
+    /* Команда Китай*/
+}
+export const teamMembersSkh = [
+    {
+        name: 'Игорь Соколов',
+        role: 'Руководитель направления',
+        image: '/img/team/shl/shl1.jpg',
+        description: 'Стратегическое развитие региона',
+    },
+    {
+        name: 'Мария Козлова',
+        role: 'Финансовый консультант',
+        image: '/img/team/shl/shl2.jpg',
+        description: 'Помощь в подборе кредитных программ',
+    },
+    {
+        name: 'Артём Васильев',
+        role: 'Специалист по страхованию',
+        image: '/img/team/shl/shl3-w.avif',
+        description: 'Подбор оптимальных страховых решений',
+    },
+]
+
+export const teamOffices = [
+    { id: 'khv', name: 'Хабаровск', members: teamMembersKhv },
+    { id: 'vdk', name: 'Владивосток', members: teamMembersVdk },
+    { id: 'china', name: 'Харбин', members: teamMembersChina },
+    { id: 'kamch', name: 'Камчатка', members: teamMembersKamch },
+    { id: 'skh', name: 'Сахалин', members: teamMembersSkh },
 ]

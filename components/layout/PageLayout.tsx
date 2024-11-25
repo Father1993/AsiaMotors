@@ -50,7 +50,7 @@ const PagesLayout = ({ children }: { children: React.ReactNode }) => {
                     },
                 }}
             />
-            <Next13ProgressBar height="4px" color="#9466FF" showOnShallow />
+            <Next13ProgressBar height="4px" color="#2F3136" showOnShallow />
             <Layout>
                 <main>{children}</main>
             </Layout>
