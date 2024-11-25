@@ -13,7 +13,6 @@ import HeroBlock from './HeroBlock'
 import AdvantagesBlock from './AdvantagesBlock'
 import Breadcrumbs from '@/components/features/Breadcrumbs/Breadcrumbs'
 import { ABOUT_BREADCRUMBS } from '@/shared/constants/breadcrumbs'
-import CompanyCard from '@/components/common/CompanyCard/CompanyCard'
 import FAQAbout from '@/components/features/Faq/FAQAbout'
 
 const AboutPage = () => {
