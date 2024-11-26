@@ -19,24 +19,14 @@ export const offices: Offices = {
         image: '/img/office/vdk.jpg',
         mapComponent: 'vdk',
     },
-    china: {
-        city: 'Харбин',
-        address:
-            'No.1 Baoshui 3rd Road, Xingfu Town, Xiangfang District, Harbin',
-        phone: '+86-138-22-14-08-45',
-        email: 'asiamotors27@mail.ru',
-        workHours: 'Пн-Пт: 9:00-18:00, Сб: 10:00-15:00',
-        image: '/img/office/vdk.jpg',
-        mapComponent: 'vdk',
-    },
     shl: {
         city: 'Южно-Сахалинск',
         address: 'ул. 3-я Новая 17',
         phone: '+7 (962) 580-40-06',
         email: 'asiamotors27@mail.ru',
         workHours: 'Пн-Пт: 9:00-18:00, Сб: 10:00-15:00',
-        image: '/img/office/vdk.jpg',
-        mapComponent: 'vdk',
+        image: '/img/office/sahalin.jpg',
+        mapComponent: 'shl',
     },
     kmch: {
         city: 'Петропавловск-Камчатский',
@@ -44,7 +34,17 @@ export const offices: Offices = {
         phone: '+7 (961) 968-88-88',
         email: 'asiamotors27@mail.ru',
         workHours: 'Пн-Пт: 9:00-18:00, Сб: 10:00-15:00',
-        image: '/img/office/vdk.jpg',
-        mapComponent: 'vdk',
+        image: '/img/office/kamchatka.png',
+        mapComponent: 'kmch',
+    },
+    china: {
+        city: 'Харбин',
+        address:
+            'No.1 Baoshui 3rd Road, Xingfu Town, Xiangfang District, Harbin',
+        phone: '+86-138-22-14-08-45',
+        email: 'asiamotors27@mail.ru',
+        workHours: 'Пн-Пт: 9:00-18:00, Сб: 10:00-15:00',
+        image: '/img/office/harbin.jpg',
+        mapComponent: 'china',
     },
 }
