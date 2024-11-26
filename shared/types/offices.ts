@@ -13,3 +13,12 @@ export interface Office {
 export type Offices = {
     [K in OfficeKey]: Office
 }
+
+export interface TeamMember {
+    name: string
+    role: string
+    image: string
+    description: string | React.ReactElement
+    telephone?: string | React.ReactElement
+    address?: string
+}
