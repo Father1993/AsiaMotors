@@ -14,19 +14,25 @@ import { FaTelegramPlane, FaWhatsapp, FaVk } from 'react-icons/fa'
 import ContactForm from '@/components/templates/AboutPage/ContactsBlock'
 import { offices } from '@/shared/constants/offices'
 import { Office, OfficeKey } from '@/shared/types/offices'
-import Khv from '@/components/common/Maps/Khv'
-import Vdk from '@/components/common/Maps/Vdk'
 import {
     telegramAsiaLink,
     whatsAppAsiaLink,
 } from '@/shared/constants/socialLinks'
 import Breadcrumbs from '@/components/features/Breadcrumbs/Breadcrumbs'
 import { CONTACTS } from '@/shared/constants/breadcrumbs'
+import KhvMap from '@/components/common/Maps/KhvMap'
+import VdkMap from '@/components/common/Maps/VdkMap'
+import ChinaMap from '@/components/common/Maps/ChinaMap'
+import SahalinMap from '@/components/common/Maps/SahalinMap'
+import KamchatkaMap from '@/components/common/Maps/KamchatkaMap'
 
 const ContactsPage = () => {
     const MapComponents = {
-        khv: Khv,
-        vdk: Vdk,
+        khv: KhvMap,
+        vdk: VdkMap,
+        china: ChinaMap,
+        shl: SahalinMap,
+        kmch: KamchatkaMap,
     }
 
     const [selectedOffice, setSelectedOffice] =
@@ -47,12 +53,16 @@ const ContactsPage = () => {
                     {/* SEO-оптимизированный заголовок */}
                     <div className="text-center mb-16">
                         <h1 className="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-red-600 to-red-400 mb-6">
-                            Наши офисы Asia Motors
+                            <span className="text-[#2F3136]">Наши офисы</span>{' '}
+                            Asia Motors
                         </h1>
-                        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                            Посетите наши офисы в Хабаровске и Владивостоке.
-                            Наши специалисты помогут подобрать идеальный
-                            автомобиль
+                        <p className="text-xl text-gray-600 max-w-5xl mx-auto">
+                            Посетите наши представительства в <u>России</u> и{' '}
+                            <u>Китае</u>: Хабаровск, Владивосток,
+                            Южно-Сахалинск, Петропавловск-Камчатский и Харбин.
+                            Откройте для себя преимущества международного
+                            сотрудничества и профессиональный подход к подбору
+                            автомобиля вашей мечты.
                         </p>
                     </div>
 
@@ -68,7 +78,7 @@ const ContactsPage = () => {
                                     className={`px-8 py-4 rounded-xl font-medium transition-all duration-300
                                     ${
                                         selectedOffice === key
-                                            ? 'bg-red-600 text-white shadow-lg shadow-red-600/20'
+                                            ? 'bg-[#2F3136] text-white shadow-lg shadow-red-600/20'
                                             : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
                                     }`}
                                 >

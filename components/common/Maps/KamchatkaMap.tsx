@@ -1,4 +1,4 @@
-const Vdk = () => {
+const KamchatkaMap = () => {
     return (
         <iframe
             src="https://yandex.ru/map-widget/v1/?um=constructor%3A93b6dedd3d2826a2994fabe72e5acb3033d7c31f63f4e5741ae26de7a11906cb&amp;source=constructor"
@@ -13,4 +13,4 @@ const Vdk = () => {
     )
 }
 
-export default Vdk
+export default KamchatkaMap

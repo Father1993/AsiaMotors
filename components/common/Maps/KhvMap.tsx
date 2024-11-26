@@ -1,4 +1,4 @@
-const Khv = () => {
+const KhvMap = () => {
     return (
         <iframe
             src="https://yandex.ru/map-widget/v1/?um=constructor%3A69958da6eb3e43c75351c2811ba2cb6a037f1a9ffc1fcf87db2d1deee4a60405&amp;source=constructor"
@@ -13,4 +13,4 @@ const Khv = () => {
     )
 }
 
-export default Khv
+export default KhvMap
