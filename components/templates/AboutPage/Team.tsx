@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { teamOffices } from '@/shared/constants/team'
@@ -69,6 +69,12 @@ const Team = () => {
                         <p className="text-gray-600 mb-3">{member.role}</p>
                         <p className="text-sm text-gray-500">
                             {member.description}
+                        </p>
+                        <p className="text-sm text-gray-500 mt-2">
+                            {member.address}
+                        </p>
+                        <p className="text-sm text-gray-500 mt-2">
+                            {member.telephone}
                         </p>
                     </motion.div>
                 ))}

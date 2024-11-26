@@ -53,12 +53,26 @@ export const teamMembersKhv = [
                 </Link>
             </>
         ),
+        telephone: (
+            <>
+                <Link href="tel:+79142142500" className="text-red-500">
+                    +7 (914) 214-25-00
+                </Link>
+            </>
+        ),
     },
     {
         name: 'Владимир Карпыш',
         role: 'Менеджер отдела продаж',
         image: '/img/team/Vladimir-man.png',
         description: 'Профессионал, находящий решения для каждого клиента',
+        telephone: (
+            <>
+                <Link href="tel:+79242066592" className="text-red-500">
+                    +7 (924) 206-65-92
+                </Link>
+            </>
+        ),
     },
     {
         name: 'Спиней Андрей',
@@ -74,22 +88,32 @@ export const teamMembersKhv = [
 }
 export const teamMembersVdk = [
     {
-        name: 'Сергей Иванов',
+        name: 'Роман Мориц',
         role: 'Руководитель филиала',
         image: '/img/team/vdk/vdk1.webp',
         description: 'Более 10 лет опыта в автомобильном бизнесе',
+        address: 'Владивосток, ​Баляева улица, 49, офис- 50 - ​ЖК Горизонт',
+        telephone: (
+            <>
+                <Link href="tel:+79996175664" className="text-red-500">
+                    +7 (999) 617-56-64
+                </Link>
+            </>
+        ),
     },
     {
-        name: 'Екатерина Петрова',
+        name: 'Кирил Зубченко',
         role: 'Старший менеджер по продажам',
         image: '/img/team/vdk/vdk2.jpeg',
-        description: 'Эксперт по работе с корпоративными клиентами',
-    },
-    {
-        name: 'Алексей Смирнов',
-        role: 'Специалист по логистике',
-        image: '/img/team/vdk/vdk3.webp',
-        description: 'Организация поставок автомобилей из Азии',
+        description: 'Эксперт по работе с клиентами',
+        address: 'Владивосток, ​Баляева улица, 49, офис- 50 - ​ЖК Горизонт',
+        telephone: (
+            <>
+                <Link href="tel:+79143357069" className="text-red-500">
+                    +7 (914) 335 70 69
+                </Link>
+            </>
+        ),
     },
 ]
 
@@ -98,22 +122,43 @@ export const teamMembersVdk = [
 }
 export const teamMembersChina = [
     {
-        name: 'Ли Вэй',
+        name: 'Яша Юй',
         role: 'Директор китайского офиса',
-        image: '/img/team/china/1.jpg',
-        description: 'Специалист по работе с китайскими производителями',
-    },
-    {
-        name: 'Чжан Мин',
-        role: 'Технический инспектор',
-        image: '/img/team/china/2.png',
-        description: 'Контроль качества и предпродажная подготовка',
-    },
-    {
-        name: 'Ван Хуа',
-        role: 'Координатор поставок',
         image: '/img/team/china/3.jpeg',
+        description: 'Специалист по работе с китайскими производителями',
+        city: 'Хабрин',
+        address: 'Baoshui 3rd Road, Xingfu Town, Xiangfang District, Harbin',
+        telephone: (
+            <>
+                <Link href="tel:+8613822140845" className="text-red-500">
+                    +86-138-22-14-08-45
+                </Link>
+            </>
+        ),
+    },
+    {
+        name: 'Хе Чао',
+        role: 'Технический инспектор',
+        image: '/img/team/china/1.jpg',
+        description: 'Контроль качества и предпродажная подготовка',
+        city: 'Суйфеньхэ',
+        address: '',
+        telephone: (
+            <>
+                <Link href="tel:+13804814499" className="text-red-500">
+                    +138-048-144-99
+                </Link>
+            </>
+        ),
+    },
+    {
+        name: 'Юрий Би',
+        role: 'Координатор поставок',
+        image: '/img/team/china/2.png',
         description: 'Организация логистики и таможенного оформления',
+        city: 'Суйфеньхэ',
+        address: '',
+        telephone: '',
     },
 ]
 
@@ -127,8 +172,14 @@ export const teamMembersKamch = [
         image: '/img/team/kamch/2.jpg',
 
         description: 'Развитие бизнеса на Камчатке',
-        telephone: '+7 (961) 968-88-88',
         address: 'Петропавловск-Камчатский, Тундровая, 1',
+        telephone: (
+            <>
+                <Link href="tel:+79619688888" className="text-red-500">
+                    +7 (961) 968-88-88
+                </Link>
+            </>
+        ),
     },
 ]
 
@@ -141,15 +192,22 @@ export const teamMembersSkh = [
         role: 'Региональный менеджер',
         image: '/img/team/shl/shl2.jpg',
         description: 'Развитие бизнеса в регионах ДВ',
-        telephone: '+7 (962) 580-40-06',
+
         address: 'Южно-Сахалинск,  ул. 3-я Новая 17',
+        telephone: (
+            <>
+                <Link href="tel:+79625804006" className="text-red-500">
+                    +7 (962) 580-40-06
+                </Link>
+            </>
+        ),
     },
 ]
 
 export const teamOffices = [
     { id: 'khv', name: 'Хабаровск', members: teamMembersKhv },
     { id: 'vdk', name: 'Владивосток', members: teamMembersVdk },
-    { id: 'china', name: 'Харбин', members: teamMembersChina },
+    { id: 'china', name: 'Китай', members: teamMembersChina },
     {
         id: 'kamch',
         name: 'Петропавловск-Камчатский',
