@@ -70,9 +70,11 @@ const Team = () => {
                         <p className="text-sm text-gray-500">
                             {member.description}
                         </p>
-                        <p className="text-sm text-gray-500 mt-2">
-                            {member.address}
-                        </p>
+                        {member.address && ( // Добавляем условный рендеринг
+                            <p className="text-sm text-gray-500 mt-2">
+                                {member.address}
+                            </p>
+                        )}
                         <p className="text-sm text-gray-500 mt-2">
                             {member.telephone}
                         </p>

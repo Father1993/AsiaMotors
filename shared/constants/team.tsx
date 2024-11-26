@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { FaHandshake, FaCar } from 'react-icons/fa'
 import { FaGlobe } from 'react-icons/fa'
 import { FaShieldAlt } from 'react-icons/fa'
+import { TeamMember } from '../types/offices'
 
 export const advantagesList = [
     {
@@ -205,13 +206,17 @@ export const teamMembersSkh = [
 ]
 
 export const teamOffices = [
-    { id: 'khv', name: 'Хабаровск', members: teamMembersKhv },
-    { id: 'vdk', name: 'Владивосток', members: teamMembersVdk },
-    { id: 'china', name: 'Китай', members: teamMembersChina },
+    { id: 'khv', name: 'Хабаровск', members: teamMembersKhv as TeamMember[] },
+    { id: 'vdk', name: 'Владивосток', members: teamMembersVdk as TeamMember[] },
+    { id: 'china', name: 'Китай', members: teamMembersChina as TeamMember[] },
     {
         id: 'kamch',
         name: 'Петропавловск-Камчатский',
-        members: teamMembersKamch,
+        members: teamMembersKamch as TeamMember[],
     },
-    { id: 'skh', name: 'Южно-Сахалинск', members: teamMembersSkh },
+    {
+        id: 'skh',
+        name: 'Южно-Сахалинск',
+        members: teamMembersSkh as TeamMember[],
+    },
 ]
