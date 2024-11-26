@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { teamOffices } from '@/shared/constants/team'
-import CompanyCard from '@/components/common/CompanyCard/CompanyCard'
 
 const Team = () => {
     const [currentOffice, setCurrentOffice] = useState(teamOffices[0])
@@ -74,7 +73,6 @@ const Team = () => {
                     </motion.div>
                 ))}
             </div>
-            <CompanyCard />
         </section>
     )
 }

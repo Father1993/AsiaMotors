@@ -16,13 +16,13 @@ const Creator = () => {
                             d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
                         />
                     </svg>
-                    <span className="text-sm">Разработка</span>
+                    <span className="text-[10px]">Разработка</span>
 
                     <a
                         href="https://spinej.ru"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="font-medium text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 hover:from-purple-500 hover:to-pink-700 transition-all duration-300"
+                        className="font-medium text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 hover:from-purple-500 hover:to-pink-700 transition-all duration-300 text-[10px]"
                     >
                         Spinej Andrej
                     </a>
