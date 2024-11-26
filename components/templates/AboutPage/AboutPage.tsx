@@ -14,6 +14,7 @@ import AdvantagesBlock from './AdvantagesBlock'
 import Breadcrumbs from '@/components/features/Breadcrumbs/Breadcrumbs'
 import { ABOUT_BREADCRUMBS } from '@/shared/constants/breadcrumbs'
 import FAQAbout from '@/components/features/Faq/FAQAbout'
+import CompanyCard from '@/components/common/CompanyCard/CompanyCard'
 
 const AboutPage = () => {
     return (
@@ -28,6 +29,7 @@ const AboutPage = () => {
                 <HeroBlock />
                 <Statistics />
                 <Team />
+                <CompanyCard />
                 <AdvantagesBlock />
             </div>
             <VideoBlock />

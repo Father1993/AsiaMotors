@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { PhoneIcon } from '@heroicons/react/24/outline'
+import { ChevronDownIcon, PhoneIcon } from '@heroicons/react/24/outline'
 import Logo from '@/components/common/Logo/Logo'
 import MobileMenu from './MobileMenu'
 import ScrollToTop from '@/components/features/ScrollToTop/ScrollToTop'
@@ -43,13 +43,42 @@ const Header = () => {
                             {/* Десктопное меню */}
                             <div className="hidden lg:flex items-center space-x-8">
                                 {NAVIGATION.map((item) => (
-                                    <Link
+                                    <div
                                         key={item.name}
-                                        href={item.href}
-                                        className="text-gray-700 hover:text-red-600 transition-colors font-medium"
+                                        className="relative group"
                                     >
-                                        {item.name}
-                                    </Link>
+                                        <Link
+                                            href={item.href}
+                                            className="flex items-center text-gray-700 hover:text-red-600 transition-colors font-medium"
+                                        >
+                                            {item.name}
+                                            {item.submenu && (
+                                                <ChevronDownIcon className="w-4 h-4 ml-1 group-hover:rotate-180 transition-transform duration-200" />
+                                            )}
+                                        </Link>
+
+                                        {item.submenu && (
+                                            <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-xl shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                                <div className="py-2">
+                                                    {item.submenu.map(
+                                                        (subItem) => (
+                                                            <Link
+                                                                key={
+                                                                    subItem.name
+                                                                }
+                                                                href={
+                                                                    subItem.href
+                                                                }
+                                                                className="block px-4 py-2 text-sm text-gray-700 hover:text-red-600 hover:bg-gray-50"
+                                                            >
+                                                                {subItem.name}
+                                                            </Link>
+                                                        )
+                                                    )}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
                                 ))}
                             </div>
 
