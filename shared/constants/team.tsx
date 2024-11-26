@@ -122,17 +122,13 @@ export const teamMembersChina = [
 }
 export const teamMembersKamch = [
     {
-        name: 'Дмитрий Волков',
+        name: 'Сергей Чжан',
         role: 'Региональный менеджер',
         image: '/img/team/kamch/2.jpg',
 
         description: 'Развитие бизнеса на Камчатке',
-    },
-    {
-        name: 'Анна Морозова',
-        role: 'Менеджер по работе с клиентами',
-        image: '/img/team/kamch/1.jpg',
-        description: 'Сопровождение сделок и консультации',
+        telephone: '+7 (961) 968-88-88',
+        address: 'Петропавловск-Камчатский, Тундровая, 1',
     },
 ]
 
@@ -141,22 +137,12 @@ export const teamMembersKamch = [
 }
 export const teamMembersSkh = [
     {
-        name: 'Игорь Соколов',
-        role: 'Руководитель направления',
-        image: '/img/team/shl/shl1.jpg',
-        description: 'Стратегическое развитие региона',
-    },
-    {
-        name: 'Мария Козлова',
-        role: 'Финансовый консультант',
+        name: 'Акуленко Евгений Константинович',
+        role: 'Региональный менеджер',
         image: '/img/team/shl/shl2.jpg',
-        description: 'Помощь в подборе кредитных программ',
-    },
-    {
-        name: 'Артём Васильев',
-        role: 'Специалист по страхованию',
-        image: '/img/team/shl/shl3-w.avif',
-        description: 'Подбор оптимальных страховых решений',
+        description: 'Развитие бизнеса в регионах ДВ',
+        telephone: '+7 (962) 580-40-06',
+        address: 'Южно-Сахалинск,  ул. 3-я Новая 17',
     },
 ]
 
@@ -164,6 +150,10 @@ export const teamOffices = [
     { id: 'khv', name: 'Хабаровск', members: teamMembersKhv },
     { id: 'vdk', name: 'Владивосток', members: teamMembersVdk },
     { id: 'china', name: 'Харбин', members: teamMembersChina },
-    { id: 'kamch', name: 'Камчатка', members: teamMembersKamch },
-    { id: 'skh', name: 'Сахалин', members: teamMembersSkh },
+    {
+        id: 'kamch',
+        name: 'Петропавловск-Камчатский',
+        members: teamMembersKamch,
+    },
+    { id: 'skh', name: 'Южно-Сахалинск', members: teamMembersSkh },
 ]
