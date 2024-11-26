@@ -12,7 +12,7 @@ const Team = () => {
                 Команда
             </h2>
             {/* Современный переключатель офисов */}
-            <div className="flex flex-wrap justify-center gap-3 mb-12 p-2 bg-gray-50 rounded-2xl max-w-2xl mx-auto">
+            <div className="flex flex-wrap justify-center gap-3 mb-12 p-2 bg-gray-50 rounded-2xl max-w-4xl mx-auto">
                 {teamOffices.map((office) => (
                     <button
                         key={office.id}
@@ -27,7 +27,7 @@ const Team = () => {
                                     }
                                     before:absolute before:inset-0 before:rounded-xl before:transition-opacity
                                     before:opacity-0 hover:before:opacity-100
-                                    before:bg-gradient-to-r before:from-purple-50 before:to-blue-50
+                                    before:bg-gradient-to-r before:from-purple-50 before:to-gray-50
                                     overflow-hidden
                                 `}
                     >
@@ -70,11 +70,6 @@ const Team = () => {
                         <p className="text-sm text-gray-500">
                             {member.description}
                         </p>
-                        {member.address && ( // Добавляем условный рендеринг
-                            <p className="text-sm text-gray-500 mt-2">
-                                {member.address}
-                            </p>
-                        )}
                         <p className="text-sm text-gray-500 mt-2">
                             {member.telephone}
                         </p>
