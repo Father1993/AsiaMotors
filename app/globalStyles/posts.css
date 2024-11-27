@@ -303,3 +303,170 @@
     text-align: left;
     min-width: 120px; /* Минимальная ширина ячеек */
 }
+
+/* Стили для карточек автомобилей */
+.car-details {
+    background: white;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin: 1.5rem 0;
+}
+
+.price-tag {
+    display: inline-block;
+    background: #15803d;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.year-range {
+    color: #4b5563;
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+}
+
+.advantages-card {
+    background: #f8fafc;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid #e2e8f0;
+}
+
+.advantages-card h4 {
+    color: #1e40af;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.advantages-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.advantages-card li {
+    margin: 0.75rem 0;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    color: #334155;
+}
+
+/* Стили для блока pros-cons */
+.pros-cons-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+@media (min-width: 768px) {
+    .pros-cons-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.pros-card,
+.cons-card {
+    background: white;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.pros-card h3 {
+    color: #15803d;
+    margin-bottom: 1rem;
+}
+
+.pros-card > ul > li {
+    font-size: 0.9rem;
+}
+.cons-card > ul > li {
+    font-size: 0.9rem;
+}
+
+.cons-card h3 {
+    color: #dc2626;
+    margin-bottom: 1rem;
+}
+
+/* Стили для сетки советов */
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+@media (min-width: 768px) {
+    .tips-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.tip-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.tip-card h4 {
+    color: #1e40af;
+    margin-bottom: 0.75rem;
+}
+
+/* Стили для блока автора */
+.author-box {
+    display: flex;
+    gap: 1.5rem;
+    background: #f8fafc;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    margin: 2rem 0;
+}
+
+.author-box img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.author-info h4 {
+    color: #1e40af;
+    margin-bottom: 0.75rem;
+}
+
+.author-info p {
+    font-size: 0.8rem;
+}
+
+/* Улучшенные стили для intro-block */
+.intro-block {
+    background: linear-gradient(135deg, #e8f4ff 0%, #fff4e4 100%);
+    padding: 2rem;
+    border-radius: 1rem;
+    margin: 2rem 0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.intro-text {
+    font-size: 1.25rem;
+    line-height: 1.75;
+    color: #1e293b;
+    font-weight: 500;
+}
+
+.posts__spec-img {
+    max-height: 460px;
+}

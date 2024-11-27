@@ -1,10 +1,16 @@
 import Link from 'next/link'
-import { FaHandshake, FaCar } from 'react-icons/fa'
-import { FaGlobe } from 'react-icons/fa'
+import { FaHandshake, FaCar, FaGlobe } from 'react-icons/fa'
+
 import { FaShieldAlt } from 'react-icons/fa'
 import { TeamMember } from '../types/offices'
 
 export const advantagesList = [
+    {
+        icon: <FaGlobe className="text-red-500 w-12 h-12" />,
+        title: 'Ваш прямой представитель в Китае',
+        description:
+            'Собственные офисы в Китае - никаких посредников и переплат',
+    },
     {
         icon: <FaShieldAlt className="text-red-500 w-12 h-12" />,
         title: 'Гарантированное качество',
@@ -12,20 +18,15 @@ export const advantagesList = [
             'Тщательный отбор и проверка каждого автомобиля перед отправкой',
     },
     {
-        icon: <FaGlobe className="text-red-500 w-12 h-12" />,
-        description:
-            'Собственные офисы в Китае - никаких посредников и переплат',
+        icon: <FaHandshake className="text-red-500 w-12 h-12" />,
+        title: 'Индивидуальный подход',
+        description: 'Кастомизация под любые требования клиента',
     },
     {
         icon: <FaCar className="text-red-500 w-12 h-12" />,
         title: 'Эксклюзивные автомобили',
         description:
             'Возможность привезти авто до официального старта продаж в РФ',
-    },
-    {
-        icon: <FaHandshake className="text-red-500 w-12 h-12" />,
-        title: 'Индивидуальный подход',
-        description: 'Кастомизация под любые требования клиента',
     },
 ]
 
