@@ -30,9 +30,10 @@ const ContactsPage = () => {
     const MapComponents = {
         khv: KhvMap,
         vdk: VdkMap,
-        china: ChinaMap,
+        harbin: ChinaMap,
         shl: SahalinMap,
         kmch: KamchatkaMap,
+        suifenhe: ChinaMap,
     }
 
     const [selectedOffice, setSelectedOffice] =
