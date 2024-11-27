@@ -6,7 +6,7 @@ const GlobalSpinner = () => {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-80 backdrop-blur-sm">
             <motion.div
-                className="w-16 h-16 border-4 border-red-600 rounded-full border-t-transparent"
+                className="w-16 h-16 border-4 border-[#2F3136] rounded-full border-t-transparent"
                 animate={{ rotate: 360 }}
                 transition={{
                     duration: 1,
@@ -15,7 +15,7 @@ const GlobalSpinner = () => {
                 }}
             />
             <motion.div
-                className="absolute text-red-600 mt-24 font-semibold"
+                className="absolute text-[#2F3136] mt-24 font-semibold"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}

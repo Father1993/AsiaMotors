@@ -104,7 +104,7 @@ export default function RootLayout({
     return (
         <html lang="ru">
             <head />
-            <body>
+            <body suppressHydrationWarning>
                 <PagesLayout>
                     <LoadingProvider>
                         <ModalProvider>{children}</ModalProvider>
