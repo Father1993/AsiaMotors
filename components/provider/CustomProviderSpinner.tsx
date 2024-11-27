@@ -1,13 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
-import { createContext, useContext, useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { usePathname, useSearchParams } from 'next/navigation'
 import GlobalSpinner from '../features/GlobalSpinner/GlobalSpinner'
-
-const LoadingContext = createContext({
-    isLoading: false,
-    setIsLoading: (_value: boolean) => {},
-})
+import { LoadingContext } from './LoadingContext'
 
 export const LoadingProvider = ({
     children,
@@ -15,7 +11,10 @@ export const LoadingProvider = ({
     children: React.ReactNode
 }) => {
     const [isLoading, setIsLoading] = useState(true)
+    const pathname = usePathname()
+    const searchParams = useSearchParams()
 
+    // Обработка начальной загрузки
     useEffect(() => {
         const handleLoad = () => {
             setIsLoading(false)
@@ -27,23 +26,19 @@ export const LoadingProvider = ({
             window.addEventListener('load', handleLoad)
             return () => window.removeEventListener('load', handleLoad)
         }
-    }, []) // Убрали зависимости pathname и searchParams
-
-    // Добавляем обработчик изменения роута через MutationObserver
-    useEffect(() => {
-        const observer = new MutationObserver((mutations) => {
-            mutations.forEach(() => {
-                setIsLoading(false)
-            })
-        })
-
-        observer.observe(document.documentElement, {
-            childList: true,
-            subtree: true,
-        })
-
-        return () => observer.disconnect()
     }, [])
+
+    // Обработка навигации между страницами
+    useEffect(() => {
+        setIsLoading(true)
+
+        // Используем setTimeout для имитации минимального времени загрузки
+        const timer = setTimeout(() => {
+            setIsLoading(false)
+        }, 300) // минимальное время показа спиннера
+
+        return () => clearTimeout(timer)
+    }, [pathname, searchParams])
 
     return (
         <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
@@ -52,5 +47,3 @@ export const LoadingProvider = ({
         </LoadingContext.Provider>
     )
 }
-
-export const useLoading = () => useContext(LoadingContext)
