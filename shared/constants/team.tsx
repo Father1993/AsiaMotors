@@ -1,10 +1,16 @@
 import Link from 'next/link'
-import { FaHandshake, FaCar } from 'react-icons/fa'
-import { FaGlobe } from 'react-icons/fa'
+import { FaHandshake, FaCar, FaGlobe } from 'react-icons/fa'
+
 import { FaShieldAlt } from 'react-icons/fa'
 import { TeamMember } from '../types/offices'
 
 export const advantagesList = [
+    {
+        icon: <FaGlobe className="text-red-500 w-12 h-12" />,
+        title: 'Ваш прямой представитель в Китае',
+        description:
+            'Собственные офисы в Китае - никаких посредников и переплат',
+    },
     {
         icon: <FaShieldAlt className="text-red-500 w-12 h-12" />,
         title: 'Гарантированное качество',
@@ -12,20 +18,15 @@ export const advantagesList = [
             'Тщательный отбор и проверка каждого автомобиля перед отправкой',
     },
     {
-        icon: <FaGlobe className="text-red-500 w-12 h-12" />,
-        description:
-            'Собственные офисы в Китае - никаких посредников и переплат',
+        icon: <FaHandshake className="text-red-500 w-12 h-12" />,
+        title: 'Индивидуальный подход',
+        description: 'Кастомизация под любые требования клиента',
     },
     {
         icon: <FaCar className="text-red-500 w-12 h-12" />,
         title: 'Эксклюзивные автомобили',
         description:
             'Возможность привезти авто до официального старта продаж в РФ',
-    },
-    {
-        icon: <FaHandshake className="text-red-500 w-12 h-12" />,
-        title: 'Индивидуальный подход',
-        description: 'Кастомизация под любые требования клиента',
     },
 ]
 
@@ -120,9 +121,9 @@ export const teamMembersVdk = [
 ]
 
 {
-    /* Команда Китай*/
+    /* Команда Харбин*/
 }
-export const teamMembersChina = [
+export const teamMembersHarbin = [
     {
         name: 'Яша Юй',
         role: 'Директор китайского офиса',
@@ -148,7 +149,7 @@ export const teamMembersChina = [
         telephone: (
             <>
                 <Link href="tel:+13804814499" className="text-red-500">
-                    +138-048-144-99
+                    +86-138-048-144-99
                 </Link>
             </>
         ),
@@ -163,13 +164,56 @@ export const teamMembersChina = [
 ]
 
 {
-    /* Команда Китай*/
+    /* Команда Суйфэньхэ*/
+}
+export const teamMembersSuifenhe = [
+    {
+        name: 'Яша Юй',
+        role: 'Директор китайского офиса',
+        image: '/img/team/china/yasha.jpg',
+        description: 'Специалист по работе с китайскими производителями',
+        city: 'Хабрин',
+        address:
+            'No.1 Baoshui 3rd Road, Xingfu Town, Xiangfang District, Harbin',
+        telephone: (
+            <>
+                <Link href="tel:+8613822140845" className="text-red-500">
+                    +86-138-22-14-08-45
+                </Link>
+            </>
+        ),
+    },
+    {
+        name: 'Хе Чао',
+        role: 'Технический инспектор',
+        image: '/img/team/china/gus.jpg',
+        description: 'Контроль качества и предпродажная подготовка',
+        city: 'Суйфеньхэ',
+        telephone: (
+            <>
+                <Link href="tel:+13804814499" className="text-red-500">
+                    +86-138-048-144-99
+                </Link>
+            </>
+        ),
+    },
+    {
+        name: 'Юрий Би',
+        role: 'Координатор поставок',
+        image: '/img/team/china/yra.jpg',
+        description: 'Организация логистики и таможенного оформления',
+        city: 'Суйфеньхэ',
+    },
+]
+
+{
+    /* Команда Камчатка*/
 }
 export const teamMembersKamch = [
     {
         name: 'Сергей Чжан',
         role: 'Руководитель филиала',
-        image: '/img/team/kamch/2.jpg',
+        image: '/img/team/kamch/sergey-kmch.jpg',
         description: 'Развитие бизнеса на Камчатке',
         address: 'Петропавловск-Камчатский, Тундровая, 1. СТО КАМ-МОТОРС',
         telephone: (
@@ -183,7 +227,7 @@ export const teamMembersKamch = [
 ]
 
 {
-    /* Команда Китай*/
+    /* Команда Сахалин*/
 }
 export const teamMembersSkh = [
     {
@@ -205,7 +249,6 @@ export const teamMembersSkh = [
 export const teamOffices = [
     { id: 'khv', name: 'Хабаровск', members: teamMembersKhv as TeamMember[] },
     { id: 'vdk', name: 'Владивосток', members: teamMembersVdk as TeamMember[] },
-    { id: 'china', name: 'Китай', members: teamMembersChina as TeamMember[] },
     {
         id: 'kamch',
         name: 'Петропавловск-Камчатский',
@@ -215,5 +258,15 @@ export const teamOffices = [
         id: 'skh',
         name: 'Южно-Сахалинск',
         members: teamMembersSkh as TeamMember[],
+    },
+    {
+        id: 'Harbin',
+        name: 'Харбин',
+        members: teamMembersHarbin as TeamMember[],
+    },
+    {
+        id: 'Suifenhe',
+        name: 'Суйфэньхэ',
+        members: teamMembersSuifenhe as TeamMember[],
     },
 ]

@@ -37,7 +37,7 @@ export const offices: Offices = {
         image: '/img/office/kamchatka.png',
         mapComponent: 'kmch',
     },
-    china: {
+    harbin: {
         city: 'Харбин',
         address:
             'No.1 Baoshui 3rd Road, Xingfu Town, Xiangfang District, Harbin',
@@ -45,6 +45,15 @@ export const offices: Offices = {
         email: 'asiamotors27@mail.ru',
         workHours: 'Пн-Пт: 9:00-18:00, Сб: 10:00-15:00',
         image: '/img/office/harbin.jpg',
-        mapComponent: 'china',
+        mapComponent: 'harbin',
+    },
+    suifenhe: {
+        city: 'Суйфыньхэ',
+        address: 'No.1, Suifenhe',
+        phone: '+86-138-22-14-08-45',
+        email: 'asiamotors27@mail.ru',
+        workHours: 'Пн-Пт: 9:00-18:00, Сб: 10:00-15:00',
+        image: '/img/office/suifenhe.jpeg',
+        mapComponent: 'harbin',
     },
 }

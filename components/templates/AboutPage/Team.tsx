@@ -12,7 +12,7 @@ const Team = () => {
                 Команда
             </h2>
             {/* Современный переключатель офисов */}
-            <div className="flex flex-wrap justify-center gap-3 mb-12 p-2 bg-gray-50 rounded-2xl max-w-4xl mx-auto">
+            <div className="flex flex-wrap justify-center gap-3 mb-12 p-2 bg-gray-50 rounded-2xl max-w-5xl mx-auto">
                 {teamOffices.map((office) => (
                     <button
                         key={office.id}

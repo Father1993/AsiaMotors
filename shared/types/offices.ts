@@ -1,4 +1,10 @@
-export type OfficeKey = 'khabarovsk' | 'vladivostok' | 'china' | 'shl' | 'kmch'
+export type OfficeKey =
+    | 'khabarovsk'
+    | 'vladivostok'
+    | 'kmch'
+    | 'shl'
+    | 'harbin'
+    | 'suifenhe'
 
 export interface Office {
     city: string
@@ -7,7 +13,7 @@ export interface Office {
     email: string
     workHours: string
     image: string
-    mapComponent: 'khv' | 'vdk' | 'china' | 'shl' | 'kmch'
+    mapComponent: 'khv' | 'vdk' | 'harbin' | 'shl' | 'kmch' | 'suifenhe'
 }
 
 export type Offices = {
