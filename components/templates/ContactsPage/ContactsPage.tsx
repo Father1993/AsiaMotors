@@ -11,29 +11,30 @@ import {
     ClockIcon,
 } from '@heroicons/react/24/outline'
 import { FaTelegramPlane, FaWhatsapp, FaVk } from 'react-icons/fa'
-import ContactForm from '@/components/templates/AboutPage/ContactsBlock'
-import { offices } from '@/shared/constants/offices'
-import { Office, OfficeKey } from '@/shared/types/offices'
 import {
     telegramAsiaLink,
     whatsAppAsiaLink,
 } from '@/shared/constants/socialLinks'
+import ContactForm from '@/components/templates/AboutPage/ContactsBlock'
+import { offices } from '@/shared/constants/offices'
+import { Office, OfficeKey } from '@/shared/types/offices'
 import Breadcrumbs from '@/components/features/Breadcrumbs/Breadcrumbs'
 import { CONTACTS } from '@/shared/constants/breadcrumbs'
 import KhvMap from '@/components/common/Maps/KhvMap'
 import VdkMap from '@/components/common/Maps/VdkMap'
-import ChinaMap from '@/components/common/Maps/ChinaMap'
 import SahalinMap from '@/components/common/Maps/SahalinMap'
 import KamchatkaMap from '@/components/common/Maps/KamchatkaMap'
+import SuifenheMap from '@/components/common/Maps/SuifenheMap'
+import HarbinMap from '@/components/common/Maps/HarbinMap'
 
 const ContactsPage = () => {
     const MapComponents = {
         khv: KhvMap,
         vdk: VdkMap,
-        harbin: ChinaMap,
+        harbin: HarbinMap,
         shl: SahalinMap,
         kmch: KamchatkaMap,
-        suifenhe: ChinaMap,
+        suifenhe: SuifenheMap,
     }
 
     const [selectedOffice, setSelectedOffice] =
@@ -68,7 +69,7 @@ const ContactsPage = () => {
                     </div>
 
                     {/* Переключатель офисов */}
-                    <div className="flex justify-center gap-4 mb-12">
+                    <div className="flex flex-wrap justify-center gap-4 mb-12 px-4">
                         {(Object.entries(offices) as [OfficeKey, Office][]).map(
                             ([key, office]) => (
                                 <motion.button
@@ -76,7 +77,7 @@ const ContactsPage = () => {
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
                                     onClick={() => setSelectedOffice(key)}
-                                    className={`px-8 py-4 rounded-xl font-medium transition-all duration-300
+                                    className={`px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-xl font-medium transition-all duration-300 text-sm sm:text-base w-full sm:w-auto
                                     ${
                                         selectedOffice === key
                                             ? 'bg-[#2F3136] text-white shadow-lg shadow-red-600/20'

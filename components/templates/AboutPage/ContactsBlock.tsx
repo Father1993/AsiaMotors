@@ -2,11 +2,11 @@
 
 import { useState, ChangeEvent, FormEvent, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import dynamic from 'next/dynamic'
+import { useInView } from 'react-intersection-observer'
 import { IMaskInput } from 'react-imask'
+import dynamic from 'next/dynamic'
 import { FaWhatsapp, FaTelegramPlane } from 'react-icons/fa'
 import { HiOutlineUser, HiOutlinePhone } from 'react-icons/hi'
-import { useInView } from 'react-intersection-observer'
 import { useEmailService } from '@/shared/hooks/useEmailService'
 import { emailConfig } from '@/shared/config/emailService'
 
@@ -23,8 +23,6 @@ const ContactsBlock = () => {
     const [phone, setPhone] = useState('')
     const [nameError, setNameError] = useState('')
     const [phoneError, setPhoneError] = useState('')
-
-    // Используем хук emailService вместо локального состояния isSubmitting
     const {
         formRef,
         isLoading: isSubmitting,
@@ -162,7 +160,7 @@ const ContactsBlock = () => {
                                     <HiOutlinePhone className="absolute left-4 top-1/2 -translate-y-1/2 text-white/60 text-xl group-focus-within:text-red-500 transition-colors" />
                                     <IMaskInput
                                         mask="+{7} (000) 000-00-00"
-                                        name="user_phone" // Важно! Добавляем name для EmailJS
+                                        name="user_phone"
                                         value={phone}
                                         onAccept={handlePhoneAccept}
                                         placeholder="+7 (___) ___-__-__"

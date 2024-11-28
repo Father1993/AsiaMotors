@@ -1,4 +1,4 @@
-const ChinaMap = () => {
+const HarbinMap = () => {
     return (
         <iframe
             src="https://yandex.ru/map-widget/v1/?um=constructor%3Ac97b51c69eb4d4d2557ec7986afeadec3de29d73b9b8beab71dbde1a898b9eee&amp;source=constructor"
@@ -13,4 +13,4 @@ const ChinaMap = () => {
     )
 }
 
-export default ChinaMap
+export default HarbinMap

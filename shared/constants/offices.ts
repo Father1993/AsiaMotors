@@ -49,11 +49,12 @@ export const offices: Offices = {
     },
     suifenhe: {
         city: 'Суйфыньхэ',
-        address: 'No.1, Suifenhe',
-        phone: '+86-138-22-14-08-45',
+        address:
+            '33 Anjuli, провинция Хэйлунцзян, городской округ Муданьцзян, город Суйфыньхэ',
+        phone: '',
         email: 'asiamotors27@mail.ru',
-        workHours: 'Пн-Пт: 9:00-18:00, Сб: 10:00-15:00',
+        workHours: 'Пн-Пт: 9:00-18:00, Сб: 10:00-16:00',
         image: '/img/office/suifenhe.jpeg',
-        mapComponent: 'harbin',
+        mapComponent: 'suifenhe',
     },
 }
