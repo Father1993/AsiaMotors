@@ -10,6 +10,8 @@ import {
     FaFileContract,
     FaShieldAlt,
 } from 'react-icons/fa'
+import Breadcrumbs from '@/components/features/Breadcrumbs/Breadcrumbs'
+import { SERVICES } from '@/shared/constants/breadcrumbs'
 
 const services = [
     {
@@ -71,6 +73,7 @@ const services = [
 const ServicesPage = () => {
     return (
         <div className="container mx-auto px-4 py-16">
+            <Breadcrumbs items={SERVICES} />
             {/* Вводный текст */}
             <div className="max-w-3xl mx-auto text-center mb-16">
                 <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-gray-700 to-red-600 bg-clip-text text-transparent mt-10">

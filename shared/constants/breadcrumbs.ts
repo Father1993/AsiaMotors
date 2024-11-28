@@ -27,6 +27,16 @@ export const VACANCIES: BreadcrumbItem[] = [
 export const FAQ: BreadcrumbItem[] = [{ label: 'FAQ', href: '/faq' }]
 
 export const SPARES: BreadcrumbItem[] = [{ label: 'Запчасти', href: '/spares' }]
+export const SERVICES: BreadcrumbItem[] = [
+    { label: 'Услуги', href: '/services' },
+]
 export const DELIVERY_BREADCRUMBS: BreadcrumbItem[] = [
     { label: 'Доставка', href: '/delivery' },
+]
+export const INSURANCE: BreadcrumbItem[] = [
+    { label: 'Страхование', href: '/insurance' },
+]
+
+export const CUSTOMS: BreadcrumbItem[] = [
+    { label: 'Таможенное оформление', href: '/customs' },
 ]
