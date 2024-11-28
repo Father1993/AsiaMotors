@@ -82,7 +82,7 @@ const HeroBlock = () => {
                     >
                         <div className="relative aspect-square rounded-3xl overflow-hidden shadow-2xl">
                             <Image
-                                src="/img/office.jpeg"
+                                src="/img/office/harbin-office.jpg"
                                 alt="Команда Asia Motors в офисе в Китае"
                                 fill
                                 className="object-cover"
@@ -92,7 +92,7 @@ const HeroBlock = () => {
                             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                             <div className="absolute bottom-6 left-6 right-6 text-white">
                                 <p className="text-sm font-medium">
-                                    Наш офис в г.Харбин, Китай
+                                    офис в г.Харбин, Китай
                                 </p>
                             </div>
                         </div>
