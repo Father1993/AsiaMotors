@@ -168,9 +168,9 @@ export const teamMembersHarbin = [
 }
 export const teamMembersSuifenhe = [
     {
-        name: 'Яша Юй',
+        name: 'Юрий Чау',
         role: 'Директор китайского офиса',
-        image: '/img/team/china/yasha.jpg',
+        image: '/img/team/sunfen/sunvunxe_manager.jpg',
         description: 'Специалист по работе с китайскими производителями',
         city: 'Хабрин',
         address:
@@ -184,7 +184,7 @@ export const teamMembersSuifenhe = [
         ),
     },
     {
-        name: 'Хе Чао',
+        name: 'Фе Мун',
         role: 'Технический инспектор',
         image: '/img/team/china/gus.jpg',
         description: 'Контроль качества и предпродажная подготовка',
@@ -198,7 +198,7 @@ export const teamMembersSuifenhe = [
         ),
     },
     {
-        name: 'Юрий Би',
+        name: 'Николая Сян',
         role: 'Координатор поставок',
         image: '/img/team/china/yra.jpg',
         description: 'Организация логистики и таможенного оформления',

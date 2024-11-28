@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-export type CountryId = 'china' | 'japan' | 'korea'
+export type CountryId = 'china' | 'japan' | 'korea' | 'europe'
 
 export interface Country {
     id: CountryId

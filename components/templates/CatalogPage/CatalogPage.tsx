@@ -108,7 +108,7 @@ const CatalogPage = () => {
                                 className={`group px-8 py-4 rounded-2xl text-lg font-medium 
                     transition-all duration-300 ${
                         selectedCountry === country.id
-                            ? 'bg-red-500 text-white shadow-lg scale-105'
+                            ? 'bg-[#2F3136] text-white shadow-lg scale-105'
                             : 'bg-white text-gray-700 hover:bg-gray-50 shadow hover:shadow-lg'
                     }`}
                             >

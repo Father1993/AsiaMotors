@@ -49,12 +49,15 @@ const Team = () => {
             <h3 className="text-2xl font-semibold mb-6 text-gray-700">
                 Офис {currentOffice.name}
             </h3>
-            <div className="grid md:grid-cols-3 gap-8 mb-10" id="team">
+            <div
+                className="flex flex-wrap justify-center gap-8 mb-10"
+                id="team"
+            >
                 {currentOffice.members.map((member, index) => (
                     <motion.div
                         key={index}
                         whileHover={{ scale: 1.05 }}
-                        className="bg-white rounded-2xl p-6 shadow-lg text-center"
+                        className="bg-white rounded-2xl p-6 shadow-lg text-center w-[300px]"
                     >
                         <Image
                             src={member.image}
