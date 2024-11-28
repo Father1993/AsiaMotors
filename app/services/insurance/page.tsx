@@ -1,5 +1,5 @@
+import InsurancePage from '@/components/templates/ServicesPage/InsurancePage/InsurancePage'
 import { Metadata } from 'next'
-import ClearancePage from '@/components/templates/ServicesPage/ClearancePage/ClearancePage'
 
 export const metadata: Metadata = {
     title: 'Доставка автомобилей из Китая в Россию | Цены и сроки | AsiaMotors',
@@ -24,6 +24,6 @@ export const metadata: Metadata = {
     },
 }
 
-export default function Clearance() {
-    return <ClearancePage />
+export default function Insurance() {
+    return <InsurancePage />
 }
