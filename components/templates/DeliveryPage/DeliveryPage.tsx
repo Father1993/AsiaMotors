@@ -1,16 +1,44 @@
+'use client'
+
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { FiTruck, FiShield, FiClock, FiDollarSign } from 'react-icons/fi'
-// import Breadcrumbs from '@/components/features/Breadcrumbs/Breadcrumbs'
+import Breadcrumbs from '@/components/features/Breadcrumbs/Breadcrumbs'
+import { DELIVERY_BREADCRUMBS } from '@/shared/constants/breadcrumbs'
 
 const DeliveryPage = () => {
+    interface Advantage {
+        title: string
+        description: string
+    }
+
+    const advantages: Advantage[] = [
+        {
+            title: 'Быстрая доставка',
+            description: 'От 20 дней с момента заказа до получения',
+        },
+        {
+            title: 'Полная страховка',
+            description: '100% гарантия сохранности автомобиля',
+        },
+        {
+            title: 'Отслеживание 24/7',
+            description: 'Отчет о статусе доставки',
+        },
+        {
+            title: 'Прозрачные цены',
+            description: 'Фиксированная стоимость без скрытых платежей',
+        },
+    ]
     return (
         <div className="bg-gradient-to-b from-white to-gray-50">
+            <div className="container">
+                <Breadcrumbs items={DELIVERY_BREADCRUMBS} />
+            </div>
             {/* Hero секция */}
             <section className="relative h-[60vh] min-h-[600px] flex items-center">
                 <div className="absolute inset-0 z-0">
                     <Image
-                        src="/img/delivery/hero-bg.jpg"
+                        src="/img/bg-hero-delivery.jpg"
                         alt="Доставка автомобилей из Китая"
                         fill
                         className="object-cover"
@@ -20,8 +48,6 @@ const DeliveryPage = () => {
                 </div>
 
                 <div className="container relative z-10 mx-auto px-4">
-                    {/* <Breadcrumbs items={DELIVERY_BREADCRUMBS} /> */}
-
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -31,7 +57,7 @@ const DeliveryPage = () => {
                             Профессиональная доставка автомобилей из Китая
                         </h1>
                         <p className="text-xl mb-8 text-gray-200">
-                            От 7 дней с полным таможенным оформлением и
+                            От 20 дней с полным таможенным оформлением и
                             гарантией сохранности
                         </p>
                         <button
@@ -52,32 +78,7 @@ const DeliveryPage = () => {
                     </h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {[
-                            {
-                                icon: FiTruck,
-                                title: 'Быстрая доставка',
-                                description:
-                                    'От 7 дней с момента заказа до получения',
-                            },
-                            {
-                                icon: FiShield,
-                                title: 'Полная страховка',
-                                description:
-                                    '100% гарантия сохранности автомобиля',
-                            },
-                            {
-                                icon: FiClock,
-                                title: 'Отслеживание 24/7',
-                                description:
-                                    'Онлайн мониторинг статуса доставки',
-                            },
-                            {
-                                icon: FiDollarSign,
-                                title: 'Прозрачные цены',
-                                description:
-                                    'Фиксированная стоимость без скрытых платежей',
-                            },
-                        ].map((item, index) => (
+                        {advantages.map((item, index) => (
                             <motion.div
                                 key={index}
                                 initial={{ opacity: 0, y: 20 }}
@@ -86,7 +87,6 @@ const DeliveryPage = () => {
                                 transition={{ delay: index * 0.1 }}
                                 className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow"
                             >
-                                <item.icon className="w-12 h-12 text-red-600 mb-4" />
                                 <h3 className="text-xl font-semibold mb-2">
                                     {item.title}
                                 </h3>
@@ -158,10 +158,10 @@ const DeliveryPage = () => {
             </section>
 
             {/* CTA секция */}
-            <section className="py-20 bg-gray-900 text-white">
+            <section className="py-20 bg-gray-900 text-white" id="delivery__bg">
                 <div className="container mx-auto px-4 text-center">
                     <h2 className="text-3xl font-bold mb-6">
-                        Готовы доставить ваш автомобиль?
+                        Мы готовы доставить ваш автомобиль!
                     </h2>
                     <p className="text-xl text-gray-300 mb-8">
                         Получите бесплатную консультацию и расчет стоимости
