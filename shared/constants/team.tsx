@@ -170,7 +170,7 @@ export const teamMembersSuifenhe = [
     {
         name: 'Юрий Чау',
         role: 'Директор китайского офиса',
-        image: '/img/team/sunfen/sunvunxe_manager.jpg',
+        image: '/img/team/china/sunvunxe_manager.jpg',
         description: 'Специалист по работе с китайскими производителями',
         city: 'Хабрин',
         address:

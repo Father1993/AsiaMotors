@@ -1,5 +1,5 @@
+import DeliveryPage from '@/components/templates/ServicesPage/DeliveryPage/DeliveryPage'
 import { Metadata } from 'next'
-import DeliveryPage from '@/components/templates/DeliveryPage/DeliveryPage'
 
 export const metadata: Metadata = {
     title: 'Доставка автомобилей из Китая в Россию | Цены и сроки | AsiaMotors',
@@ -12,13 +12,13 @@ export const metadata: Metadata = {
         description:
             'Быстрая и надежная доставка авто из Китая под ключ. Таможенное оформление включено. Гарантия лучшей цены. Узнайте стоимость прямо сейчас!',
         type: 'website',
-        url: 'https://asiamotors.su/delivery',
+        url: 'https://asiamotors.su/services/delivery',
         images: [
             {
-                url: '/img/china-cars-import.jpg',
+                url: '/img/android-chrome-192x192.png',
                 width: 1200,
                 height: 630,
-                alt: 'Процесс импорта автомобилей из Китая',
+                alt: 'Заказать автомобилей из Китая Азиамоторс',
             },
         ],
     },
