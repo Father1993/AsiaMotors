@@ -128,46 +128,46 @@ const ContactsBlock = () => {
                     <div className="grid lg:grid-cols-2 gap-0">
                         <motion.div
                             variants={itemVariants}
-                            className="p-12 lg:p-16"
+                            className="p-4 sm:p-8 md:p-12 lg:p-16" // Адаптивные отступы
                         >
-                            <h2 className="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300 mb-6">
+                            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300 mb-6">
                                 Начните свой путь к идеальному авто
                             </h2>
 
                             <form
                                 ref={formRef}
                                 onSubmit={handleSubmit}
-                                className="space-y-6 mt-12"
+                                className="space-y-4 sm:space-y-6 mt-8 sm:mt-12" // Адаптивные отступы между элементами
                             >
                                 <div className="relative group">
-                                    <HiOutlineUser className="absolute left-4 top-1/2 -translate-y-1/2 text-white/60 text-xl group-focus-within:text-red-500 transition-colors" />
+                                    <HiOutlineUser className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-white/60 text-lg sm:text-xl group-focus-within:text-red-500 transition-colors" />
                                     <input
                                         type="text"
-                                        name="user_name" // Важно! Добавляем name для EmailJS
+                                        name="user_name"
                                         value={name}
                                         onChange={handleNameChange}
                                         placeholder="Ваше имя"
-                                        className="w-full pl-12 pr-4 py-4 bg-white/5 border border-white/10 rounded-2xl text-white placeholder:text-white/40 focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+                                        className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 bg-white/5 border border-white/10 rounded-xl sm:rounded-2xl text-sm sm:text-base text-white placeholder:text-white/40 focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
                                     />
                                     {nameError && (
-                                        <p className="text-red-500 text-sm mt-1">
+                                        <p className="text-red-500 text-xs sm:text-sm mt-1">
                                             {nameError}
                                         </p>
                                     )}
                                 </div>
 
                                 <div className="relative group">
-                                    <HiOutlinePhone className="absolute left-4 top-1/2 -translate-y-1/2 text-white/60 text-xl group-focus-within:text-red-500 transition-colors" />
+                                    <HiOutlinePhone className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-white/60 text-lg sm:text-xl group-focus-within:text-red-500 transition-colors" />
                                     <IMaskInput
                                         mask="+{7} (000) 000-00-00"
                                         name="user_phone"
                                         value={phone}
                                         onAccept={handlePhoneAccept}
                                         placeholder="+7 (___) ___-__-__"
-                                        className="w-full pl-12 pr-4 py-4 bg-white/5 border border-white/10 rounded-2xl text-white placeholder:text-white/40 focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+                                        className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 bg-white/5 border border-white/10 rounded-xl sm:rounded-2xl text-sm sm:text-base text-white placeholder:text-white/40 focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
                                     />
                                     {phoneError && (
-                                        <p className="text-red-500 text-sm mt-1">
+                                        <p className="text-red-500 text-xs sm:text-sm mt-1">
                                             {phoneError}
                                         </p>
                                     )}
@@ -178,7 +178,7 @@ const ContactsBlock = () => {
                                     whileTap={{ scale: 0.98 }}
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className="w-full py-4 px-8 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-2xl font-medium shadow-xl shadow-red-500/20 hover:shadow-red-500/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="w-full py-3 sm:py-4 px-6 sm:px-8 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl sm:rounded-2xl text-sm sm:text-base font-medium shadow-xl shadow-red-500/20 hover:shadow-red-500/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {isSubmitting
                                         ? 'Отправка...'
@@ -186,8 +186,8 @@ const ContactsBlock = () => {
                                 </motion.button>
                             </form>
 
-                            <div className="mt-12">
-                                <p className="text-white/60 text-center mb-6">
+                            <div className="mt-8 sm:mt-12">
+                                <p className="text-white/60 text-sm sm:text-base text-center mb-4 sm:mb-6">
                                     Или свяжитесь напрямую:
                                 </p>
                                 <div className="flex justify-center space-x-6">
