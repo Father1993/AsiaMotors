@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import DeliveryPage from '@/components/templates/DeliveryPage/DeliveryPage'
+import ClearancePage from '@/components/templates/ServicesPage/ClearancePage/ClearancePage'
 
 export const metadata: Metadata = {
     title: 'Доставка автомобилей из Китая в Россию | Цены и сроки | AsiaMotors',
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
         url: 'https://asiamotors.su/delivery',
         images: [
             {
-                url: '/img/china-cars-import.jpg',
+                url: '/img/android-chrome-192x192.png',
                 width: 1200,
                 height: 630,
                 alt: 'Процесс импорта автомобилей из Китая',
@@ -24,6 +24,6 @@ export const metadata: Metadata = {
     },
 }
 
-export default function Delivery() {
-    return <DeliveryPage />
+export default function Clearance() {
+    return <ClearancePage />
 }

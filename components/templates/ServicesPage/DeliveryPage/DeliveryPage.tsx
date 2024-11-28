@@ -4,31 +4,9 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import Breadcrumbs from '@/components/features/Breadcrumbs/Breadcrumbs'
 import { DELIVERY_BREADCRUMBS } from '@/shared/constants/breadcrumbs'
+import { advantages } from '@/shared/constants/services'
 
 const DeliveryPage = () => {
-    interface Advantage {
-        title: string
-        description: string
-    }
-
-    const advantages: Advantage[] = [
-        {
-            title: 'Быстрая доставка',
-            description: 'От 20 дней с момента заказа до получения',
-        },
-        {
-            title: 'Полная страховка',
-            description: '100% гарантия сохранности автомобиля',
-        },
-        {
-            title: 'Отслеживание 24/7',
-            description: 'Отчет о статусе доставки',
-        },
-        {
-            title: 'Прозрачные цены',
-            description: 'Фиксированная стоимость без скрытых платежей',
-        },
-    ]
     return (
         <div className="bg-gradient-to-b from-white to-gray-50">
             <div className="container">

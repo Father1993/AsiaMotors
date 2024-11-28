@@ -14,7 +14,7 @@ export const metadata: Metadata = {
         type: 'website',
         images: [
             {
-                url: '/img/about-hero.jpg',
+                url: '/img/android-chrome-192x192.png',
                 width: 1200,
                 height: 630,
             },
