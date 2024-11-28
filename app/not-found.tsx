@@ -2,6 +2,7 @@
 /* eslint-disable max-len */
 import NotFoundPages from '@/components/common/NotFoundPages/NotFoundPages'
 import { Metadata } from 'next'
+import { Suspense } from 'react'
 
 export const metadata: Metadata = {
     title: 'Страница не найдена | AsiaMotors',
@@ -36,9 +37,11 @@ export const metadata: Metadata = {
 }
 
 const NotFound = () => (
-    <main className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 flex items-center justify-center p-4">
-        <NotFoundPages />
-    </main>
+    <Suspense fallback={<div>Loading...</div>}>
+        <main className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 flex items-center justify-center p-4">
+            <NotFoundPages />
+        </main>
+    </Suspense>
 )
 
 export default NotFound
