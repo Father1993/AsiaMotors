@@ -5,6 +5,7 @@ export const countries: Country[] = [
     { id: 'china', name: 'Китай' },
     { id: 'japan', name: 'Япония' },
     { id: 'korea', name: 'Корея' },
+    { id: 'europe', name: 'Европа' },
 ]
 
 export const categories = [
@@ -77,6 +78,22 @@ export const carsData: CarsDataType = {
             name: 'Tucson',
             category: 'Кроссоверы',
             price: '3 290 000 ₽',
+            image: '/img/cars/catalog/korea/tucson.jpeg',
+            specs: [
+                { icon: <FiSettings />, value: '2.0L' },
+                { icon: <FiZap />, value: '180 л.с.' },
+                { icon: <FiBox />, value: 'АКПП' },
+            ],
+            available: true,
+        },
+    ],
+    europe: [
+        {
+            id: 1,
+            brand: 'BMW',
+            name: '3-series',
+            category: 'Седаны',
+            price: '1 290 000 ₽',
             image: '/img/cars/catalog/korea/tucson.jpeg',
             specs: [
                 { icon: <FiSettings />, value: '2.0L' },
