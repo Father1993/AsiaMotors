@@ -7,7 +7,7 @@ export const offices: Offices = {
         phone: '+7 (4212) 93-5555',
         email: 'asiamotors27@mail.ru',
         workHours: 'Пн-Пт: 9:00-18:00, Сб: 10:00-15:00',
-        image: '/img/office/khv.jpg',
+        image: '/img/office/khabarovsk.jpg',
         mapComponent: 'khv',
     },
     vladivostok: {
@@ -48,9 +48,9 @@ export const offices: Offices = {
         mapComponent: 'harbin',
     },
     suifenhe: {
-        city: 'Суйфыньхэ',
+        city: 'Суйфэньхэ',
         address:
-            '33 Anjuli, провинция Хэйлунцзян, городской округ Муданьцзян, город Суйфыньхэ',
+            '33 Anjuli, провинция Хэйлунцзян, городской округ Муданьцзян, город Суйфэньхэ',
         phone: '',
         email: 'asiamotors27@mail.ru',
         workHours: 'Пн-Пт: 9:00-18:00, Сб: 10:00-16:00',
