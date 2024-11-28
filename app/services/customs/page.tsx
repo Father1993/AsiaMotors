@@ -12,7 +12,7 @@ export const metadata: Metadata = {
         description:
             'Asia Motors предлагает полный спектр услуг по растаможке автомобилей из Китая. Профессиональная помощь в оформлении всех документов, гарантия надежности и минимальные сроки оформления.',
         type: 'website',
-        url: 'https://asiamotors.su/customs',
+        url: 'https://asiamotors.su/services/customs',
         images: [
             {
                 url: '/img/android-chrome-192x192.png',

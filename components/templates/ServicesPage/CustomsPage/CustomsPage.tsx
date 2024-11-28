@@ -51,7 +51,7 @@ const CustomsPage = () => {
                 <div className="relative rounded-3xl overflow-hidden mb-16">
                     <div className="absolute inset-0">
                         <Image
-                            src="/img/bg-customs.jpg"
+                            src="/img/bg-computers-2.jpg"
                             alt="Таможенное оформление автомобилей"
                             fill
                             className="object-cover"

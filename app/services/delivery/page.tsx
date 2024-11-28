@@ -12,7 +12,7 @@ export const metadata: Metadata = {
         description:
             'Быстрая и надежная доставка авто из Китая под ключ. Таможенное оформление включено. Гарантия лучшей цены. Узнайте стоимость прямо сейчас!',
         type: 'website',
-        url: 'https://asiamotors.su/delivery',
+        url: 'https://asiamotors.su/services/delivery',
         images: [
             {
                 url: '/img/android-chrome-192x192.png',
