@@ -1,8 +1,7 @@
 'use client'
-
-import { motion } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
+import { motion } from 'framer-motion'
 import { FaHome, FaSearch, FaPhone } from 'react-icons/fa'
 
 const NotFoundPages = () => {

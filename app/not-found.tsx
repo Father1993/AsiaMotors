@@ -1,8 +1,9 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable max-len */
-import NotFoundPages from '@/components/common/NotFoundPages/NotFoundPages'
-import { Metadata } from 'next'
 import { Suspense } from 'react'
+import { Metadata } from 'next'
+import NotFoundPages from '@/components/common/NotFoundPages/NotFoundPages'
+import GlobalSpinner from '@/components/features/GlobalSpinner/GlobalSpinner'
 
 export const metadata: Metadata = {
     title: 'Страница не найдена | AsiaMotors',
@@ -37,7 +38,7 @@ export const metadata: Metadata = {
 }
 
 const NotFound = () => (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<GlobalSpinner />}>
         <main className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 flex items-center justify-center p-4">
             <NotFoundPages />
         </main>

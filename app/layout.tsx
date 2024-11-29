@@ -42,7 +42,7 @@ export const metadata: Metadata = {
         apple: [{ url: '/img/apple-touch-icon.png', sizes: '180x180' }],
         other: [{ rel: 'mask-icon', url: '/img/logo-s.svg', color: '#5bbad5' }],
     },
-    manifest: '/manifest.json',
+    manifest: '/manifest',
     openGraph: {
         type: 'website',
         locale: 'ru_RU',
