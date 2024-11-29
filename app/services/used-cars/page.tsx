@@ -1,5 +1,5 @@
+import UsedCarsPage from '@/components/templates/ServicesPage/UsedCarsPage/UsedCarsPage'
 import { Metadata } from 'next'
-import UsedCarsPage from '@/components/templates/UsedCarsPage/UsedCarsPage'
 
 export const metadata: Metadata = {
     title: 'Новые автомобили из Китая | Качество и гарантия от Asia Motors',

@@ -1,9 +1,31 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 import GlobalSpinner from '../features/GlobalSpinner/GlobalSpinner'
 import { LoadingContext } from './LoadingContext'
+
+// Отдельный компонент для клиентской логики
+const ClientLoadingManager = ({
+    children,
+    setIsLoading,
+}: {
+    children: React.ReactNode
+    setIsLoading: (value: boolean) => void
+}) => {
+    const pathname = usePathname()
+    const searchParams = useSearchParams()
+
+    useEffect(() => {
+        setIsLoading(true)
+        const timer = setTimeout(() => {
+            setIsLoading(false)
+        }, 300)
+        return () => clearTimeout(timer)
+    }, [pathname, searchParams, setIsLoading])
+
+    return <>{children}</>
+}
 
 export const LoadingProvider = ({
     children,
@@ -11,10 +33,7 @@ export const LoadingProvider = ({
     children: React.ReactNode
 }) => {
     const [isLoading, setIsLoading] = useState(true)
-    const pathname = usePathname()
-    const searchParams = useSearchParams()
 
-    // Обработка начальной загрузки
     useEffect(() => {
         const handleLoad = () => {
             setIsLoading(false)
@@ -28,22 +47,14 @@ export const LoadingProvider = ({
         }
     }, [])
 
-    // Обработка навигации между страницами
-    useEffect(() => {
-        setIsLoading(true)
-
-        // Используем setTimeout для имитации минимального времени загрузки
-        const timer = setTimeout(() => {
-            setIsLoading(false)
-        }, 300) // минимальное время показа спиннера
-
-        return () => clearTimeout(timer)
-    }, [pathname, searchParams])
-
     return (
         <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
-            {isLoading && <GlobalSpinner />}
-            {children}
+            <Suspense fallback={<GlobalSpinner />}>
+                <ClientLoadingManager setIsLoading={setIsLoading}>
+                    {isLoading && <GlobalSpinner />}
+                    {children}
+                </ClientLoadingManager>
+            </Suspense>
         </LoadingContext.Provider>
     )
 }

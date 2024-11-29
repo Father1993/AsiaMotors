@@ -17,8 +17,8 @@ export const metadata: Metadata = {
     keywords:
         'автомобили из Китая, купить авто из Китая, новые автомобили из Китая, подержанные автомобили из Китая, продажа авто из Китая, авто из Китая для России, надежные авто из Китая, авто премиум-класса из Китая, китайские автомобили в России, поставки авто из Китая, заказать авто из Китая, китайские машины с доставкой, покупка авто из Китая, китайские кроссоверы и седаны, лучшие автомобили из Китая, авто под заказ, китаец под заказ, заказать китайца, китайские авто, дилер китайских авто, официально, официалы, купить машину, азиамоторс, азиа-моторс, азиа моторс, asiasmotors, asia-motors, asia motors',
     authors: [{ name: 'AsiaMotors' }],
-    creator: 'AsiaMotors',
-    publisher: 'AsiaMotors',
+    creator: 'Spinej Andrej',
+    publisher: 'Spinej Andrej',
     formatDetection: {
         telephone: true,
         date: false,
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
         apple: [{ url: '/img/apple-touch-icon.png', sizes: '180x180' }],
         other: [{ rel: 'mask-icon', url: '/img/logo-s.svg', color: '#5bbad5' }],
     },
-    manifest: '/manifest.json',
+    manifest: '/manifest',
     openGraph: {
         type: 'website',
         locale: 'ru_RU',
