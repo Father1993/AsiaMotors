@@ -184,9 +184,9 @@ export const teamMembersSuifenhe = [
         ),
     },
     {
-        name: 'Фе Мун',
+        name: 'Ван Вэй',
         role: 'Технический инспектор',
-        image: '/img/team/china/gus.jpg',
+        image: '/img/team/china/china-team.jpg',
         description: 'Контроль качества и предпродажная подготовка',
         city: 'Суйфеньхэ',
         telephone: (
@@ -198,10 +198,18 @@ export const teamMembersSuifenhe = [
         ),
     },
     {
-        name: 'Николая Сян',
+        name: 'Лю Ян',
         role: 'Координатор поставок',
-        image: '/img/team/china/yra.jpg',
-        description: 'Организация логистики и таможенного оформления',
+        image: '/img/team/china/Image_20241128162415.jpg',
+        description: 'Менеджер',
+        city: 'Суйфеньхэ',
+    },
+
+    {
+        name: 'Чжао Мин',
+        role: 'Координатор поставок',
+        image: '/img/team/china/Image_20241128162419.jpg',
+        description: 'Поиск любого автомобиля в Китае',
         city: 'Суйфеньхэ',
     },
 ]
