@@ -229,3 +229,7 @@ div {
     opacity: 0.1;
     z-index: 0;
 }
+
+.swiper {
+    padding-bottom: 25px !important;
+}

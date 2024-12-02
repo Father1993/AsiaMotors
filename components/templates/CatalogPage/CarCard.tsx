@@ -21,12 +21,14 @@ import {
     VKIcon,
 } from 'react-share'
 import { CarCardProps } from '@/shared/types/catalog'
+import { generateCarSlug } from '@/app/catalog/[slug]/page'
 
 const CarCard = ({ car, viewMode }: CarCardProps) => {
     const [isLiked, setIsLiked] = useState(false)
     const [showDetails, setShowDetails] = useState(false)
     const [isShareModalOpen, setIsShareModalOpen] = useState(false)
     const [isCopied, setIsCopied] = useState(false)
+    const carSlug = generateCarSlug(car)
 
     // Функция для копирования ссылки
     const copyToClipboard = async () => {
@@ -116,21 +118,21 @@ const CarCard = ({ car, viewMode }: CarCardProps) => {
                         {isShareModalOpen && (
                             <div className="absolute right-0 top-12 bg-white p-4 rounded-xl shadow-lg z-50 flex gap-2">
                                 <WhatsappShareButton
-                                    url={`https://asiamotors.su/catalog/${car.id}`}
+                                    url={`https://asiamotors.su/catalog/${carSlug}`}
                                     title={`${car.brand} ${car.brand} - ${car.price}`}
                                 >
                                     <WhatsappIcon size={32} round />
                                 </WhatsappShareButton>
 
                                 <TelegramShareButton
-                                    url={`https://asiamotors.su/catalog/${car.id}`}
+                                    url={`https://asiamotors.su/catalog/${carSlug}`}
                                     title={`${car.brand} ${car.brand} - ${car.price}`}
                                 >
                                     <TelegramIcon size={32} round />
                                 </TelegramShareButton>
 
                                 <VKShareButton
-                                    url={`https://asiamotors.su/catalog/${car.id}`}
+                                    url={`https://asiamotors.su/catalog/${carSlug}`}
                                     title={`${car.brand} ${car.brand} - ${car.price}`}
                                     image={car.images[0]}
                                 >
