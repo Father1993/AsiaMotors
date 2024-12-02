@@ -1,10 +1,18 @@
 'use client'
 
+import { useRef, useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
-import { FiHeart, FiShare2, FiInfo } from 'react-icons/fi'
-import { useRef, useState, useEffect } from 'react'
-import { CarCardProps } from '@/shared/types/catalog'
+import {
+    FiHeart,
+    FiShare2,
+    FiInfo,
+    FiDroplet,
+    FiSettings,
+    FiZap,
+    FiClock,
+} from 'react-icons/fi'
 import {
     TelegramShareButton,
     WhatsappShareButton,
@@ -13,12 +21,15 @@ import {
     WhatsappIcon,
     VKIcon,
 } from 'react-share'
+import { CarCardProps } from '@/shared/types/catalog'
+import { generateCarSlug } from '@/shared/utils/catalog'
 
 const CarCard = ({ car, viewMode }: CarCardProps) => {
     const [isLiked, setIsLiked] = useState(false)
-    const [showDetails, setShowDetails] = useState(false)
     const [isShareModalOpen, setIsShareModalOpen] = useState(false)
     const [isCopied, setIsCopied] = useState(false)
+    const carSlug = generateCarSlug(car)
+    const router = useRouter()
 
     // Функция для копирования ссылки
     const copyToClipboard = async () => {
@@ -67,8 +78,8 @@ const CarCard = ({ car, viewMode }: CarCardProps) => {
             {/* Секция с изображением */}
             <div className="relative aspect-[16/9] group">
                 <Image
-                    src={car.image}
-                    alt={`${car.brand} ${car.name}`}
+                    src={car.images[0]} // Используем первое изображение из массива
+                    alt={`${car.brand} ${car.model}`} // Используем model вместо name
                     fill
                     className="object-cover transform group-hover:scale-105 transition-transform duration-300"
                 />
@@ -76,14 +87,9 @@ const CarCard = ({ car, viewMode }: CarCardProps) => {
 
                 {/* Бейджи */}
                 <div className="absolute top-4 left-4 flex gap-2">
-                    {car.isNew && (
-                        <span className="px-3 py-1 bg-green-500 text-white text-sm font-medium rounded-full">
-                            Новинка
-                        </span>
-                    )}
                     {car.discount && (
-                        <span className="px-3 py-1 bg-red-500 text-white text-sm font-medium rounded-full">
-                            -{car.discount}%
+                        <span className="px-3 py-1 bg-green-500 text-white text-sm font-medium rounded-full">
+                            ВЫГОДНО
                         </span>
                     )}
                 </div>
@@ -113,23 +119,23 @@ const CarCard = ({ car, viewMode }: CarCardProps) => {
                         {isShareModalOpen && (
                             <div className="absolute right-0 top-12 bg-white p-4 rounded-xl shadow-lg z-50 flex gap-2">
                                 <WhatsappShareButton
-                                    url={`https://asiamotors.su/catalog/${car.id}`}
-                                    title={`${car.brand} ${car.name} - ${car.price}`}
+                                    url={`https://asiamotors.su/catalog/${carSlug}`}
+                                    title={`${car.brand} ${car.brand} - ${car.price}`}
                                 >
                                     <WhatsappIcon size={32} round />
                                 </WhatsappShareButton>
 
                                 <TelegramShareButton
-                                    url={`https://asiamotors.su/catalog/${car.id}`}
-                                    title={`${car.brand} ${car.name} - ${car.price}`}
+                                    url={`https://asiamotors.su/catalog/${carSlug}`}
+                                    title={`${car.brand} ${car.brand} - ${car.price}`}
                                 >
                                     <TelegramIcon size={32} round />
                                 </TelegramShareButton>
 
                                 <VKShareButton
-                                    url={`https://asiamotors.su/catalog/${car.id}`}
-                                    title={`${car.brand} ${car.name} - ${car.price}`}
-                                    image={car.image}
+                                    url={`https://asiamotors.su/catalog/${carSlug}`}
+                                    title={`${car.brand} ${car.brand} - ${car.price}`}
+                                    image={car.images[0]}
                                 >
                                     <VKIcon size={32} round />
                                 </VKShareButton>
@@ -188,39 +194,48 @@ const CarCard = ({ car, viewMode }: CarCardProps) => {
                 <div className="flex justify-between items-start mb-4">
                     <div>
                         <h3 className="text-xl font-bold text-gray-900 mb-1">
-                            {car.brand} {car.name}
+                            {car.brand} {car.model}
                         </h3>
-                        <p className="text-sm text-gray-500">{car.category}</p>
+                        <p className="text-sm text-gray-500">{car.year} г.</p>
                     </div>
                     <div className="text-right">
                         <p className="text-2xl font-bold text-red-500">
-                            {car.price}
+                            {new Intl.NumberFormat('ru-RU').format(car.price)} ₽
                         </p>
-                        {car.oldPrice && (
-                            <p className="text-sm text-gray-400 line-through">
-                                {car.oldPrice}
-                            </p>
+                        {car.discount && (
+                            <span className="text-sm text-green-500 font-medium">
+                                Скидка
+                            </span>
                         )}
                     </div>
                 </div>
 
-                {/* Характеристики */}
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                    {car.specs.map((spec, index) => (
-                        <div key={index} className="flex items-center gap-2">
-                            <span className="text-gray-500">{spec.icon}</span>
-                            <span className="text-sm">{spec.value}</span>
-                        </div>
-                    ))}
+                {/* Характеристики в сетке */}
+                <div className="grid grid-cols-2 gap-y-2 mb-6 text-sm text-gray-600">
+                    <div className="flex items-center gap-2">
+                        <FiClock className="w-4 h-4" />
+                        <span>{car.specs.mileage.toLocaleString()} км</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <FiZap className="w-4 h-4" />
+                        <span>{car.specs.horsePower} л.с.</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <FiSettings className="w-4 h-4" />
+                        <span>{car.specs.transmission}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <FiDroplet className="w-4 h-4" />
+                        <span>{car.specs.fuelType}</span>
+                    </div>
                 </div>
-
                 {/* Кнопки действий */}
                 <div className="flex gap-4">
                     <button className="flex-1 bg-red-500 text-white py-3 rounded-xl hover:bg-red-600 transition-colors">
                         Заказать
                     </button>
                     <button
-                        onClick={() => setShowDetails(!showDetails)}
+                        onClick={() => router.push(`/catalog/${carSlug}`)}
                         className="px-4 py-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
                     >
                         <FiInfo />
@@ -240,8 +255,8 @@ const CarCard = ({ car, viewMode }: CarCardProps) => {
             {/* Изображение */}
             <div className="relative w-1/3 group">
                 <Image
-                    src={car.image}
-                    alt={`${car.brand} ${car.name}`}
+                    src={car.images[0]}
+                    alt={`${car.brand} ${car.model}`}
                     fill
                     className="object-cover"
                 />
@@ -253,39 +268,79 @@ const CarCard = ({ car, viewMode }: CarCardProps) => {
                 <div className="flex justify-between items-start mb-4">
                     <div>
                         <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                            {car.brand} {car.name}
+                            {car.brand} {car.model}
                         </h3>
                         <div className="flex gap-2 mb-4">
-                            {car.isNew && (
-                                <span className="px-3 py-1 bg-green-500 text-white text-sm font-medium rounded-full">
-                                    Новинка
+                            <span className="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-medium rounded-full">
+                                {car.year} г.
+                            </span>
+                            {car.discount && (
+                                <span className="px-3 py-1 bg-green-100 text-green-700 text-sm font-medium rounded-full">
+                                    Скидка
                                 </span>
                             )}
-                            <span className="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-medium rounded-full">
-                                {car.category}
-                            </span>
                         </div>
                     </div>
                     <div className="text-right">
                         <p className="text-3xl font-bold text-red-500">
-                            {car.price}
+                            {new Intl.NumberFormat('ru-RU').format(car.price)} ₽
                         </p>
-                        {car.oldPrice && (
-                            <p className="text-sm text-gray-400 line-through">
-                                {car.oldPrice}
-                            </p>
-                        )}
                     </div>
                 </div>
 
                 {/* Характеристики в строку */}
-                <div className="flex gap-6 mb-6">
-                    {car.specs.map((spec, index) => (
-                        <div key={index} className="flex items-center gap-2">
-                            <span className="text-gray-500">{spec.icon}</span>
-                            <span className="text-sm">{spec.value}</span>
+                <div className="flex flex-wrap gap-6 mb-6">
+                    <div className="flex items-center gap-2">
+                        <span className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full">
+                            <FiClock className="w-4 h-4" />
+                        </span>
+                        <div className="flex flex-col">
+                            <span className="text-xs text-gray-500">
+                                Пробег
+                            </span>
+                            <span className="text-sm font-medium">
+                                {car.specs.mileage.toLocaleString()} км
+                            </span>
                         </div>
-                    ))}
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <span className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full">
+                            <FiZap className="w-4 h-4" />
+                        </span>
+                        <div className="flex flex-col">
+                            <span className="text-xs text-gray-500">
+                                Двигатель
+                            </span>
+                            <span className="text-sm font-medium">
+                                {car.specs.engineVolume}л /{' '}
+                                {car.specs.horsePower}л.с.
+                            </span>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <span className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full">
+                            <FiSettings className="w-4 h-4" />
+                        </span>
+                        <div className="flex flex-col">
+                            <span className="text-xs text-gray-500">КПП</span>
+                            <span className="text-sm font-medium">
+                                {car.specs.transmission}
+                            </span>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <span className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full">
+                            <FiDroplet className="w-4 h-4" />
+                        </span>
+                        <div className="flex flex-col">
+                            <span className="text-xs text-gray-500">
+                                Топливо
+                            </span>
+                            <span className="text-sm font-medium">
+                                {car.specs.fuelType}
+                            </span>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Кнопки действий */}
