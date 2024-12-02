@@ -85,21 +85,10 @@ export async function generateMetadata({
             images: [car.images[0]],
             creator: '@AndrejDev',
         },
-
         alternates: {
             canonical: `https://asiamotors.su/catalog/${params.slug}`,
             languages: {
                 'ru-RU': `https://asiamotors.su/catalog/${params.slug}`,
-            },
-        },
-
-        robots: {
-            index: true,
-            follow: true,
-            googleBot: {
-                index: true,
-                follow: true,
-                'max-image-preview': 'large',
             },
         },
     }
