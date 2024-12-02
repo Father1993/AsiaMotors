@@ -51,7 +51,7 @@ export const carsData: CarsDataType = {
         {
             id: '2',
             brand: 'BYD',
-            model: 'Song-Plus DM-I 110km',
+            model: 'Song-Plus DM-I',
             year: 2021,
             category: 'Кроссоверы',
             price: 1888000,

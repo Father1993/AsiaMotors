@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import {
@@ -21,14 +22,14 @@ import {
     VKIcon,
 } from 'react-share'
 import { CarCardProps } from '@/shared/types/catalog'
-import { generateCarSlug } from '@/app/catalog/[slug]/page'
+import { generateCarSlug } from '@/shared/utils/catalog'
 
 const CarCard = ({ car, viewMode }: CarCardProps) => {
     const [isLiked, setIsLiked] = useState(false)
-    const [showDetails, setShowDetails] = useState(false)
     const [isShareModalOpen, setIsShareModalOpen] = useState(false)
     const [isCopied, setIsCopied] = useState(false)
     const carSlug = generateCarSlug(car)
+    const router = useRouter()
 
     // Функция для копирования ссылки
     const copyToClipboard = async () => {
@@ -234,7 +235,7 @@ const CarCard = ({ car, viewMode }: CarCardProps) => {
                         Заказать
                     </button>
                     <button
-                        onClick={() => setShowDetails(!showDetails)}
+                        onClick={() => router.push(`/catalog/${carSlug}`)}
                         className="px-4 py-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
                     >
                         <FiInfo />
