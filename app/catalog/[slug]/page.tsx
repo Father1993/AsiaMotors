@@ -5,12 +5,6 @@ import { carsData } from '@/shared/constants/catalog'
 import { generateCarSlug } from '@/shared/utils/catalog'
 import CarPageClient from '@/components/templates/CatalogPage/CarPage/CarPage.cleint'
 
-// Функция для безопасного получения slug
-async function getSlug(params: { slug: string }) {
-    const resolvedParams = params instanceof Promise ? await params : params
-    return resolvedParams.slug
-}
-
 // Обновленная функция генерации метаданных
 export async function generateMetadata({
     params,
@@ -18,9 +12,8 @@ export async function generateMetadata({
     params: { slug: string }
 }): Promise<Metadata> {
     try {
-        // Дожидаемся получения slug
-        const slug = await getSlug(params)
-        const car = await getCarData({ slug })
+        // Получаем данные автомобиля
+        const car = await getCarData({ slug: params.slug })
 
         if (!car) {
             return {
@@ -80,27 +73,25 @@ export async function generateMetadata({
     }
 }
 
-// Генерация статических путей остается без изменений
-export async function generateStaticParams() {
-    const allCars = Object.values(carsData).flat()
-    return allCars.map((car) => ({
-        slug: generateCarSlug(car),
-    }))
-}
-
-// Обновленный основной компонент страницы
+// Основной компонент страницы
 export default async function CarDetailsPage({
     params,
 }: {
     params: { slug: string }
 }) {
-    // Дожидаемся получения slug
-    const slug = await getSlug(params)
-    const car = await getCarData({ slug })
+    const car = await getCarData({ slug: params.slug })
 
     if (!car) {
         notFound()
     }
 
     return <CarPageClient car={car} />
+}
+
+// Генерация статических путей
+export function generateStaticParams() {
+    const allCars = Object.values(carsData).flat()
+    return allCars.map((car) => ({
+        slug: generateCarSlug(car),
+    }))
 }

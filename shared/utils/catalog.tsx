@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { FiClock, FiSettings, FiZap, FiTruck, FiDroplet } from 'react-icons/fi'
+
 import { carsData } from '@/shared/constants/catalog'
 
 // Функция для создания slug
@@ -34,4 +36,20 @@ export async function findCarBySlug(slug: string) {
 export async function getCarData(params: { slug: string }) {
     const resolvedParams = params instanceof Promise ? await params : params
     return findCarBySlug(resolvedParams.slug)
+}
+
+export const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('ru-RU', {
+        style: 'currency',
+        currency: 'RUB',
+        maximumFractionDigits: 0,
+    }).format(price)
+}
+
+export const specIcons = {
+    mileage: <FiClock className="w-5 h-5 text-red-500" />,
+    engineVolume: <FiSettings className="w-5 h-5 text-red-500" />,
+    horsePower: <FiZap className="w-5 h-5 text-red-500" />,
+    transmission: <FiTruck className="w-5 h-5 text-red-500" />,
+    fuelType: <FiDroplet className="w-5 h-5 text-red-500" />,
 }

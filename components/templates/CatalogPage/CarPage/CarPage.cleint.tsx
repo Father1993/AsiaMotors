@@ -1,24 +1,20 @@
 'use client'
 
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
     FiArrowLeft,
     FiHeart,
     FiShare2,
     FiChevronLeft,
     FiChevronRight,
-    FiClock,
-    FiSettings,
-    FiZap,
-    FiTruck,
-    FiDroplet,
 } from 'react-icons/fi'
 import { CarPageProps } from '@/shared/types/carPage'
 import { CATALOG } from '@/shared/constants/breadcrumbs'
 import Breadcrumbs from '@/components/features/Breadcrumbs/Breadcrumbs'
+import { formatPrice, specIcons } from '@/shared/utils/catalog'
 
 const CarPageClient = ({ car }: CarPageProps) => {
     const router = useRouter()
@@ -29,22 +25,6 @@ const CarPageClient = ({ car }: CarPageProps) => {
         ...CATALOG,
         { label: `${car.brand} ${car.model}`, href: `/catalog/${car.id}` },
     ]
-
-    const formatPrice = (price: number) => {
-        return new Intl.NumberFormat('ru-RU', {
-            style: 'currency',
-            currency: 'RUB',
-            maximumFractionDigits: 0,
-        }).format(price)
-    }
-
-    const specIcons = {
-        mileage: <FiClock className="w-5 h-5 text-red-500" />,
-        engineVolume: <FiSettings className="w-5 h-5 text-red-500" />,
-        horsePower: <FiZap className="w-5 h-5 text-red-500" />,
-        transmission: <FiTruck className="w-5 h-5 text-red-500" />,
-        fuelType: <FiDroplet className="w-5 h-5 text-red-500" />,
-    }
 
     return (
         <div className="min-h-screen bg-gray-50 pt-8">
