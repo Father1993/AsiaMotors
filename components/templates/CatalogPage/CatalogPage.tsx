@@ -22,14 +22,30 @@ const CatalogPage = () => {
     // Фильтрация автомобилей
     const filteredCars =
         carsData[selectedCountry]?.filter((car) => {
-            const matchesSearch = car.name
-                .toLowerCase()
-                .includes(searchQuery.toLowerCase())
+            const matchesSearch =
+                car.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                car.model.toLowerCase().includes(searchQuery.toLowerCase())
             const matchesCategory =
                 selectedCategory === 'Все' || car.category === selectedCategory
-            const matchesPrice =
-                selectedPrice === 'Все цены' ||
-                car.price.includes(selectedPrice)
+
+            // Обновленная логика фильтрации по цене
+            const matchesPrice = (() => {
+                if (selectedPrice === 'Все цены') return true
+                const price = car.price
+                switch (selectedPrice) {
+                    case 'До 2 млн':
+                        return price < 2000000
+                    case '2-3 млн':
+                        return price >= 2000000 && price < 3000000
+                    case '3-4 млн':
+                        return price >= 3000000 && price < 4000000
+                    case 'От 4 млн':
+                        return price >= 4000000
+                    default:
+                        return true
+                }
+            })()
+
             return matchesSearch && matchesCategory && matchesPrice
         }) || []
 
