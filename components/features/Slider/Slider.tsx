@@ -2,16 +2,21 @@
 
 import { useRef } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
+import { motion } from 'framer-motion'
+import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { Navigation } from 'swiper/modules'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import { CARS_DATA } from '@/shared/constants/cars'
 import 'swiper/css'
 import 'swiper/css/navigation'
-import { motion } from 'framer-motion'
 
 const Slider = () => {
     const swiperRef = useRef(null)
+    const router = useRouter()
+    const handleGoCatalog = () => {
+        router.push('/catalog')
+    }
 
     return (
         <section className="py-20 bg-gradient-to-b from-white to-gray-50">
@@ -52,7 +57,10 @@ const Slider = () => {
                     >
                         {CARS_DATA.map((car) => (
                             <SwiperSlide key={car.name}>
-                                <div className="bg-white rounded-2xl shadow-lg overflow-hidden transition-transform duration-300 hover:scale-[1.02] cursor-pointer">
+                                <div
+                                    onClick={handleGoCatalog}
+                                    className="bg-white rounded-2xl shadow-lg overflow-hidden transition-transform duration-300 hover:scale-[1.02] cursor-pointer"
+                                >
                                     <div className="relative h-64">
                                         <Image
                                             src={car.image}
@@ -94,7 +102,7 @@ const Slider = () => {
                                                 {car.price}
                                             </span>
                                             <span className="text-sm text-gray-500">
-                                                В наличии
+                                                В наличии г.Харбин
                                             </span>
                                         </div>
                                         <div className="grid grid-cols-3 gap-4 pt-4 border-t">

@@ -1,12 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
     FiArrowLeft,
-    FiHeart,
+    // FiHeart,
     FiShare2,
     FiChevronLeft,
     FiChevronRight,
@@ -14,7 +14,17 @@ import {
 import { CarPageProps } from '@/shared/types/carPage'
 import { CATALOG } from '@/shared/constants/breadcrumbs'
 import Breadcrumbs from '@/components/features/Breadcrumbs/Breadcrumbs'
-import { formatPrice, specIcons } from '@/shared/utils/catalog'
+import { formatPrice, generateCarSlug, specIcons } from '@/shared/utils/catalog'
+import {
+    TelegramShareButton,
+    WhatsappShareButton,
+    VKShareButton,
+    TelegramIcon,
+    WhatsappIcon,
+    VKIcon,
+} from 'react-share'
+import SimilarCars from '@/components/features/SimilarCars/SimilarCars'
+import { carsData } from '@/shared/constants/catalog'
 
 const CarPageClient = ({ car }: CarPageProps) => {
     const router = useRouter()
@@ -24,6 +34,37 @@ const CarPageClient = ({ car }: CarPageProps) => {
         ...CATALOG,
         { label: `${car.brand} ${car.model}`, href: `/catalog/${car.id}` },
     ]
+
+    const [isShareModalOpen, setIsShareModalOpen] = useState(false)
+    const [isCopied, setIsCopied] = useState(false)
+    const carSlug = generateCarSlug(car)
+
+    // Функция для копирования ссылки
+    const copyToClipboard = async () => {
+        const url = `https://asiamotors.su/catalog/${car.id}`
+
+        await navigator.clipboard.writeText(url)
+        setIsCopied(true)
+        // Сбрасываем состояние через 2 секунды
+        setTimeout(() => setIsCopied(false), 2000)
+    }
+
+    const shareModalRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                shareModalRef.current &&
+                !shareModalRef.current.contains(event.target as Node)
+            ) {
+                setIsShareModalOpen(false)
+            }
+        }
+
+        document.addEventListener('mousedown', handleClickOutside)
+        return () =>
+            document.removeEventListener('mousedown', handleClickOutside)
+    }, [])
 
     return (
         <div className="min-h-screen bg-gray-50 pt-8">
@@ -137,12 +178,101 @@ const CarPageClient = ({ car }: CarPageProps) => {
                                     </p>
                                 </div>
                                 <div className="flex gap-4">
-                                    <button className="p-2 rounded-full hover:bg-gray-100">
+                                    {/* <button className="p-2 rounded-full hover:bg-gray-100">
                                         <FiHeart className="w-6 h-6" />
-                                    </button>
-                                    <button className="p-2 rounded-full hover:bg-gray-100">
-                                        <FiShare2 className="w-6 h-6" />
-                                    </button>
+                                    </button> */}
+
+                                    <motion.div
+                                        whileTap={{ scale: 0.9 }}
+                                        onClick={() =>
+                                            setIsShareModalOpen(
+                                                !isShareModalOpen
+                                            )
+                                        }
+                                        className="p-2 rounded-full bg-white text-gray-700 relative cursor-pointer"
+                                    >
+                                        <FiShare2 />
+
+                                        {/* Модальное окно шеринга */}
+                                        {isShareModalOpen && (
+                                            <div
+                                                ref={shareModalRef}
+                                                className="absolute right-0 top-12 bg-white p-4 rounded-xl shadow-lg z-50 flex gap-2"
+                                            >
+                                                <WhatsappShareButton
+                                                    url={`https://asiamotors.su/catalog/${carSlug}`}
+                                                    title={`${car.brand} ${car.brand} - ${car.price}`}
+                                                >
+                                                    <WhatsappIcon
+                                                        size={32}
+                                                        round
+                                                    />
+                                                </WhatsappShareButton>
+
+                                                <TelegramShareButton
+                                                    url={`https://asiamotors.su/catalog/${carSlug}`}
+                                                    title={`${car.brand} ${car.brand} - ${car.price}`}
+                                                >
+                                                    <TelegramIcon
+                                                        size={32}
+                                                        round
+                                                    />
+                                                </TelegramShareButton>
+
+                                                <VKShareButton
+                                                    url={`https://asiamotors.su/catalog/${carSlug}`}
+                                                    title={`${car.brand} ${car.brand} - ${car.price}`}
+                                                    image={car.images[0]}
+                                                >
+                                                    <VKIcon size={32} round />
+                                                </VKShareButton>
+
+                                                {/* Кнопка копирования ссылки */}
+                                                <div className="relative">
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation() // Предотвращаем закрытие модального окна
+                                                            copyToClipboard()
+                                                        }}
+                                                        className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full hover:bg-gray-200 transition-colors"
+                                                        title="Копировать ссылку"
+                                                    >
+                                                        {isCopied ? (
+                                                            <svg
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                className="h-4 w-4 text-green-500"
+                                                                viewBox="0 0 20 20"
+                                                                fill="currentColor"
+                                                            >
+                                                                <path
+                                                                    fillRule="evenodd"
+                                                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                                    clipRule="evenodd"
+                                                                />
+                                                            </svg>
+                                                        ) : (
+                                                            <svg
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                className="h-4 w-4"
+                                                                viewBox="0 0 20 20"
+                                                                fill="currentColor"
+                                                            >
+                                                                <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+                                                                <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+                                                            </svg>
+                                                        )}
+                                                    </button>
+
+                                                    {/* Всплывающее уведомление */}
+                                                    {isCopied && (
+                                                        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">
+                                                            Ссылка скопирована!
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </motion.div>
                                 </div>
                             </div>
 
@@ -151,7 +281,11 @@ const CarPageClient = ({ car }: CarPageProps) => {
                                 <div className="flex items-center justify-between">
                                     <h2 className="text-3xl font-bold text-red-600">
                                         {formatPrice(car.price)}
+                                        <span className="special__text-for-price">
+                                            -цена под ключ в РФ
+                                        </span>
                                     </h2>
+
                                     <span
                                         className={`px-3 py-1 rounded-full text-sm font-medium
                                         ${
@@ -174,6 +308,19 @@ const CarPageClient = ({ car }: CarPageProps) => {
                                 </h3>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="flex items-center gap-3">
+                                        {specIcons.engineVolume}
+                                        <div>
+                                            <p className="text-sm text-gray-500">
+                                                Двигатель
+                                            </p>
+                                            <p className="font-medium">
+                                                {car.specs.engineVolume}л /{' '}
+                                                {car.specs.fuelType}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center gap-3">
                                         {specIcons.mileage}
                                         <div>
                                             <p className="text-sm text-gray-500">
@@ -185,17 +332,7 @@ const CarPageClient = ({ car }: CarPageProps) => {
                                             </p>
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-3">
-                                        {specIcons.engineVolume}
-                                        <div>
-                                            <p className="text-sm text-gray-500">
-                                                Двигатель
-                                            </p>
-                                            <p className="font-medium">
-                                                {car.specs.engineVolume}л
-                                            </p>
-                                        </div>
-                                    </div>
+
                                     <div className="flex items-center gap-3">
                                         {specIcons.horsePower}
                                         <div>
@@ -207,6 +344,7 @@ const CarPageClient = ({ car }: CarPageProps) => {
                                             </p>
                                         </div>
                                     </div>
+
                                     <div className="flex items-center gap-3">
                                         {specIcons.transmission}
                                         <div>
@@ -215,6 +353,30 @@ const CarPageClient = ({ car }: CarPageProps) => {
                                             </p>
                                             <p className="font-medium">
                                                 {car.specs.transmission}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center gap-3">
+                                        {specIcons.drive}
+                                        <div>
+                                            <p className="text-sm text-gray-500">
+                                                Привод
+                                            </p>
+                                            <p className="font-medium">
+                                                {car.specs.driveType}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center gap-3">
+                                        {specIcons.year}
+                                        <div>
+                                            <p className="text-sm text-gray-500">
+                                                Год выпуска
+                                            </p>
+                                            <p className="font-medium">
+                                                {car.year}
                                             </p>
                                         </div>
                                     </div>
@@ -229,6 +391,10 @@ const CarPageClient = ({ car }: CarPageProps) => {
                             </div>
                         </div>
                     </div>
+                    <SimilarCars
+                        currentCar={car}
+                        allCars={Object.values(carsData).flat()}
+                    />
                 </div>
             </div>
         </div>

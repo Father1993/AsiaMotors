@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { FiClock, FiSettings, FiZap, FiTruck, FiDroplet } from 'react-icons/fi'
+import { FiClock, FiSettings, FiZap, FiDroplet } from 'react-icons/fi'
+import { GiCarWheel, GiClockwiseRotation } from 'react-icons/gi'
 
 import { carsData } from '@/shared/constants/catalog'
+import { TbAutomaticGearbox } from 'react-icons/tb'
 
 // Функция для создания slug
 export function generateCarSlug(car: any) {
@@ -50,6 +52,8 @@ export const specIcons = {
     mileage: <FiClock className="w-5 h-5 text-red-500" />,
     engineVolume: <FiSettings className="w-5 h-5 text-red-500" />,
     horsePower: <FiZap className="w-5 h-5 text-red-500" />,
-    transmission: <FiTruck className="w-5 h-5 text-red-500" />,
+    transmission: <TbAutomaticGearbox className="w-5 h-5 text-red-500" />,
     fuelType: <FiDroplet className="w-5 h-5 text-red-500" />,
+    drive: <GiCarWheel className="w-5 h-5 text-red-500" />,
+    year: <GiClockwiseRotation className="w-5 h-5 text-red-500" />,
 }

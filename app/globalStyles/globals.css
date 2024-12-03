@@ -233,3 +233,9 @@ div {
 .swiper {
     padding-bottom: 25px !important;
 }
+
+.special__text-for-price {
+    margin-left: 10px;
+    font-size: 0.8rem;
+    color: #5d5f61;
+}

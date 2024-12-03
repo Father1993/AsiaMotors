@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { FiSearch, FiGrid, FiList } from 'react-icons/fi'
@@ -48,6 +49,19 @@ const CatalogPage = () => {
 
             return matchesSearch && matchesCategory && matchesPrice
         }) || []
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth < 768 && viewMode === 'list') {
+                setViewMode('grid')
+            }
+        }
+
+        window.addEventListener('resize', handleResize)
+        handleResize() // Проверяем при монтировании
+
+        return () => window.removeEventListener('resize', handleResize)
+    }, [viewMode])
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
@@ -149,7 +163,7 @@ const CatalogPage = () => {
                         </button>
                         <button
                             onClick={() => setViewMode('list')}
-                            className={`p-2 rounded-lg transition-colors ${
+                            className={`hidden md:block p-2 rounded-lg transition-colors ${
                                 viewMode === 'list'
                                     ? 'bg-red-500 text-white'
                                     : 'text-gray-500 hover:bg-gray-100'
@@ -162,13 +176,13 @@ const CatalogPage = () => {
                         </span>
                     </div>
 
-                    <button
+                    {/* <button
                         onClick={() => setIsFilterOpen(!isFilterOpen)}
                         className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg shadow hover:shadow-md transition-all"
                     >
                         <HiOutlineAdjustments className="text-gray-500" />
                         <span>Фильтры</span>
-                    </button>
+                    </button> */}
                 </div>
 
                 {/* Фильтры */}

@@ -5,6 +5,7 @@ import {
     BODY_TYPES,
     PRICE_RANGES,
 } from '@/shared/constants/smartFilter'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 const SmartSearch = () => {
@@ -19,6 +20,11 @@ const SmartSearch = () => {
             price: selectedPrice,
             bodyType: selectedBody,
         })
+    }
+
+    const router = useRouter()
+    const handleGoCatalog = () => {
+        router.push('/catalog')
     }
 
     return (
@@ -79,23 +85,35 @@ const SmartSearch = () => {
                                 onClick={handleSearch}
                                 className="bg-red-600 hover:bg-red-700 text-white py-3 px-6 rounded-xl transition-colors duration-200 flex items-center justify-center gap-2"
                             >
-                                <span>Найти</span>
+                                <span onClick={handleGoCatalog}>Найти</span>
                             </button>
                         </div>
                     </div>
 
                     {/* Быстрые фильтры */}
                     <div className="mt-6 flex flex-wrap gap-3 justify-center">
-                        <button className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-full text-sm font-medium text-gray-700 transition-colors">
+                        <button
+                            onClick={handleGoCatalog}
+                            className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-full text-sm font-medium text-gray-700 transition-colors"
+                        >
                             Новинки 2024
                         </button>
-                        <button className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-full text-sm font-medium text-gray-700 transition-colors">
+                        <button
+                            onClick={handleGoCatalog}
+                            className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-full text-sm font-medium text-gray-700 transition-colors"
+                        >
                             Электромобили
                         </button>
-                        <button className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-full text-sm font-medium text-gray-700 transition-colors">
+                        <button
+                            onClick={handleGoCatalog}
+                            className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-full text-sm font-medium text-gray-700 transition-colors"
+                        >
                             Премиум класс
                         </button>
-                        <button className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-full text-sm font-medium text-gray-700 transition-colors">
+                        <button
+                            onClick={handleGoCatalog}
+                            className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-full text-sm font-medium text-gray-700 transition-colors"
+                        >
                             Семейные авто
                         </button>
                     </div>
