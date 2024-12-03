@@ -6,10 +6,13 @@ import { generateCarSlug } from '@/shared/utils/catalog'
 import CarPageClient from '@/components/templates/CatalogPage/CarPage/CarPage.client'
 import { PageProps } from '@/shared/types/common'
 
-// Обновленная функция генерации метаданных
-export async function generateMetadata(props: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+    params,
+}: PageProps): Promise<Metadata> {
     try {
-        const car = await getCarData({ slug: props.params.slug })
+        // Правильно ожидаем params перед использованием
+        const { slug } = await params
+        const car = await getCarData({ slug })
 
         if (!car) {
             return {
@@ -29,7 +32,7 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
                 title: `${car.brand} ${car.model} ${car.year} | AsiaMotors`,
                 description: `${car.brand} ${car.model} ${car.year} года, ${car.specs.engineVolume}л, ${car.specs.horsePower} л.с., ${car.specs.transmission}. Цена: ${price} ₽`,
                 type: 'website',
-                url: `https://asiamotors.su/catalog/${props.params.slug}`,
+                url: `https://asiamotors.su/catalog/${params.slug}`,
                 images: [
                     {
                         url: car.images[0],
@@ -54,9 +57,9 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
                 creator: '@AndrejDev',
             },
             alternates: {
-                canonical: `https://asiamotors.su/catalog/${props.params.slug}`,
+                canonical: `https://asiamotors.su/catalog/${params.slug}`,
                 languages: {
-                    'ru-RU': `https://asiamotors.su/catalog/${props.params.slug}`,
+                    'ru-RU': `https://asiamotors.su/catalog/${params.slug}`,
                 },
             },
         }
@@ -69,9 +72,10 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
     }
 }
 
-// Основной компонент страницы
-export default async function CarDetailsPage(props: PageProps) {
-    const car = await getCarData({ slug: props.params.slug })
+export default async function CarDetailsPage({ params }: PageProps) {
+    // Правильно ожидаем params перед использованием
+    const { slug } = await params
+    const car = await getCarData({ slug })
 
     if (!car) {
         notFound()
@@ -80,7 +84,7 @@ export default async function CarDetailsPage(props: PageProps) {
     return <CarPageClient car={car} />
 }
 
-// Генерация статических путей
+// Генерация статических путей остается без изменений
 export function generateStaticParams() {
     const allCars = Object.values(carsData).flat()
     return allCars.map((car) => ({
