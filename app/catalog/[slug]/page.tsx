@@ -3,26 +3,13 @@ import { notFound } from 'next/navigation'
 import { getCarData } from '@/shared/utils/catalog'
 import { carsData } from '@/shared/constants/catalog'
 import { generateCarSlug } from '@/shared/utils/catalog'
-import CarPageClient from '@/components/templates/CatalogPage/CarPage/CarPage.cleint'
-
-// Функция для безопасного получения slug
-async function getSlug(params: Promise<{ slug: string }> | { slug: string }) {
-    const resolvedParams = params instanceof Promise ? await params : params
-    return resolvedParams.slug
-}
+import CarPageClient from '@/components/templates/CatalogPage/CarPage/CarPage.client'
+import { PageProps } from '@/shared/types/common'
 
 // Обновленная функция генерации метаданных
-export async function generateMetadata({
-    params,
-}: {
-    params: Promise<{ slug: string }> | { slug: string }
-}): Promise<Metadata> {
+export async function generateMetadata(props: PageProps): Promise<Metadata> {
     try {
-        // Получаем slug безопасным способом
-        const slug = await getSlug(params)
-
-        // Получаем данные автомобиля
-        const car = await getCarData({ slug })
+        const car = await getCarData({ slug: props.params.slug })
 
         if (!car) {
             return {
@@ -42,7 +29,7 @@ export async function generateMetadata({
                 title: `${car.brand} ${car.model} ${car.year} | AsiaMotors`,
                 description: `${car.brand} ${car.model} ${car.year} года, ${car.specs.engineVolume}л, ${car.specs.horsePower} л.с., ${car.specs.transmission}. Цена: ${price} ₽`,
                 type: 'website',
-                url: `https://asiamotors.su/catalog/${slug}`,
+                url: `https://asiamotors.su/catalog/${props.params.slug}`,
                 images: [
                     {
                         url: car.images[0],
@@ -67,9 +54,9 @@ export async function generateMetadata({
                 creator: '@AndrejDev',
             },
             alternates: {
-                canonical: `https://asiamotors.su/catalog/${slug}`,
+                canonical: `https://asiamotors.su/catalog/${props.params.slug}`,
                 languages: {
-                    'ru-RU': `https://asiamotors.su/catalog/${slug}`,
+                    'ru-RU': `https://asiamotors.su/catalog/${props.params.slug}`,
                 },
             },
         }
@@ -83,13 +70,8 @@ export async function generateMetadata({
 }
 
 // Основной компонент страницы
-export default async function CarDetailsPage({
-    params,
-}: {
-    params: Promise<{ slug: string }> | { slug: string }
-}) {
-    const slug = await getSlug(params)
-    const car = await getCarData({ slug })
+export default async function CarDetailsPage(props: PageProps) {
+    const car = await getCarData({ slug: props.params.slug })
 
     if (!car) {
         notFound()

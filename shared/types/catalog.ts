@@ -79,3 +79,10 @@ export interface PageProps {
         slug: string
     }
 }
+
+export type PageParams = {
+    params: {
+        slug: string
+    }
+    searchParams?: { [key: string]: string | string[] | undefined }
+}
