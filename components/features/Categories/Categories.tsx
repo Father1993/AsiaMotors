@@ -1,6 +1,14 @@
+'use client'
+
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 const Categories = () => {
+    const router = useRouter()
+    const handleGoCatalog = () => {
+        router.push('/catalog')
+    }
+
     return (
         <section className="py-20">
             <div className="container">
@@ -9,7 +17,10 @@ const Categories = () => {
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {/* Карточки категорий */}
-                    <div className="relative h-80 rounded-2xl overflow-hidden group cursor-pointer">
+                    <div
+                        onClick={handleGoCatalog}
+                        className="relative h-80 rounded-2xl overflow-hidden group cursor-pointer"
+                    >
                         <Image
                             fill
                             src="/img/categories/catalog-suv.webp"
@@ -30,7 +41,10 @@ const Categories = () => {
                         </div>
                     </div>
 
-                    <div className="relative h-80 rounded-2xl overflow-hidden group cursor-pointer">
+                    <div
+                        onClick={handleGoCatalog}
+                        className="relative h-80 rounded-2xl overflow-hidden group cursor-pointer"
+                    >
                         <Image
                             fill
                             src="/img/categories/catalog-sedan.jpg"
@@ -52,7 +66,10 @@ const Categories = () => {
                         </div>
                     </div>
 
-                    <div className="relative h-80 rounded-2xl overflow-hidden group cursor-pointer">
+                    <div
+                        onClick={handleGoCatalog}
+                        className="relative h-80 rounded-2xl overflow-hidden group cursor-pointer"
+                    >
                         <Image
                             fill
                             src="/img/categories/catalog-hach.jpg"
@@ -74,7 +91,10 @@ const Categories = () => {
                         </div>
                     </div>
 
-                    <div className="relative h-80 rounded-2xl overflow-hidden group cursor-pointer">
+                    <div
+                        onClick={handleGoCatalog}
+                        className="relative h-80 rounded-2xl overflow-hidden group cursor-pointer"
+                    >
                         <Image
                             fill
                             src="/img/categories/catalog-minivan.jpg"
@@ -96,7 +116,10 @@ const Categories = () => {
                         </div>
                     </div>
 
-                    <div className="relative h-80 rounded-2xl overflow-hidden group cursor-pointer">
+                    <div
+                        onClick={handleGoCatalog}
+                        className="relative h-80 rounded-2xl overflow-hidden group cursor-pointer"
+                    >
                         <Image
                             fill
                             src="/img/categories/catalog-pickup.webp"
@@ -118,7 +141,10 @@ const Categories = () => {
                         </div>
                     </div>
 
-                    <div className="relative h-80 rounded-2xl overflow-hidden group cursor-pointer">
+                    <div
+                        onClick={handleGoCatalog}
+                        className="relative h-80 rounded-2xl overflow-hidden group cursor-pointer"
+                    >
                         <Image
                             fill
                             src="/img/categories/catalog-universal.jpg"

@@ -16,8 +16,8 @@ export const CARS_DATA = [
         id: 2,
         name: 'TANK 500',
         price: '6 800 000 ₽',
-        image: '/img/cars/tank500.jpeg',
-        bestseller: false,
+        image: '/img/cars/tank-500_11.jpg',
+        bestseller: true,
         specs: {
             year: '2023',
             engine: '2.0T',
@@ -38,14 +38,14 @@ export const CARS_DATA = [
     },
     {
         id: 3,
-        name: 'TANK',
-        price: '8 200 000 ₽',
-        image: '/img/cars/tank500.jpeg',
-        bestseller: false,
+        name: 'Haval Jolion',
+        price: '2 300 000 ₽',
+        image: '/img/cars/haval-julion.jpg',
+        bestseller: true,
         specs: {
-            year: '2022',
+            year: '2023',
             engine: '1.5',
-            power: '300 л.с.',
+            power: '150 л.с.',
         },
     },
 ]

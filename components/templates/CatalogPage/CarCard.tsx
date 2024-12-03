@@ -73,6 +73,7 @@ const CarCard = ({ car, viewMode }: CarCardProps) => {
             initial="hidden"
             animate="visible"
             whileHover={{ y: -5 }}
+            onClick={() => router.push(`/catalog/${carSlug}`)}
             className="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300"
         >
             {/* Секция с изображением */}
@@ -110,7 +111,10 @@ const CarCard = ({ car, viewMode }: CarCardProps) => {
                     </motion.button> */}
                     <motion.div
                         whileTap={{ scale: 0.9 }}
-                        onClick={() => setIsShareModalOpen(!isShareModalOpen)}
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            setIsShareModalOpen(!isShareModalOpen)
+                        }}
                         className="p-2 rounded-full bg-white text-gray-700 relative cursor-pointer"
                     >
                         <FiShare2 />
@@ -231,11 +235,20 @@ const CarCard = ({ car, viewMode }: CarCardProps) => {
                 </div>
                 {/* Кнопки действий */}
                 <div className="flex gap-4">
-                    <button className="flex-1 bg-red-500 text-white py-3 rounded-xl hover:bg-red-600 transition-colors">
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            console.log('')
+                        }}
+                        className="flex-1 bg-red-500 text-white py-3 rounded-xl hover:bg-red-600 transition-colors"
+                    >
                         Заказать
                     </button>
                     <button
-                        onClick={() => router.push(`/catalog/${carSlug}`)}
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            router.push(`/catalog/${carSlug}`)
+                        }}
                         className="px-4 py-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
                     >
                         <FiInfo />
@@ -349,7 +362,10 @@ const CarCard = ({ car, viewMode }: CarCardProps) => {
                         Заказать
                     </button>
                     <button
-                        onClick={() => setIsLiked(!isLiked)}
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            setIsLiked(!isLiked)
+                        }}
                         className={`px-4 py-3 rounded-xl border ${
                             isLiked
                                 ? 'bg-red-500 border-red-500 text-white'

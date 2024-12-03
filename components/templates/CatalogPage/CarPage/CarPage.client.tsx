@@ -23,6 +23,8 @@ import {
     WhatsappIcon,
     VKIcon,
 } from 'react-share'
+import SimilarCars from '@/components/features/SimilarCars/SimilarCars'
+import { carsData } from '@/shared/constants/catalog'
 
 const CarPageClient = ({ car }: CarPageProps) => {
     const router = useRouter()
@@ -179,6 +181,7 @@ const CarPageClient = ({ car }: CarPageProps) => {
                                     {/* <button className="p-2 rounded-full hover:bg-gray-100">
                                         <FiHeart className="w-6 h-6" />
                                     </button> */}
+
                                     <motion.div
                                         whileTap={{ scale: 0.9 }}
                                         onClick={() =>
@@ -278,7 +281,11 @@ const CarPageClient = ({ car }: CarPageProps) => {
                                 <div className="flex items-center justify-between">
                                     <h2 className="text-3xl font-bold text-red-600">
                                         {formatPrice(car.price)}
+                                        <span className="special__text-for-price">
+                                            -цена под ключ в РФ
+                                        </span>
                                     </h2>
+
                                     <span
                                         className={`px-3 py-1 rounded-full text-sm font-medium
                                         ${
@@ -301,6 +308,19 @@ const CarPageClient = ({ car }: CarPageProps) => {
                                 </h3>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="flex items-center gap-3">
+                                        {specIcons.engineVolume}
+                                        <div>
+                                            <p className="text-sm text-gray-500">
+                                                Двигатель
+                                            </p>
+                                            <p className="font-medium">
+                                                {car.specs.engineVolume}л /{' '}
+                                                {car.specs.fuelType}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center gap-3">
                                         {specIcons.mileage}
                                         <div>
                                             <p className="text-sm text-gray-500">
@@ -312,17 +332,7 @@ const CarPageClient = ({ car }: CarPageProps) => {
                                             </p>
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-3">
-                                        {specIcons.engineVolume}
-                                        <div>
-                                            <p className="text-sm text-gray-500">
-                                                Двигатель
-                                            </p>
-                                            <p className="font-medium">
-                                                {car.specs.engineVolume}л
-                                            </p>
-                                        </div>
-                                    </div>
+
                                     <div className="flex items-center gap-3">
                                         {specIcons.horsePower}
                                         <div>
@@ -334,6 +344,7 @@ const CarPageClient = ({ car }: CarPageProps) => {
                                             </p>
                                         </div>
                                     </div>
+
                                     <div className="flex items-center gap-3">
                                         {specIcons.transmission}
                                         <div>
@@ -342,6 +353,30 @@ const CarPageClient = ({ car }: CarPageProps) => {
                                             </p>
                                             <p className="font-medium">
                                                 {car.specs.transmission}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center gap-3">
+                                        {specIcons.drive}
+                                        <div>
+                                            <p className="text-sm text-gray-500">
+                                                Привод
+                                            </p>
+                                            <p className="font-medium">
+                                                {car.specs.driveType}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center gap-3">
+                                        {specIcons.year}
+                                        <div>
+                                            <p className="text-sm text-gray-500">
+                                                Год выпуска
+                                            </p>
+                                            <p className="font-medium">
+                                                {car.year}
                                             </p>
                                         </div>
                                     </div>
@@ -356,6 +391,10 @@ const CarPageClient = ({ car }: CarPageProps) => {
                             </div>
                         </div>
                     </div>
+                    <SimilarCars
+                        currentCar={car}
+                        allCars={Object.values(carsData).flat()}
+                    />
                 </div>
             </div>
         </div>
