@@ -35,6 +35,10 @@ export const carsData: CarsDataType = {
             images: [
                 '/img/catalog/china/BYD-Han/1.jpg',
                 '/img/catalog/china/BYD-Han/2.jpg',
+                '/img/catalog/china/BYD-Han/3.jpg',
+                '/img/catalog/china/BYD-Han/4.jpg',
+                '/img/catalog/china/BYD-Han/5.jpg',
+                '/img/catalog/china/BYD-Han/6.jpg',
             ],
             specs: {
                 mileage: 22000,
@@ -59,6 +63,8 @@ export const carsData: CarsDataType = {
             images: [
                 '/img/catalog/china/BYD-Song-Plus/1.jpg',
                 '/img/catalog/china/BYD-Song-Plus/2.jpg',
+                '/img/catalog/china/BYD-Song-Plus/3.jpg',
+                '/img/catalog/china/BYD-Song-Plus/4.jpg',
             ],
             specs: {
                 mileage: 23000,
