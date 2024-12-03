@@ -19,7 +19,6 @@ import { formatPrice, specIcons } from '@/shared/utils/catalog'
 const CarPageClient = ({ car }: CarPageProps) => {
     const router = useRouter()
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
-    const [isImageModalOpen, setIsImageModalOpen] = useState(false)
 
     const breadcrumbItems = [
         ...CATALOG,
@@ -54,15 +53,12 @@ const CarPageClient = ({ car }: CarPageProps) => {
                                         animate={{ opacity: 1 }}
                                         exit={{ opacity: 0 }}
                                         className="relative w-full h-full"
-                                        onClick={() =>
-                                            setIsImageModalOpen(true)
-                                        }
                                     >
                                         <Image
                                             src={car.images[currentImageIndex]}
                                             alt={`${car.brand} ${car.model} ${car.year}`}
                                             fill
-                                            className="object-cover cursor-pointer"
+                                            className="object-cover"
                                             priority
                                         />
                                     </motion.div>
@@ -235,27 +231,6 @@ const CarPageClient = ({ car }: CarPageProps) => {
                     </div>
                 </div>
             </div>
-
-            {/* Модальное окно для просмотра изображений */}
-            <AnimatePresence>
-                {isImageModalOpen && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center"
-                        onClick={() => setIsImageModalOpen(false)}
-                    >
-                        <Image
-                            src={car.images[currentImageIndex]}
-                            alt={`${car.brand} ${car.model}`}
-                            width={1200}
-                            height={800}
-                            className="max-w-[90vw] max-h-[90vh] object-contain"
-                        />
-                    </motion.div>
-                )}
-            </AnimatePresence>
         </div>
     )
 }

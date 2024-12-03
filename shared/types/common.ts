@@ -68,8 +68,9 @@ export type PageParams = {
     searchParams?: any
 }
 
-// Определяем типы
-export type PageProps = {
-    params: any
-    searchParams?: any
+export interface PageProps {
+    params: Promise<{
+        slug: string
+    }>
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }

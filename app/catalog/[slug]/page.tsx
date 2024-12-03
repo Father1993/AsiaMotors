@@ -10,9 +10,9 @@ export async function generateMetadata({
     params,
 }: PageProps): Promise<Metadata> {
     try {
-        // Правильно ожидаем params перед использованием
-        const { slug } = await params
-        const car = await getCarData({ slug })
+        // Деструктурируем params через await
+        const resolvedParams = await params
+        const car = await getCarData({ slug: resolvedParams.slug })
 
         if (!car) {
             return {
@@ -32,7 +32,7 @@ export async function generateMetadata({
                 title: `${car.brand} ${car.model} ${car.year} | AsiaMotors`,
                 description: `${car.brand} ${car.model} ${car.year} года, ${car.specs.engineVolume}л, ${car.specs.horsePower} л.с., ${car.specs.transmission}. Цена: ${price} ₽`,
                 type: 'website',
-                url: `https://asiamotors.su/catalog/${params.slug}`,
+                url: `https://asiamotors.su/catalog/${resolvedParams.slug}`,
                 images: [
                     {
                         url: car.images[0],
@@ -57,9 +57,9 @@ export async function generateMetadata({
                 creator: '@AndrejDev',
             },
             alternates: {
-                canonical: `https://asiamotors.su/catalog/${params.slug}`,
+                canonical: `https://asiamotors.su/catalog/${resolvedParams.slug}`,
                 languages: {
-                    'ru-RU': `https://asiamotors.su/catalog/${params.slug}`,
+                    'ru-RU': `https://asiamotors.su/catalog/${resolvedParams.slug}`,
                 },
             },
         }
@@ -73,9 +73,9 @@ export async function generateMetadata({
 }
 
 export default async function CarDetailsPage({ params }: PageProps) {
-    // Правильно ожидаем params перед использованием
-    const { slug } = await params
-    const car = await getCarData({ slug })
+    // Деструктурируем params через await
+    const resolvedParams = await params
+    const car = await getCarData({ slug: resolvedParams.slug })
 
     if (!car) {
         notFound()
