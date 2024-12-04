@@ -492,3 +492,7 @@
         flex-direction: column;
     }
 }
+
+.feature-item-spec {
+    font-size: 0.9rem;
+}
