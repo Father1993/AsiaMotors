@@ -1,4 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable react/no-unescaped-entities */
+import Script from 'next/script'
 import Link from 'next/link'
 import {
     PhoneIcon,
@@ -18,6 +20,38 @@ import ImportIcon from '@/components/ui/Footer/ImportIcon'
 const Footer = () => {
     return (
         <footer className="bg-gray-900 text-gray-300 pt-16 md:pb-2 pb-20">
+            <Script
+                id="metrika-counter"
+                strategy="afterInteractive"
+                dangerouslySetInnerHTML={{
+                    __html: `
+                            (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+                            m[i].l=1*new Date();
+                            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+                            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+                            (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+                            ym(99121605, "init", {
+                                clickmap:true,
+                                trackLinks:true,
+                                accurateTrackBounce:true,
+                                webvisor:true
+                            });
+                        `,
+                }}
+            />
+            <noscript>
+                <div>
+                    <img
+                        src="https://mc.yandex.ru/watch/99121605"
+                        style={{
+                            position: 'absolute',
+                            left: '-9999px',
+                        }}
+                        alt=""
+                    />
+                </div>
+            </noscript>
             <div className="container mx-auto px-4">
                 {/* Основной контент футера */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
