@@ -470,3 +470,29 @@
 .posts__spec-img {
     max-height: 460px;
 }
+
+.avtovoz__images {
+    display: block;
+    margin: 0 auto;
+    max-height: 450px;
+}
+
+.avtovoz__images-spec {
+    max-height: 370px;
+}
+
+.avtovoz__images-spec-wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+@media (max-width: 768px) {
+    .avtovoz__images-spec-wrapper {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.feature-item-spec {
+    font-size: 0.9rem;
+}
