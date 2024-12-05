@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import Breadcrumbs from '@/components/features/Breadcrumbs/Breadcrumbs'
@@ -38,12 +39,12 @@ const DeliveryPage = () => {
                             От 20 дней с полным таможенным оформлением и
                             гарантией сохранности
                         </p>
-                        <button
-                            // onClick={openPopup}
+                        <Link
+                            href="/contacts"
                             className="px-8 py-4 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors"
                         >
-                            Рассчитать стоимость доставки
-                        </button>
+                            Контакты
+                        </Link>
                     </motion.div>
                 </div>
             </section>

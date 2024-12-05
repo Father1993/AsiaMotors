@@ -3,35 +3,17 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import DzenIcon from '@/components/ui/DzenIcon'
-import RutubeIcon from '@/components/ui/RutubeIcon'
+// import DzenIcon from '@/components/ui/DzenIcon'
+// import RutubeIcon from '@/components/ui/RutubeIcon'
 import {
     FaYoutube,
     FaTiktok,
     FaInstagram,
     FaTelegramPlane,
-    FaVk,
+    // FaVk,
 } from 'react-icons/fa'
 
 const socialLinks = [
-    {
-        name: 'YouTube',
-        icon: <FaYoutube />,
-        color: 'text-red-600 hover:text-red-700',
-        link: 'https://youtube.com/asiamotors',
-    },
-    {
-        name: 'TikTok',
-        icon: <FaTiktok />,
-        color: 'text-black hover:text-gray-800',
-        link: 'https://tiktok.com/@asiamotors',
-    },
-    {
-        name: 'Instagram',
-        icon: <FaInstagram />,
-        color: 'text-pink-600 hover:text-pink-700',
-        link: 'https://instagram.com/asiamotors',
-    },
     {
         name: 'Telegram',
         icon: <FaTelegramPlane />,
@@ -39,23 +21,41 @@ const socialLinks = [
         link: 'https://t.me/asiamotors',
     },
     {
-        name: 'Дзен',
-        icon: <DzenIcon />,
-        color: 'text-yellow-600 hover:text-yellow-700',
-        link: 'https://dzen.ru/asiamotors',
+        name: 'YouTube',
+        icon: <FaYoutube />,
+        color: 'text-red-600 hover:text-red-700',
+        link: 'https://www.youtube.com/@AsiaMotors_su',
     },
     {
-        name: 'VK',
-        icon: <FaVk />,
-        color: 'text-blue-800 hover:text-blue-900',
-        link: 'https://vk.com/asiamotors',
+        name: 'TikTok',
+        icon: <FaTiktok />,
+        color: 'text-black hover:text-gray-800',
+        link: 'https://tiktok.com/@asiamotors.su',
     },
     {
-        name: 'RuTube',
-        icon: <RutubeIcon />,
-        color: 'text-red-800 hover:text-red-900',
-        link: 'https://rutube.ru/asiamotors',
+        name: 'Instagram',
+        icon: <FaInstagram />,
+        color: 'text-pink-600 hover:text-pink-700',
+        link: 'https://www.instagram.com/asiamotors_su/#',
     },
+    // {
+    //     name: 'Дзен',
+    //     icon: <DzenIcon />,
+    //     color: 'text-yellow-600 hover:text-yellow-700',
+    //     link: 'https://dzen.ru/asiamotors',
+    // },
+    // {
+    //     name: 'VK',
+    //     icon: <FaVk />,
+    //     color: 'text-blue-800 hover:text-blue-900',
+    //     link: 'https://vk.com/asiamotors',
+    // },
+    // {
+    //     name: 'RuTube',
+    //     icon: <RutubeIcon />,
+    //     color: 'text-red-800 hover:text-red-900',
+    //     link: 'https://rutube.ru/asiamotors',
+    // },
 ]
 
 const Social = () => {
