@@ -66,7 +66,7 @@ const Questions = () => {
 
                             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                                 <Link
-                                    href="https://wa.me/79999999999"
+                                    href="https://wa.me/79294156555"
                                     target="_blank"
                                     className="group flex items-center justify-center gap-3 px-8 py-4 bg-green-500 hover:bg-green-600 text-white rounded-xl transition-all duration-300 transform hover:scale-105"
                                 >
@@ -76,7 +76,7 @@ const Questions = () => {
                                 </Link>
 
                                 <Link
-                                    href="https://t.me/asiamotors_bot"
+                                    href="https://t.me/asiamotors_su"
                                     target="_blank"
                                     className="group flex items-center justify-center gap-3 px-8 py-4 bg-blue-500 hover:bg-blue-600 text-white rounded-xl transition-all duration-300 transform hover:scale-105"
                                 >
