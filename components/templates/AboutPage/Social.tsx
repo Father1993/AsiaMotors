@@ -11,7 +11,7 @@ import {
     FaTelegramPlane,
     FaVk,
 } from 'react-icons/fa'
-// import DzenIcon from '@/components/ui/DzenIcon'
+import DzenIcon from '@/components/ui/DzenIcon'
 
 const socialLinks = [
     {
@@ -51,12 +51,12 @@ const socialLinks = [
         color: 'text-red-800 hover:text-red-900',
         link: 'https://rutube.ru/channel/49744487/',
     },
-    // {
-    //     name: 'Дзен',
-    //     icon: <DzenIcon />,
-    //     color: 'text-yellow-600 hover:text-yellow-700',
-    //     link: 'https://dzen.ru/asiamotors',
-    // },
+    {
+        name: 'Дзен',
+        icon: <DzenIcon />,
+        color: 'text-yellow-600 hover:text-yellow-700',
+        link: 'https://dzen.ru/asiamotors',
+    },
 ]
 
 const Social = () => {
