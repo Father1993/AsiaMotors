@@ -9,13 +9,14 @@ import {
 } from '@heroicons/react/24/outline'
 import YoutubeIcon from '@/components/ui/YoutubeIcon'
 import WhatsAppIcon from '@/components/ui/WhatsAppIcon'
-// import VkIcon from '@/components/ui/VkIcon'
+import VkIcon from '@/components/ui/VkIcon'
 import TelegramIcon from '@/components/ui/TelegramIcon'
 import Logo from '@/components/common/Logo/Logo'
 import Creator from './Creator'
 import CompanyCard from '@/components/ui/Footer/CompanyCardIcon'
 import PrivacyPolicyIcon from '@/components/ui/Footer/PrivacyPolicyIcon'
 import ImportIcon from '@/components/ui/Footer/ImportIcon'
+import RutubeIconFooter from '@/components/ui/Footer/RutubeFooterIcon'
 
 const Footer = () => {
     return (
@@ -89,13 +90,20 @@ const Footer = () => {
                             >
                                 <WhatsAppIcon />
                             </a>
-                            {/* <a
-                                href="https://vk.com/asiamotors"
+                            <a
+                                href="https://vk.com/asiamotors_su"
                                 className="hover:text-red-500 transition-colors"
                                 aria-label="Мы ВКонтакте"
                             >
                                 <VkIcon />
-                            </a> */}
+                            </a>
+                            <a
+                                href="https://rutube.ru/channel/49744487/"
+                                className="hover:text-red-500 transition-colors"
+                                aria-label="Мы ВКонтакте"
+                            >
+                                <RutubeIconFooter />
+                            </a>
                         </div>
                     </div>
 

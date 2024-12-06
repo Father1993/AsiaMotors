@@ -86,6 +86,10 @@ export const metadata: Metadata = {
         google: 'NnSgHs5QovAAKDKnJdfPM1s_uKq5M_2N5jcweftHVlU',
         yandex: '9c844378ef09d23b',
     },
+    other: {
+        'zen-verification':
+            'EsCGanIZ0BIFQzcVfextrP0Tug1kbszsqQzcylukgVWvnE45JF0KzZdouHqubwbf',
+    },
 }
 
 export const viewport: Viewport = {
