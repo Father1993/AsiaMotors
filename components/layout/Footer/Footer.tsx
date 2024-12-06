@@ -16,6 +16,7 @@ import Creator from './Creator'
 import CompanyCard from '@/components/ui/Footer/CompanyCardIcon'
 import PrivacyPolicyIcon from '@/components/ui/Footer/PrivacyPolicyIcon'
 import ImportIcon from '@/components/ui/Footer/ImportIcon'
+import RutubeIconFooter from '@/components/ui/Footer/RutubeFooterIcon'
 
 const Footer = () => {
     return (
@@ -95,6 +96,13 @@ const Footer = () => {
                                 aria-label="Мы ВКонтакте"
                             >
                                 <VkIcon />
+                            </a>
+                            <a
+                                href="https://rutube.ru/channel/49744487/"
+                                className="hover:text-red-500 transition-colors"
+                                aria-label="Мы ВКонтакте"
+                            >
+                                <RutubeIconFooter />
                             </a>
                         </div>
                     </div>

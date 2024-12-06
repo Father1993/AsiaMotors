@@ -3,8 +3,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-// import DzenIcon from '@/components/ui/DzenIcon'
-// import RutubeIcon from '@/components/ui/RutubeIcon'
+import RutubeIcon from '@/components/ui/RutubeIcon'
 import {
     FaYoutube,
     FaTiktok,
@@ -12,6 +11,7 @@ import {
     FaTelegramPlane,
     FaVk,
 } from 'react-icons/fa'
+// import DzenIcon from '@/components/ui/DzenIcon'
 
 const socialLinks = [
     {
@@ -30,10 +30,11 @@ const socialLinks = [
         name: 'TikTok',
         icon: <FaTiktok />,
         color: 'text-black hover:text-gray-800',
-        link: 'https://tiktok.com/@asiamotors.su',
+        link: 'https://www.tiktok.com/@asiamotors.su',
     },
     {
         name: 'Instagram',
+
         icon: <FaInstagram />,
         color: 'text-pink-600 hover:text-pink-700',
         link: 'https://www.instagram.com/asiamotors_su/#',
@@ -44,17 +45,17 @@ const socialLinks = [
         color: 'text-blue-800 hover:text-blue-900',
         link: 'https://vk.com/asiamotors_su',
     },
+    {
+        name: 'RuTube',
+        icon: <RutubeIcon />,
+        color: 'text-red-800 hover:text-red-900',
+        link: 'https://rutube.ru/channel/49744487/',
+    },
     // {
     //     name: 'Дзен',
     //     icon: <DzenIcon />,
     //     color: 'text-yellow-600 hover:text-yellow-700',
     //     link: 'https://dzen.ru/asiamotors',
-    // },
-    // {
-    //     name: 'RuTube',
-    //     icon: <RutubeIcon />,
-    //     color: 'text-red-800 hover:text-red-900',
-    //     link: 'https://rutube.ru/asiamotors',
     // },
 ]
 
