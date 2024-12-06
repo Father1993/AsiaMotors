@@ -12,11 +12,12 @@ import WhatsAppIcon from '@/components/ui/WhatsAppIcon'
 import VkIcon from '@/components/ui/VkIcon'
 import TelegramIcon from '@/components/ui/TelegramIcon'
 import Logo from '@/components/common/Logo/Logo'
-import Creator from './Creator'
 import CompanyCard from '@/components/ui/Footer/CompanyCardIcon'
 import PrivacyPolicyIcon from '@/components/ui/Footer/PrivacyPolicyIcon'
 import ImportIcon from '@/components/ui/Footer/ImportIcon'
 import RutubeIconFooter from '@/components/ui/Footer/RutubeFooterIcon'
+import DzenFooterIcon from '@/components/ui/Footer/DzenFooterIcon'
+import Creator from './Creator'
 
 const Footer = () => {
     return (
@@ -103,6 +104,13 @@ const Footer = () => {
                                 aria-label="Мы ВКонтакте"
                             >
                                 <RutubeIconFooter />
+                            </a>
+                            <a
+                                href="https://dzen.ru/asiamotors"
+                                className="hover:text-red-500 transition-colors"
+                                aria-label="Мы ВКонтакте"
+                            >
+                                <DzenFooterIcon />
                             </a>
                         </div>
                     </div>
