@@ -10,7 +10,7 @@ import {
     FaTiktok,
     FaInstagram,
     FaTelegramPlane,
-    // FaVk,
+    FaVk,
 } from 'react-icons/fa'
 
 const socialLinks = [
@@ -38,17 +38,17 @@ const socialLinks = [
         color: 'text-pink-600 hover:text-pink-700',
         link: 'https://www.instagram.com/asiamotors_su/#',
     },
+    {
+        name: 'VK',
+        icon: <FaVk />,
+        color: 'text-blue-800 hover:text-blue-900',
+        link: 'https://vk.com/asiamotors_su',
+    },
     // {
     //     name: 'Дзен',
     //     icon: <DzenIcon />,
     //     color: 'text-yellow-600 hover:text-yellow-700',
     //     link: 'https://dzen.ru/asiamotors',
-    // },
-    // {
-    //     name: 'VK',
-    //     icon: <FaVk />,
-    //     color: 'text-blue-800 hover:text-blue-900',
-    //     link: 'https://vk.com/asiamotors',
     // },
     // {
     //     name: 'RuTube',

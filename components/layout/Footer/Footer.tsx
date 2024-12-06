@@ -9,7 +9,7 @@ import {
 } from '@heroicons/react/24/outline'
 import YoutubeIcon from '@/components/ui/YoutubeIcon'
 import WhatsAppIcon from '@/components/ui/WhatsAppIcon'
-// import VkIcon from '@/components/ui/VkIcon'
+import VkIcon from '@/components/ui/VkIcon'
 import TelegramIcon from '@/components/ui/TelegramIcon'
 import Logo from '@/components/common/Logo/Logo'
 import Creator from './Creator'
@@ -89,13 +89,13 @@ const Footer = () => {
                             >
                                 <WhatsAppIcon />
                             </a>
-                            {/* <a
-                                href="https://vk.com/asiamotors"
+                            <a
+                                href="https://vk.com/asiamotors_su"
                                 className="hover:text-red-500 transition-colors"
                                 aria-label="Мы ВКонтакте"
                             >
                                 <VkIcon />
-                            </a> */}
+                            </a>
                         </div>
                     </div>
 
