@@ -27,7 +27,7 @@ const BuyingProcess = () => {
                             key={step.id}
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: index * 0.1 }}
+                            transition={{ duration: 0.3, delay: index * 0.05 }}
                             viewport={{ once: true }}
                             className="bg-white rounded-xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 relative group z-10"
                         >
@@ -41,8 +41,8 @@ const BuyingProcess = () => {
                                     initial={{ scale: 0.8, opacity: 0 }}
                                     whileInView={{ scale: 1, opacity: 1 }}
                                     transition={{
-                                        duration: 0.5,
-                                        delay: index * 0.2,
+                                        duration: 0.3,
+                                        delay: index * 0.1,
                                     }}
                                     viewport={{ once: true }}
                                 >
@@ -54,7 +54,7 @@ const BuyingProcess = () => {
                                         initial={{ opacity: 0, x: -20 }}
                                         whileInView={{ opacity: 1, x: 0 }}
                                         transition={{
-                                            delay: 0.3 + index * 0.2,
+                                            delay: 0.2 + index * 0.1,
                                         }}
                                         viewport={{ once: true }}
                                         className="text-lg font-bold mb-2 text-gray-900"
@@ -65,7 +65,7 @@ const BuyingProcess = () => {
                                         initial={{ opacity: 0 }}
                                         whileInView={{ opacity: 1 }}
                                         transition={{
-                                            delay: 0.4 + index * 0.2,
+                                            delay: 0.3 + index * 0.1,
                                         }}
                                         viewport={{ once: true }}
                                         className="text-sm text-gray-600 leading-relaxed"

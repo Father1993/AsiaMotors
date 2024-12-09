@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { FaHandshake, FaCar, FaGlobe } from 'react-icons/fa'
-
 import { FaShieldAlt } from 'react-icons/fa'
 import { TeamMember } from '../types/offices'
 
@@ -93,7 +92,7 @@ export const teamMembersVdk = [
     {
         name: 'Роман Мориц',
         role: 'Руководитель филиала',
-        image: '/img/team/vdk/vdk1.webp',
+        image: '/img/team/vdk/man.jpg',
         description: 'Более 10 лет опыта в автомобильном бизнесе',
         address: 'Владивосток, ​Баляева улица, 49, офис- 50 - ​ЖК Горизонт',
         telephone: (
@@ -107,7 +106,7 @@ export const teamMembersVdk = [
     {
         name: 'Кирил Зубченко',
         role: 'Старший менеджер по продажам',
-        image: '/img/team/vdk/vdk2.jpeg',
+        image: '/img/team/vdk/man2.jpg',
         description: 'Эксперт по работе с клиентами',
         address: 'Владивосток, ​Баляева улица, 49, офис- 50 - ​ЖК Горизонт',
         telephone: (
