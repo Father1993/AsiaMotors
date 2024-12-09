@@ -41,7 +41,7 @@ const CarPageClient = ({ car }: CarPageProps) => {
 
     // Функция для копирования ссылки
     const copyToClipboard = async () => {
-        const url = `https://asiamotors.su/catalog/${car.id}`
+        const url = `https://asiamotors.su/catalog/${carSlug}`
 
         await navigator.clipboard.writeText(url)
         setIsCopied(true)

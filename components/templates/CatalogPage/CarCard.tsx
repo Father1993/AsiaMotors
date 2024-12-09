@@ -33,7 +33,7 @@ const CarCard = ({ car, viewMode }: CarCardProps) => {
 
     // Функция для копирования ссылки
     const copyToClipboard = async () => {
-        const url = `https://asiamotors.su/catalog/${car.id}`
+        const url = `https://asiamotors.su/catalog/${carSlug}`
         try {
             await navigator.clipboard.writeText(url)
             setIsCopied(true)
