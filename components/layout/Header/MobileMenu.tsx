@@ -79,7 +79,7 @@ const MobileMenu = ({ onClose }: MobileMenuProps) => {
                             damping: 25,
                             stiffness: 200,
                         }}
-                        className="fixed bottom-[85px] left-4 right-4 bg-gradient-to-b from-white/95 to-white/98 backdrop-blur-xl z-50 shadow-lg py-3 rounded-2xl border border-gray-100"
+                        className="fixed bottom-[85px] left-4 right-4 bg-white z-50 shadow-lg py-3 rounded-2xl border border-gray-100"
                     >
                         <div className="flex justify-between items-center px-6 pb-4 border-b border-gray-100">
                             <h3 className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
@@ -98,7 +98,7 @@ const MobileMenu = ({ onClose }: MobileMenuProps) => {
                                     key={item.name}
                                     href={item.href}
                                     onClick={handleLinkClick}
-                                    className="flex items-center px-4 py-3.5 my-0.5 text-gray-600 hover:text-red-600 rounded-xl hover:bg-gray-50/80 active:bg-gray-100 transition-all duration-200"
+                                    className="flex items-center px-4 py-3.5 my-0.5 text-gray-600 hover:text-red-600 rounded-xl hover:bg-gray-50/50 active:bg-gray-100 transition-all duration-200"
                                 >
                                     <span className="text-[15px] font-medium">
                                         {item.name}
