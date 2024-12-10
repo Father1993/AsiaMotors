@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useSwipeable } from 'react-swipeable'
 import {
     FiArrowLeft,
     // FiHeart,
@@ -30,16 +31,37 @@ import { OrderCarModal } from '../OrderCarModal'
 const CarPageClient = ({ car }: CarPageProps) => {
     const router = useRouter()
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
+    const [isShareModalOpen, setIsShareModalOpen] = useState(false)
+    const [isCopied, setIsCopied] = useState(false)
+    const carSlug = generateCarSlug(car)
+    const [isOrderModalOpen, setIsOrderModalOpen] = useState(false)
 
     const breadcrumbItems = [
         ...CATALOG,
         { label: `${car.brand} ${car.model}`, href: `/catalog/${car.id}` },
     ]
 
-    const [isShareModalOpen, setIsShareModalOpen] = useState(false)
-    const [isCopied, setIsCopied] = useState(false)
-    const carSlug = generateCarSlug(car)
-    const [isOrderModalOpen, setIsOrderModalOpen] = useState(false)
+    const handlePrevImage = () => {
+        setCurrentImageIndex((prev) =>
+            prev === 0 ? car.images.length - 1 : prev - 1
+        )
+    }
+
+    const handleNextImage = () => {
+        setCurrentImageIndex((prev) =>
+            prev === car.images.length - 1 ? 0 : prev + 1
+        )
+    }
+
+    // Конфигурация свайпов
+    const swipeHandlers = useSwipeable({
+        onSwipedLeft: handleNextImage,
+        onSwipedRight: handlePrevImage,
+        trackMouse: false,
+        preventScrollOnSwipe: true,
+        swipeDuration: 500,
+        delta: 10,
+    })
 
     // Функция для копирования ссылки
     const copyToClipboard = async () => {
@@ -88,7 +110,10 @@ const CarPageClient = ({ car }: CarPageProps) => {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         {/* Галерея */}
                         <div className="space-y-4">
-                            <div className="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden group">
+                            <div
+                                className="relative w-full aspect-video rounded-2xl overflow-hidden group"
+                                {...swipeHandlers}
+                            >
                                 <AnimatePresence mode="wait">
                                     <motion.div
                                         key={currentImageIndex}
@@ -103,33 +128,35 @@ const CarPageClient = ({ car }: CarPageProps) => {
                                             fill
                                             className="object-cover"
                                             priority
+                                            draggable={false}
                                         />
+                                        {/* Индикатор свайпа на мобильных устройствах */}
+                                        <div className="absolute inset-x-0 bottom-4 flex justify-center gap-1 md:hidden">
+                                            {car.images.map((_, index) => (
+                                                <div
+                                                    key={index}
+                                                    className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                                                        index ===
+                                                        currentImageIndex
+                                                            ? 'bg-white scale-125'
+                                                            : 'bg-white/50'
+                                                    }`}
+                                                />
+                                            ))}
+                                        </div>
                                     </motion.div>
                                 </AnimatePresence>
 
                                 {car.images.length > 1 && (
-                                    <div className="absolute inset-0 flex items-center justify-between p-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <div className="absolute inset-0 flex items-center justify-between p-4 opacity-0 group-hover:opacity-100 transition-opacity hidden md:flex">
                                         <button
-                                            onClick={() =>
-                                                setCurrentImageIndex((prev) =>
-                                                    prev === 0
-                                                        ? car.images.length - 1
-                                                        : prev - 1
-                                                )
-                                            }
+                                            onClick={handlePrevImage}
                                             className="p-2 rounded-full bg-white/80 hover:bg-white shadow-lg"
                                         >
                                             <FiChevronLeft className="w-6 h-6" />
                                         </button>
                                         <button
-                                            onClick={() =>
-                                                setCurrentImageIndex((prev) =>
-                                                    prev ===
-                                                    car.images.length - 1
-                                                        ? 0
-                                                        : prev + 1
-                                                )
-                                            }
+                                            onClick={handleNextImage}
                                             className="p-2 rounded-full bg-white/80 hover:bg-white shadow-lg"
                                         >
                                             <FiChevronRight className="w-6 h-6" />
@@ -140,7 +167,7 @@ const CarPageClient = ({ car }: CarPageProps) => {
 
                             {/* Миниатюры */}
                             {car.images.length > 1 && (
-                                <div className="flex gap-2 overflow-x-auto pb-2">
+                                <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
                                     {car.images.map((image, index) => (
                                         <button
                                             key={index}
@@ -148,11 +175,11 @@ const CarPageClient = ({ car }: CarPageProps) => {
                                                 setCurrentImageIndex(index)
                                             }
                                             className={`relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 
-                                                ${
-                                                    currentImageIndex === index
-                                                        ? 'ring-2 ring-red-600'
-                                                        : ''
-                                                }`}
+                        ${
+                            currentImageIndex === index
+                                ? 'ring-2 ring-red-600'
+                                : ''
+                        }`}
                                         >
                                             <Image
                                                 src={image}
