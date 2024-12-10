@@ -70,8 +70,8 @@ export const teamMembersKhv = [
             'Реализовал более 100 успешных сделок. Эксперт по подбору автомобилей',
         telephone: (
             <>
-                <Link href="tel:+79242066592" className="text-red-500">
-                    +7 (924) 206-65-92
+                <Link href="tel:+79294182888" className="text-red-500">
+                    +7 (929) 418-28-88
                 </Link>
             </>
         ),
