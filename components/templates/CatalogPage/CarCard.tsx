@@ -12,6 +12,8 @@ import {
     FiSettings,
     FiZap,
     FiClock,
+    FiChevronLeft,
+    FiChevronRight,
 } from 'react-icons/fi'
 import {
     TelegramShareButton,
@@ -32,6 +34,21 @@ export const CarCard = ({ car, viewMode }: CarCardProps) => {
     const [isOrderModalOpen, setIsOrderModalOpen] = useState(false)
     const carSlug = generateCarSlug(car)
     const router = useRouter()
+    const [currentImageIndex, setCurrentImageIndex] = useState(0)
+
+    const handlePrevImage = (e: React.MouseEvent) => {
+        e.stopPropagation() // Предотвращаем переход на страницу авто
+        setCurrentImageIndex((prev) =>
+            prev === 0 ? car.images.length - 1 : prev - 1
+        )
+    }
+
+    const handleNextImage = (e: React.MouseEvent) => {
+        e.stopPropagation()
+        setCurrentImageIndex((prev) =>
+            prev === car.images.length - 1 ? 0 : prev + 1
+        )
+    }
 
     // Функция для копирования ссылки
     const copyToClipboard = async () => {
@@ -81,12 +98,32 @@ export const CarCard = ({ car, viewMode }: CarCardProps) => {
             {/* Секция с изображением */}
             <div className="relative aspect-[16/9] group">
                 <Image
-                    src={car.images[0]} // Используем первое изображение из массива
-                    alt={`${car.brand} ${car.model}`} // Используем model вместо name
+                    src={car.images[currentImageIndex]}
+                    alt={`${car.brand} ${car.model}`}
                     fill
                     className="object-cover transform group-hover:scale-105 transition-transform duration-300"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                {/* Кнопки навигации */}
+                <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <button
+                        onClick={handlePrevImage}
+                        className="p-2 rounded-full bg-white/80 hover:bg-white text-gray-800 transition-colors"
+                    >
+                        <FiChevronLeft className="w-5 h-5" />
+                    </button>
+                    <button
+                        onClick={handleNextImage}
+                        className="p-2 rounded-full bg-white/80 hover:bg-white text-gray-800 transition-colors"
+                    >
+                        <FiChevronRight className="w-5 h-5" />
+                    </button>
+                </div>
+
+                {/* Индикатор количества фотографий */}
+                <div className="absolute bottom-2 right-2 px-2 py-1 bg-black/50 text-white text-sm rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    {currentImageIndex + 1} / {car.images.length}
+                </div>
 
                 {/* Бейджи */}
                 <div className="absolute top-4 left-4 flex gap-2">
@@ -275,12 +312,32 @@ export const CarCard = ({ car, viewMode }: CarCardProps) => {
             {/* Изображение */}
             <div className="relative w-1/3 group">
                 <Image
-                    src={car.images[0]}
+                    src={car.images[currentImageIndex]}
                     alt={`${car.brand} ${car.model}`}
                     fill
-                    className="object-cover"
+                    className="object-cover transform group-hover:scale-105 transition-transform duration-300"
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                {/* Кнопки навигации */}
+                <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <button
+                        onClick={handlePrevImage}
+                        className="p-2 rounded-full bg-white/80 hover:bg-white text-gray-800 transition-colors"
+                    >
+                        <FiChevronLeft className="w-5 h-5" />
+                    </button>
+                    <button
+                        onClick={handleNextImage}
+                        className="p-2 rounded-full bg-white/80 hover:bg-white text-gray-800 transition-colors"
+                    >
+                        <FiChevronRight className="w-5 h-5" />
+                    </button>
+                </div>
+
+                {/* Индикатор количества фотографий */}
+                <div className="absolute bottom-2 right-2 px-2 py-1 bg-black/50 text-white text-sm rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    {currentImageIndex + 1} / {car.images.length}
+                </div>
             </div>
 
             {/* Информация */}
