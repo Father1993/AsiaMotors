@@ -154,7 +154,7 @@ const SparesPage = () => {
                                                 ✓
                                             </span>
                                             <span>
-                                                Доставка из Китая всего за 2
+                                                Доставка из Китая всего за 2-3
                                                 недели
                                             </span>
                                         </li>
@@ -200,7 +200,7 @@ const SparesPage = () => {
             {/* Categories */}
             <section className="py-16 container mx-auto px-4">
                 <h2 className="text-3xl font-bold text-center mb-12 mt-10">
-                    Категории запчастей
+                    Категории запчастей которые можно заказать через Asia Motors
                 </h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                     {sparesCategories.map((category) => (

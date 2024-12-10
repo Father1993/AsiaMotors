@@ -8,6 +8,7 @@ import ScrollToTop from '@/components/features/ScrollToTop/ScrollToTop'
 import { useScroll } from '@/shared/hooks/useScroll'
 import { NAVIGATION } from '@/shared/constants/menuLinks'
 import { useModalStore } from '@/components/provider/ModalProvider'
+import Image from 'next/image'
 
 const Header = () => {
     const isScrolled = useScroll({ threshold: 20 })
@@ -107,6 +108,15 @@ const Header = () => {
             {/* Мобильное меню */}
             <div className="lg:hidden">
                 <MobileMenu />
+                <Link href="/">
+                    <Image
+                        className="fixed top-3 right-3 w-[40px] z-50"
+                        src="/img/asia-motors-logo.png"
+                        width={40}
+                        height={40}
+                        alt="Азиа Моторс"
+                    />
+                </Link>
             </div>
 
             <ScrollToTop />
