@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import {
-    FiHeart,
+    // FiHeart,
     FiShare2,
     FiInfo,
     FiDroplet,
@@ -23,11 +23,13 @@ import {
 } from 'react-share'
 import { CarCardProps } from '@/shared/types/catalog'
 import { generateCarSlug } from '@/shared/utils/catalog'
+import { OrderCarModal } from './OrderCarModal'
 
-const CarCard = ({ car, viewMode }: CarCardProps) => {
-    const [isLiked, setIsLiked] = useState(false)
+export const CarCard = ({ car, viewMode }: CarCardProps) => {
+    // const [isLiked, setIsLiked] = useState(false)
     const [isShareModalOpen, setIsShareModalOpen] = useState(false)
     const [isCopied, setIsCopied] = useState(false)
+    const [isOrderModalOpen, setIsOrderModalOpen] = useState(false)
     const carSlug = generateCarSlug(car)
     const router = useRouter()
 
@@ -235,10 +237,15 @@ const CarCard = ({ car, viewMode }: CarCardProps) => {
                 </div>
                 {/* Кнопки действий */}
                 <div className="flex gap-4">
+                    <OrderCarModal
+                        isOpen={isOrderModalOpen}
+                        onClose={() => setIsOrderModalOpen(false)}
+                        car={car}
+                    />
                     <button
                         onClick={(e) => {
                             e.stopPropagation()
-                            console.log('')
+                            setIsOrderModalOpen(true)
                         }}
                         className="flex-1 bg-red-500 text-white py-3 rounded-xl hover:bg-red-600 transition-colors"
                     >
@@ -358,10 +365,21 @@ const CarCard = ({ car, viewMode }: CarCardProps) => {
 
                 {/* Кнопки действий */}
                 <div className="flex gap-4">
-                    <button className="flex-1 bg-red-500 text-white py-3 rounded-xl hover:bg-red-600 transition-colors">
+                    <OrderCarModal
+                        isOpen={isOrderModalOpen}
+                        onClose={() => setIsOrderModalOpen(false)}
+                        car={car}
+                    />
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            setIsOrderModalOpen(true)
+                        }}
+                        className="flex-1 bg-red-500 text-white py-3 rounded-xl hover:bg-red-600 transition-colors"
+                    >
                         Заказать
                     </button>
-                    <button
+                    {/* <button
                         onClick={(e) => {
                             e.stopPropagation()
                             setIsLiked(!isLiked)
@@ -373,7 +391,7 @@ const CarCard = ({ car, viewMode }: CarCardProps) => {
                         } transition-colors`}
                     >
                         <FiHeart className={isLiked ? 'fill-current' : ''} />
-                    </button>
+                    </button> */}
                     <button className="px-4 py-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
                         <FiShare2 />
                     </button>
