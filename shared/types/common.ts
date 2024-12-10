@@ -10,7 +10,6 @@ export interface LogoProps {
 }
 
 export interface MobileMenuProps {
-    isOpen?: boolean
     onClose?: () => void
 }
 

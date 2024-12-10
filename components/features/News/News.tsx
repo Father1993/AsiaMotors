@@ -43,7 +43,6 @@ const News = () => {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                     >
-                        ``
                         <Link
                             href="/blog"
                             className="group inline-flex items-center gap-2 text-red-600 hover:text-red-700 transition-colors duration-300"
