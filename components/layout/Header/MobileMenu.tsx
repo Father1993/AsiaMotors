@@ -30,7 +30,7 @@ const MobileMenu = ({ onClose }: MobileMenuProps) => {
                 transition={{ type: 'spring', damping: 25, stiffness: 200 }}
                 className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm z-40 shadow-2xl w-full max-w-[100vw] overflow-visible rounded-t-3xl border-t border-gray-100"
             >
-                <nav className="grid grid-cols-5 gap-3 px-4 pb-6 pt-5">
+                <nav className="grid grid-cols-5 gap-3 px-4 pb-2 pt-5">
                     {MOBILE_NAVIGATION.map((item) => {
                         const Icon = item.icon
                         return (
