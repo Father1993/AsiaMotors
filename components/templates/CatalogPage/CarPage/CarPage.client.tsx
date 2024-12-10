@@ -25,6 +25,7 @@ import {
 } from 'react-share'
 import SimilarCars from '@/components/features/SimilarCars/SimilarCars'
 import { carsData } from '@/shared/constants/catalog'
+import { OrderCarModal } from '../OrderCarModal'
 
 const CarPageClient = ({ car }: CarPageProps) => {
     const router = useRouter()
@@ -38,6 +39,7 @@ const CarPageClient = ({ car }: CarPageProps) => {
     const [isShareModalOpen, setIsShareModalOpen] = useState(false)
     const [isCopied, setIsCopied] = useState(false)
     const carSlug = generateCarSlug(car)
+    const [isOrderModalOpen, setIsOrderModalOpen] = useState(false)
 
     // Функция для копирования ссылки
     const copyToClipboard = async () => {
@@ -385,8 +387,19 @@ const CarPageClient = ({ car }: CarPageProps) => {
 
                             {/* Кнопки действий */}
                             <div className="flex gap-4 pt-4">
-                                <button className="flex-1 bg-red-600 text-white py-3 px-6 rounded-xl hover:bg-red-700 transition-colors">
-                                    Оставить заявку
+                                <OrderCarModal
+                                    isOpen={isOrderModalOpen}
+                                    onClose={() => setIsOrderModalOpen(false)}
+                                    car={car}
+                                />
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        setIsOrderModalOpen(true)
+                                    }}
+                                    className="flex-1 bg-red-500 text-white py-3 rounded-xl hover:bg-red-600 transition-colors"
+                                >
+                                    Заказать
                                 </button>
                             </div>
                         </div>
