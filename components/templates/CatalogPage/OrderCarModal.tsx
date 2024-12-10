@@ -158,6 +158,15 @@ export const OrderCarModal = ({ isOpen, onClose, car }: OrderCarModalProps) => {
                                                 : 'Отправить'}
                                         </button>
                                     </div>
+                                    <p className="text-xs text-gray-500 text-center mt-4">
+                                        Нажимая кнопку, вы соглашаетесь с{' '}
+                                        <a
+                                            href="/privacy"
+                                            className="text-red-500 hover:underline"
+                                        >
+                                            политикой конфиденциальности
+                                        </a>
+                                    </p>
                                 </form>
                             </Dialog.Panel>
                         </Transition.Child>

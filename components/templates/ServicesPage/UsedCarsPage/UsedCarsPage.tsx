@@ -1,55 +1,16 @@
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
 import Breadcrumbs from '@/components/features/Breadcrumbs/Breadcrumbs'
 import { USED_CARS } from '@/shared/constants/breadcrumbs'
+import { useModalStore } from '@/components/provider/ModalProvider'
+import {
+    usedCarsBenefits,
+    usedPopularCars,
+} from '@/shared/constants/usedCarsPage'
 
 const UsedCarsPage = () => {
-    const benefits = [
-        {
-            title: 'Экономия до 30%',
-            description:
-                'По сравнению с аналогичными моделями на российском рынке',
-            icon: '💰',
-        },
-        {
-            title: 'Гарантия качества',
-            description: 'Полная проверка автомобиля перед покупкой',
-            icon: '✓',
-        },
-        {
-            title: 'Быстрая доставка',
-            description: 'От 20 дней с момента покупки до получения',
-            icon: '🚚',
-        },
-        {
-            title: 'Полное сопровождение',
-            description: 'Помощь в подборе и оформлении документов',
-            icon: '📋',
-        },
-    ]
-
-    const popularCars = [
-        {
-            name: 'Changan CS35 Plus',
-            year: '2022',
-            price: 'от 1 100 000 ₽',
-            image: '/img/cars/CS35.webp',
-        },
-        {
-            name: 'Haval Jolion',
-            year: '2022',
-            price: 'от 1 500 000 ₽',
-            image: '/img/cars/haval-chulian.jpg',
-        },
-        {
-            name: 'Geely Coolray',
-            year: '2022',
-            price: 'от 1 300 000 ₽',
-            image: '/img/cars/geely_coolray_new.jpg',
-        },
-    ]
+    const openPopup = useModalStore((state) => state.openPopup)
 
     return (
         <section className="container mx-auto px-4 py-4">
@@ -82,7 +43,7 @@ const UsedCarsPage = () => {
                     Нас выбирают- потому что
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    {benefits.map((benefit, index) => (
+                    {usedCarsBenefits.map((benefit, index) => (
                         <div
                             key={index}
                             className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
@@ -105,7 +66,7 @@ const UsedCarsPage = () => {
                     Популярные модели
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {popularCars.map((car, index) => (
+                    {usedPopularCars.map((car, index) => (
                         <div
                             key={index}
                             className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
@@ -147,12 +108,12 @@ const UsedCarsPage = () => {
                         Оставьте заявку прямо сейчас и получите персональную
                         консультацию по подбору автомобиля
                     </p>
-                    <Link
-                        href="/contact"
+                    <button
+                        onClick={openPopup}
                         className="inline-block bg-white text-[#2F3136] hover:bg-gray-100 font-medium py-3 px-8 rounded-lg transition-colors"
                     >
                         Оставить заявку
-                    </Link>
+                    </button>
                 </div>
             </div>
         </section>
