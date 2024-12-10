@@ -2,9 +2,8 @@ import {
     HomeIcon,
     ShoppingBagIcon,
     QuestionMarkCircleIcon,
-    BuildingOfficeIcon,
-    PhoneIcon,
-    // WrenchIcon,
+    NewspaperIcon,
+    Bars3Icon,
 } from '@heroicons/react/24/outline'
 
 // Базовая навигация
@@ -32,8 +31,17 @@ export const NAVIGATION = [
 export const MOBILE_NAVIGATION = [
     { name: 'Главная', href: '/', icon: HomeIcon },
     { name: 'Каталог', href: '/catalog', icon: ShoppingBagIcon },
-    // { name: 'Запчасти', href: '/spares', icon: WrenchIcon },
-    { name: 'Как купить', href: '/how-to-buy', icon: QuestionMarkCircleIcon },
-    { name: 'Блог', href: '/blog', icon: BuildingOfficeIcon },
-    { name: 'Контакты', href: '/contacts', icon: PhoneIcon },
+    { name: 'Блог', href: '/blog', icon: NewspaperIcon },
+    { name: 'О компании', href: '/about', icon: QuestionMarkCircleIcon },
+    { name: 'Меню', href: '#', icon: Bars3Icon, isMenu: true },
+]
+
+export const ModalMobileMenu = [
+    { name: 'Как купить', href: '/how-to-buy' },
+    { name: 'Наша команда', href: '/about#team' },
+    { name: 'Отзывы', href: '/about#testimonials__section' },
+    { name: 'Запчасти', href: '/spares' },
+    { name: 'Вакансии', href: '/vacancies' },
+    { name: 'Карточка предприятия', href: '/about#company-card' },
+    { name: 'Контакты', href: '/contacts' },
 ]
