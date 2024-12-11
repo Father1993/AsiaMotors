@@ -20,34 +20,72 @@ const CatalogPage = () => {
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
     const [searchQuery, setSearchQuery] = useState<string>('')
 
+    // Переменные для фильтра
+    const [selectedBrands, setSelectedBrands] = useState<string[]>([])
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+    const [priceRange, setPriceRange] = useState<[number, number]>([0, 9000000])
+    const [yearRange, setYearRange] = useState<[number, number]>([2010, 2023])
+    const [selectedDriveTypes, setSelectedDriveTypes] = useState<string[]>([])
+    const [selectedFuelTypes, setSelectedFuelTypes] = useState<string[]>([])
+
+    type ValidKeys = 'brand' | 'category' | 'specs.driveType' | 'specs.fuelType'
+
+    const getUniqueValues = (key: ValidKeys) => {
+        const allCars = Object.values(carsData).flat()
+
+        switch (key) {
+            case 'specs.driveType':
+                return [...new Set(allCars.map((car) => car.specs.driveType))]
+            case 'specs.fuelType':
+                return [...new Set(allCars.map((car) => car.specs.fuelType))]
+            case 'brand':
+                return [...new Set(allCars.map((car) => car.brand))]
+            case 'category':
+                return [...new Set(allCars.map((car) => car.category))]
+            default:
+                return []
+        }
+    }
+
+    const brands = getUniqueValues('brand')
+    const categories = getUniqueValues('category')
+    const driveTypes = getUniqueValues('specs.driveType')
+    const fuelTypes = getUniqueValues('specs.fuelType')
+
     // Фильтрация автомобилей
     const filteredCars =
         carsData[selectedCountry]?.filter((car) => {
             const matchesSearch =
+                searchQuery === '' ||
                 car.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 car.model.toLowerCase().includes(searchQuery.toLowerCase())
+
+            const matchesBrand =
+                selectedBrands.length === 0 ||
+                selectedBrands.includes(car.brand)
             const matchesCategory =
-                selectedCategory === 'Все' || car.category === selectedCategory
+                selectedCategories.length === 0 ||
+                selectedCategories.includes(car.category)
+            const matchesPrice =
+                car.price >= priceRange[0] && car.price <= priceRange[1]
+            const matchesYear =
+                car.year >= yearRange[0] && car.year <= yearRange[1]
+            const matchesDriveType =
+                selectedDriveTypes.length === 0 ||
+                selectedDriveTypes.includes(car.specs.driveType)
+            const matchesFuelType =
+                selectedFuelTypes.length === 0 ||
+                selectedFuelTypes.includes(car.specs.fuelType)
 
-            // Обновленная логика фильтрации по цене
-            const matchesPrice = (() => {
-                if (selectedPrice === 'Все цены') return true
-                const price = car.price
-                switch (selectedPrice) {
-                    case 'До 2 млн':
-                        return price < 2000000
-                    case '2-3 млн':
-                        return price >= 2000000 && price < 3000000
-                    case '3-4 млн':
-                        return price >= 3000000 && price < 4000000
-                    case 'От 4 млн':
-                        return price >= 4000000
-                    default:
-                        return true
-                }
-            })()
-
-            return matchesSearch && matchesCategory && matchesPrice
+            return (
+                matchesSearch &&
+                matchesBrand &&
+                matchesCategory &&
+                matchesPrice &&
+                matchesYear &&
+                matchesDriveType &&
+                matchesFuelType
+            )
         }) || []
 
     useEffect(() => {
@@ -176,13 +214,13 @@ const CatalogPage = () => {
                         </span>
                     </div>
 
-                    {/* <button
+                    <button
                         onClick={() => setIsFilterOpen(!isFilterOpen)}
                         className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg shadow hover:shadow-md transition-all"
                     >
                         <HiOutlineAdjustments className="text-gray-500" />
                         <span>Фильтры</span>
-                    </button> */}
+                    </button>
                 </div>
 
                 {/* Фильтры */}
@@ -192,7 +230,167 @@ const CatalogPage = () => {
                     className="overflow-hidden mb-8"
                 >
                     <div className="bg-white rounded-2xl shadow-lg p-6 space-y-6">
-                        {/* ... фильтры ... */}
+                        {/* Бренды */}
+                        <div>
+                            <h3 className="text-lg font-medium mb-3">Марка</h3>
+                            <div className="flex flex-wrap gap-2">
+                                {brands.map((brand) => (
+                                    <button
+                                        key={brand}
+                                        onClick={() => {
+                                            setSelectedBrands((prev) =>
+                                                prev.includes(brand)
+                                                    ? prev.filter(
+                                                          (b) => b !== brand
+                                                      )
+                                                    : [...prev, brand]
+                                            )
+                                        }}
+                                        className={`px-3 py-1 rounded-full text-sm ${
+                                            selectedBrands.includes(brand)
+                                                ? 'bg-red-500 text-white'
+                                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                        }`}
+                                    >
+                                        {brand}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Категории */}
+                        <div>
+                            <h3 className="text-lg font-medium mb-3">
+                                Тип кузова
+                            </h3>
+                            <div className="flex flex-wrap gap-2">
+                                {categories.map((category) => (
+                                    <button
+                                        key={category}
+                                        onClick={() => {
+                                            setSelectedCategories((prev) =>
+                                                prev.includes(category)
+                                                    ? prev.filter(
+                                                          (c) => c !== category
+                                                      )
+                                                    : [...prev, category]
+                                            )
+                                        }}
+                                        className={`px-3 py-1 rounded-full text-sm ${
+                                            selectedCategories.includes(
+                                                category
+                                            )
+                                                ? 'bg-red-500 text-white'
+                                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                        }`}
+                                    >
+                                        {category}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Цена */}
+                        <div>
+                            <h3 className="text-lg font-medium mb-3">Цена</h3>
+                            <div className="px-3">
+                                <input
+                                    type="range"
+                                    min={0}
+                                    max={5000000}
+                                    step={100000}
+                                    value={priceRange[1]}
+                                    onChange={(e) =>
+                                        setPriceRange([
+                                            priceRange[0],
+                                            Number(e.target.value),
+                                        ])
+                                    }
+                                    className="w-full text-black"
+                                />
+                                <div className="flex justify-between text-sm text-gray-500">
+                                    <span>
+                                        {priceRange[0].toLocaleString()} ₽
+                                    </span>
+                                    <span>
+                                        {priceRange[1].toLocaleString()} ₽
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Привод */}
+                        <div>
+                            <h3 className="text-lg font-medium mb-3">Привод</h3>
+                            <div className="flex flex-wrap gap-2">
+                                {driveTypes.map((type) => (
+                                    <button
+                                        key={type}
+                                        onClick={() => {
+                                            setSelectedDriveTypes((prev) =>
+                                                prev.includes(type)
+                                                    ? prev.filter(
+                                                          (t) => t !== type
+                                                      )
+                                                    : [...prev, type]
+                                            )
+                                        }}
+                                        className={`px-3 py-1 rounded-full text-sm ${
+                                            selectedDriveTypes.includes(type)
+                                                ? 'bg-red-500 text-white'
+                                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                        }`}
+                                    >
+                                        {type}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Тип топлива */}
+                        <div>
+                            <h3 className="text-lg font-medium mb-3">
+                                Тип топлива
+                            </h3>
+                            <div className="flex flex-wrap gap-2">
+                                {fuelTypes.map((type) => (
+                                    <button
+                                        key={type}
+                                        onClick={() => {
+                                            setSelectedFuelTypes((prev) =>
+                                                prev.includes(type)
+                                                    ? prev.filter(
+                                                          (t) => t !== type
+                                                      )
+                                                    : [...prev, type]
+                                            )
+                                        }}
+                                        className={`px-3 py-1 rounded-full text-sm ${
+                                            selectedFuelTypes.includes(type)
+                                                ? 'bg-red-500 text-white'
+                                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                        }`}
+                                    >
+                                        {type}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Кнопка сброса */}
+                        <button
+                            onClick={() => {
+                                setSelectedBrands([])
+                                setSelectedCategories([])
+                                setPriceRange([0, 5000000])
+                                setYearRange([2020, 2023])
+                                setSelectedDriveTypes([])
+                                setSelectedFuelTypes([])
+                            }}
+                            className="w-full py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+                        >
+                            Сбросить все фильтры
+                        </button>
                     </div>
                 </motion.div>
 
