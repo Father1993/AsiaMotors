@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { ChevronDownIcon, PhoneIcon } from '@heroicons/react/24/outline'
 import Logo from '@/components/common/Logo/Logo'
@@ -8,7 +9,6 @@ import ScrollToTop from '@/components/features/ScrollToTop/ScrollToTop'
 import { useScroll } from '@/shared/hooks/useScroll'
 import { NAVIGATION } from '@/shared/constants/menuLinks'
 import { useModalStore } from '@/components/provider/ModalProvider'
-import Image from 'next/image'
 
 const Header = () => {
     const isScrolled = useScroll({ threshold: 20 })
