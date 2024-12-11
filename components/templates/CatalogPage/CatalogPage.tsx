@@ -30,6 +30,7 @@ const CatalogPage = () => {
 
     type ValidKeys = 'brand' | 'category' | 'specs.driveType' | 'specs.fuelType'
 
+    // Получаем уникальные значения
     const getUniqueValues = (key: ValidKeys) => {
         const allCars = Object.values(carsData).flat()
 
