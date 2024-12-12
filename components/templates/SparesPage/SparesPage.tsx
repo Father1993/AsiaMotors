@@ -2,7 +2,7 @@
 import { FormEvent } from 'react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
-import { FiSearch, FiShoppingCart } from 'react-icons/fi'
+import { FiShoppingCart } from 'react-icons/fi'
 import {
     sparesAdvantages,
     sparesBenefits,
@@ -69,7 +69,7 @@ const SparesPage = () => {
                     </motion.p>
 
                     {/* Search Bar */}
-                    <motion.div
+                    {/* <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.4 }}
@@ -87,7 +87,7 @@ const SparesPage = () => {
                                 text-gray-800 placeholder-gray-400 shadow-lg transition-all"
                             />
                         </div>
-                    </motion.div>
+                    </motion.div> */}
                 </div>
             </section>
 
