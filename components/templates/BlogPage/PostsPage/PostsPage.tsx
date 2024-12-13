@@ -15,7 +15,7 @@ const PostsPage = ({ post }: PostsPageProps) => {
             <div className="container py-16">
                 <Breadcrumbs items={breadcrumbs} />
                 <article className="max-w-4xl mx-auto mt-12 bg-white rounded-2xl shadow-xl p-8">
-                    <div className="relative h-[400px] mb-8 rounded-2xl overflow-hidden">
+                    <div className="relative mb-8 rounded-2xl overflow-hidden h-[200px] sm:h-[300px] md:h-[400px] w-full">
                         <Image
                             src={post.image}
                             alt={post.title}
