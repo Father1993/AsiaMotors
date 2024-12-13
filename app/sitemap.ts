@@ -2,37 +2,28 @@ import { MetadataRoute } from 'next'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = 'https://asiamotors.su'
+    const currentDate = new Date().toISOString()
 
-    return [
-        {
-            url: baseUrl,
-            lastModified: new Date(),
-            changeFrequency: 'daily',
-            priority: 1,
-        },
-        {
-            url: `${baseUrl}/contact`,
-            lastModified: new Date(),
-            changeFrequency: 'monthly',
-            priority: 0.7,
-        },
-        {
-            url: `${baseUrl}/blog`,
-            lastModified: new Date(),
-            changeFrequency: 'weekly',
-            priority: 0.8,
-        },
-        {
-            url: `${baseUrl}/about`,
-            lastModified: new Date(),
-            changeFrequency: 'weekly',
-            priority: 0.9,
-        },
-        {
-            url: `${baseUrl}/privacy-policy`,
-            lastModified: new Date(),
-            changeFrequency: 'yearly',
-            priority: 0.5,
-        },
-    ]
+    // Основные страницы
+    const routes = [
+        '',
+        '/catalog',
+        '/blog',
+        '/about',
+        '/contacts',
+        '/services/delivery',
+        '/services/insurance',
+        '/services/used-cars',
+        '/how-to-buy',
+        '/spares',
+        '/vacancies',
+        '/faq',
+    ].map((route) => ({
+        url: `${baseUrl}${route}`,
+        lastModified: currentDate,
+        changeFrequency: 'daily' as const,
+        priority: route === '' ? 1 : 0.8,
+    }))
+
+    return [...routes]
 }

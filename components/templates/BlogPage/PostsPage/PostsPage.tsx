@@ -15,15 +15,17 @@ const PostsPage = ({ post }: PostsPageProps) => {
             <div className="container py-16">
                 <Breadcrumbs items={breadcrumbs} />
                 <article className="max-w-4xl mx-auto mt-12 bg-white rounded-2xl shadow-xl p-8">
-                    <div className="relative h-[400px] mb-8 rounded-2xl overflow-hidden">
-                        <Image
-                            src={post.image}
-                            alt={post.title}
-                            fill
-                            className="object-cover transition-transform duration-300 hover:scale-105"
-                            quality={75}
-                            priority
-                        />
+                    <div className="relative w-full mb-8 rounded-2xl overflow-hidden">
+                        <div className="relative aspect-[16/9] md:aspect-[2/1] lg:h-[400px]">
+                            <Image
+                                src={post.image}
+                                alt={post.title}
+                                fill
+                                className="object-cover transition-transform duration-300 hover:scale-105"
+                                quality={75}
+                                priority
+                            />
+                        </div>
                     </div>
 
                     {/* Мета-информация */}
