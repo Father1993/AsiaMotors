@@ -19,12 +19,13 @@ Allow: /contact/
 
 # Запрет индексации файлов определенных типов
 Disallow: /*.json$
-Disallow: /*.xml$
 Disallow: /*.txt$
+
+# Явное разрешение для sitemap
+Allow: /sitemap.xml
 
 # Указание местоположения Sitemap
 Sitemap: https://asiamotors.su/sitemap.xml
-
 # Указание предпочтительного домена
 Host: https://asiamotors.su/
 
