@@ -92,16 +92,12 @@ export const teamMembersVdk = [
     {
         name: 'Роман Мориц',
         role: 'Руководитель филиала',
-        image: '/img/team/vdk/man.jpg',
+        image: '/img/team/vdk/roman-moric.webp',
         description: 'Более 10 лет опыта в автомобильном бизнесе',
         address: 'Владивосток, ​Баляева улица, 49, офис- 50 - ​ЖК Горизонт',
-        telephone: (
-            <>
-                <Link href="tel:+79996175664" className="text-red-500">
-                    +7 (999) 617-56-64
-                </Link>
-            </>
-        ),
+        // telephone: (
+
+        // ),
     },
     {
         name: 'Кирил Зубченко',
