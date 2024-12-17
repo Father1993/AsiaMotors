@@ -130,7 +130,7 @@ const CarPageClient = ({ car }: CarPageProps) => {
                                             priority
                                             draggable={false}
                                         />
-                                        {/* Индикатор свайпа на мобильных устройствах */}
+                                        {/* Индикато�� свайпа на мобильных устройствах */}
                                         <div className="absolute inset-x-0 bottom-4 flex justify-center gap-1 md:hidden">
                                             {car.images.map((_, index) => (
                                                 <div
@@ -260,7 +260,7 @@ const CarPageClient = ({ car }: CarPageProps) => {
                                                 <div className="relative">
                                                     <button
                                                         onClick={(e) => {
-                                                            e.stopPropagation() // Предотвращаем закрытие модального окна
+                                                            e.stopPropagation() // Предотвращаем закрытие модального о��на
                                                             copyToClipboard()
                                                         }}
                                                         className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full hover:bg-gray-200 transition-colors"
@@ -307,7 +307,7 @@ const CarPageClient = ({ car }: CarPageProps) => {
 
                             {/* Цена и статус */}
                             <div className="bg-gray-50 p-4 rounded-xl">
-                                <div className="flex items-center justify-between">
+                                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                                     <h2 className="text-3xl font-bold text-red-600">
                                         {formatPrice(car.price)}
                                         <span className="special__text-for-price">
@@ -316,12 +316,7 @@ const CarPageClient = ({ car }: CarPageProps) => {
                                     </h2>
 
                                     <span
-                                        className={`px-3 py-1 rounded-full text-sm font-medium
-                                        ${
-                                            car.available
-                                                ? 'bg-green-100 text-green-800'
-                                                : 'bg-red-100 text-red-800'
-                                        }`}
+                                        className={`px-3 py-1 rounded-full text-sm font-medium w-fit mx-auto mt-2 sm:mt-0 sm:mx-0 bg-green-100 text-green-800`}
                                     >
                                         {car.available
                                             ? 'В наличии'

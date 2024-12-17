@@ -63,13 +63,6 @@ const SimilarCars = ({ currentCar, allCars }: SimilarCarsProps) => {
                                             className="object-cover group-hover:scale-105 transition-transform duration-300"
                                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                                         />
-                                        {!car.available && (
-                                            <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                                                <span className="text-white font-medium px-4 py-2 bg-red-600 rounded-full">
-                                                    Под заказ
-                                                </span>
-                                            </div>
-                                        )}
                                     </div>
 
                                     {/* Информация */}
