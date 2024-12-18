@@ -496,3 +496,16 @@
 .feature-item-spec {
     font-size: 0.9rem;
 }
+
+.features-grid__cherry {
+    display: flex;
+    justify-content: space-evenly;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+    .features-grid__cherry {
+        flex-direction: column;
+    }
+}
