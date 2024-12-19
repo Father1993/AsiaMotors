@@ -12,10 +12,10 @@ Disallow: /*?*
 
 # Разрешение индексации важных разделов
 Allow: /blog/
-Allow: /calculate/
+Allow: /catalog/
 Allow: /services/
 Allow: /about/
-Allow: /contact/
+Allow: /contacts/
 
 # Запрет индексации файлов определенных типов
 Disallow: /*.json$
@@ -26,8 +26,9 @@ Allow: /sitemap.xml
 
 # Указание местоположения Sitemap
 Sitemap: https://asiamotors.su/sitemap.xml
+
 # Указание предпочтительного домена
-Host: https://asiamotors.su/
+Host: https://asiamotors.su
 
 # Частота обхода страниц роботом (в секундах)
 Crawl-delay: 10
