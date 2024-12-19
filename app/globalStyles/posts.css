@@ -1,5 +1,5 @@
 .intro-block {
-    background: linear-gradient(to right, #e8f4ff, #fff4e4);
+    background: linear-gradient(to right, #fff5f5, #ffe4e4);
     padding: 1.5rem;
     border-radius: 0.75rem;
     margin: 2rem 0;
@@ -315,7 +315,6 @@
 
 .price-tag {
     display: inline-block;
-    background: #15803d;
     color: white;
     padding: 0.5rem 1rem;
     border-radius: 9999px;
@@ -507,5 +506,436 @@
 @media (max-width: 768px) {
     .features-grid__cherry {
         flex-direction: column;
+    }
+}
+
+/* Стили для видео-контейнера */
+.video-container {
+    position: relative;
+    width: 100%;
+    max-width: 1000px;
+    margin: 2rem auto;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    background: #000;
+}
+
+.video-container video {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 80vh;
+    object-fit: contain;
+}
+
+/* Кастомные стили для элементов управления видео */
+.custom-video::-webkit-media-controls {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.custom-video::-webkit-media-controls-panel {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+}
+
+.custom-video::-webkit-media-controls-play-button {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.custom-video::-webkit-media-controls-timeline {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    height: 4px;
+}
+
+.custom-video::-webkit-media-controls-current-time-display,
+.custom-video::-webkit-media-controls-time-remaining-display {
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+        Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* Стили для мобильных устройств */
+@media (max-width: 768px) {
+    .video-container {
+        margin: 1rem -1rem;
+        border-radius: 0;
+    }
+
+    .video-container video {
+        max-height: 100vh;
+    }
+}
+
+/* Поддержка Firefox */
+.custom-video::-moz-range-track {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    height: 4px;
+}
+
+/* Поддержка Edge */
+.custom-video::-ms-track {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    height: 4px;
+}
+
+/* Стили для баннера с ценой */
+.price-banner {
+    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+    padding: 2rem;
+    border-radius: 1rem;
+    margin: 2rem 0;
+    text-align: center;
+    color: white;
+}
+
+.price-banner .price-tag {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.price-banner .price-note {
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+/* Стили для сетки преимуществ */
+.advantages-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+@media (min-width: 768px) {
+    .advantages-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.advantage-item {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.advantage-item:hover {
+    transform: translateY(-5px);
+}
+
+.advantage-item h3 {
+    font-size: 1.25rem;
+    color: #dc2626;
+    margin-bottom: 1rem;
+}
+
+/* Стили для таймлайна процесса */
+.process-timeline {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
+    margin: 2rem 0;
+    position: relative;
+}
+
+@media (min-width: 768px) {
+    .process-timeline {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.timeline-item {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.timeline-item h3 {
+    color: #dc2626;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.timeline-item p {
+    color: #4b5563;
+    font-size: 0.9rem;
+}
+
+/* Анимации для элементов */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.advantage-item,
+.timeline-item,
+.feature-card {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.advantage-item:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.advantage-item:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+/* Улучшенные стили для CTA */
+.cta-box {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 3rem 2rem;
+    border-radius: 1.5rem;
+    margin: 3rem 0;
+    text-align: center;
+    color: #1a1a1a;
+    border: 1px solid rgba(220, 38, 38, 0.2);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+        0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(220, 38, 38, 0.1) 0%,
+        rgba(239, 68, 68, 0.1) 100%
+    );
+    z-index: -1;
+}
+
+.cta-box h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1.5rem;
+}
+
+.cta-box p {
+    font-size: 1.25rem;
+    color: #4b5563;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+}
+
+.cta-button {
+    display: inline-block;
+    background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+    color: white;
+    padding: 1rem 2.5rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    font-size: 1.125rem;
+    transition: all 0.3s ease;
+    border: none;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.1),
+        0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+    color: white;
+}
+
+/* Стили для showcase автомобилей */
+.cars-showcase {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+@media (min-width: 768px) {
+    .cars-showcase {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.car-model {
+    position: relative;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease;
+}
+
+.car-model:hover {
+    transform: translateY(-5px);
+}
+
+.car-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+/* Обновленный стиль для price-banner */
+.price-banner {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    margin: 1rem;
+    text-align: center;
+    color: #1a1a1a;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.price-banner .price-tag {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #dc2626;
+    margin-bottom: 0.5rem;
+}
+
+.price-banner .price-value {
+    font-size: 2rem;
+    font-weight: bold;
+    background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0.5rem 0;
+}
+
+.price-banner .price-note {
+    font-size: 1rem;
+    color: #6b7280;
+}
+
+/* Стили для сетки изображений */
+.image-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+@media (min-width: 768px) {
+    .image-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.grid-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.grid-image:hover {
+    transform: scale(1.02);
+}
+
+/* Обновленный стиль для price-banner внутри car-model */
+.car-model .price-banner {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    margin: 1rem;
+    text-align: center;
+    color: #1a1a1a;
+    border: 1px solid rgba(220, 38, 38, 0.2);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.car-model .price-banner .price-tag {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #dc2626;
+    margin-bottom: 0.5rem;
+}
+
+.car-model .price-banner .price-value {
+    font-size: 2rem;
+    font-weight: bold;
+    background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0.5rem 0;
+}
+
+.advantage-item:hover {
+    transform: translateY(-5px);
+    border: 1px solid rgba(220, 38, 38, 0.2);
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 1) 0%,
+        rgba(254, 242, 242, 1) 100%
+    );
+}
+
+.timeline-item {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    position: relative;
+    border: 1px solid rgba(220, 38, 38, 0.1);
+    transition: all 0.3s ease;
+}
+
+.timeline-item:hover {
+    border-color: rgba(220, 38, 38, 0.3);
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 1) 0%,
+        rgba(254, 242, 242, 1) 100%
+    );
+}
+
+/* Добавляем красную линию между элементами timeline на десктопе */
+@media (min-width: 768px) {
+    .timeline-item::after {
+        content: '';
+        position: absolute;
+        right: -1.5rem;
+        top: 50%;
+        width: 1.5rem;
+        height: 2px;
+        background: linear-gradient(to right, #dc2626, #ef4444);
+        transform: translateY(-50%);
+    }
+
+    .timeline-item:last-child::after {
+        display: none;
     }
 }
