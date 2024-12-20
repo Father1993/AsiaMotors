@@ -34,7 +34,7 @@ const CompanyCard = () => {
                             <h3 className="text-sm font-medium text-gray-500 mb-1">
                                 Полное наименование
                             </h3>
-                            <p className="text-gray-800">ООО "Азиа Моторс"</p>
+                            <p className="text-gray-800">ООО "Азия Моторс"</p>
                         </div>
                         <div>
                             <h3 className="text-sm font-medium text-gray-500 mb-1">
