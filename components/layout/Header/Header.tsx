@@ -114,7 +114,7 @@ const Header = () => {
                         src="/img/asia-motors-logo.png"
                         width={40}
                         height={40}
-                        alt="Азиа Моторс"
+                        alt="Азия Моторс"
                     />
                 </Link>
             </div>

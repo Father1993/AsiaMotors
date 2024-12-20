@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     openGraph: {
         title: '404 - Страница не найдена | AsiaMotors',
         description:
-            'Извините, запрашиваемая страница не существует. Вернитесь на главную AsiaMotors для информации. Азиа моторс. АзиаМоторс',
+            'Извините, запрашиваемая страница не существует. Вернитесь на главную AsiaMotors для информации. Азия моторс. АзияМоторс',
         type: 'website',
         url: 'https://AsiaMotors.ru/404',
         images: [
