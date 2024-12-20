@@ -220,7 +220,7 @@ const ContactsBlock = () => {
                             {isClient && (
                                 <DynamicImage
                                     src="/img/team/Mihail.png"
-                                    alt="Михаил Ананьев Азиа Моторс"
+                                    alt="Михаил Ананьев Азия Моторс"
                                     width={800}
                                     height={1000}
                                     className="w-full h-full object-cover"

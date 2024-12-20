@@ -18,7 +18,7 @@ export const metadata: Metadata = {
                 url: '/img/android-chrome-192x192.png',
                 width: 1200,
                 height: 630,
-                alt: 'Импорт автомобилей из Китая Азиамоторс',
+                alt: 'Импорт автомобилей из Китая Азиямоторс',
             },
         ],
     },
