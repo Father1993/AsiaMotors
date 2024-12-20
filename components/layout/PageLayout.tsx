@@ -19,37 +19,36 @@ const PagesLayout = ({ children }: { children: React.ReactNode }) => {
         }
     }, [])
 
+    const toastConfig = {
+        // Увеличенная длительность для лучшей читаемости
+        duration: 4000,
+
+        // Базовые стили для всех тостов
+        style: {
+            padding: '16px',
+            borderRadius: '12px',
+            background: '#333',
+            color: '#fff',
+        },
+
+        // Стили для успешных уведомлений
+        success: {
+            style: {
+                background: '#10B981',
+            },
+        },
+
+        // Стили для ошибок
+        error: {
+            style: {
+                background: '#EF4444',
+            },
+        },
+    }
+
     return (
         <>
-            <Toaster
-                position="bottom-center"
-                toastOptions={{
-                    // Увеличенная длительность для лучшей читаемости
-                    duration: 4000,
-
-                    // Базовые стили для всех тостов
-                    style: {
-                        padding: '16px',
-                        borderRadius: '12px',
-                        background: '#333',
-                        color: '#fff',
-                    },
-
-                    // Стили для успешных уведомлений
-                    success: {
-                        style: {
-                            background: '#10B981',
-                        },
-                    },
-
-                    // Стили для ошибок
-                    error: {
-                        style: {
-                            background: '#EF4444',
-                        },
-                    },
-                }}
-            />
+            <Toaster position="bottom-center" toastOptions={toastConfig} />
             <Next13ProgressBar height="4px" color="#2F3136" showOnShallow />
             <Layout>
                 <main>{children}</main>
