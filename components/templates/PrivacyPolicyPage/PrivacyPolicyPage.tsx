@@ -68,7 +68,6 @@ const PrivacyPolicyPage = () => (
                             службы и функции могут не работать.
                         </p>
                     </div>
-                    {/* Кнопка для возврата на главную, выровненная по центру */}
                     <div className="flex justify-center mt-8">
                         <Link
                             href="/"
