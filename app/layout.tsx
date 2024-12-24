@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import PagesLayout from '@/components/layout/PageLayout'
 import { LoadingProvider } from '@/components/provider/CustomProviderSpinner'
 import ModalProvider from '@/components/provider/ModalProvider'
+import { Providers } from './providers'
 import './globalStyles/normalize.css'
 import './globalStyles/globals.css'
 import './globalStyles/popup.css'
@@ -110,11 +111,13 @@ export default function RootLayout({
         <html lang="ru">
             <head />
             <body suppressHydrationWarning>
-                <PagesLayout>
-                    <LoadingProvider>
-                        <ModalProvider>{children}</ModalProvider>
-                    </LoadingProvider>
-                </PagesLayout>
+                <Providers>
+                    <PagesLayout>
+                        <LoadingProvider>
+                            <ModalProvider>{children}</ModalProvider>
+                        </LoadingProvider>
+                    </PagesLayout>
+                </Providers>
             </body>
         </html>
     )
