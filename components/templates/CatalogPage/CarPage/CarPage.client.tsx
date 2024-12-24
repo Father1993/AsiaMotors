@@ -130,7 +130,7 @@ const CarPageClient = ({ car }: CarPageProps) => {
                                             priority
                                             draggable={false}
                                         />
-                                        {/* Индикато�� свайпа на мобильных устройствах */}
+                                        {/* Индикатор свайпа на мобильных устройствах */}
                                         <div className="absolute inset-x-0 bottom-4 flex justify-center gap-1 md:hidden">
                                             {car.images.map((_, index) => (
                                                 <div
@@ -260,7 +260,7 @@ const CarPageClient = ({ car }: CarPageProps) => {
                                                 <div className="relative">
                                                     <button
                                                         onClick={(e) => {
-                                                            e.stopPropagation() // Предотвращаем закрытие модального о��на
+                                                            e.stopPropagation() // Предотвращаем закрытие модального окна
                                                             copyToClipboard()
                                                         }}
                                                         className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full hover:bg-gray-200 transition-colors"

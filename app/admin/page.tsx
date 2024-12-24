@@ -1,8 +1,11 @@
 'use client'
 import { useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import Image from 'next/image'
+import { toast } from 'react-hot-toast'
 import { Database } from '@/shared/types/database.types'
 import { supabase } from '@/shared/lib/superbase/client'
-import Image from 'next/image'
 import { FiEdit2, FiTrash2, FiPlus } from 'react-icons/fi'
 import { CarForm } from '@/components/templates/AdminPage/CarForm'
 
@@ -10,84 +13,79 @@ type Car = Database['public']['Tables']['cars']['Row']
 type Country = Database['public']['Tables']['countries']['Row']
 
 export default function AdminPage() {
+    const { data: session, status } = useSession()
+    const router = useRouter()
     const [cars, setCars] = useState<Car[]>([])
     const [countries, setCountries] = useState<Country[]>([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState<string | null>(null)
     const [isAddModalOpen, setIsAddModalOpen] = useState(false)
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const [selectedCar, setSelectedCar] = useState<Car | null>(null)
 
-    // Загрузка данных
     useEffect(() => {
+        if (status === 'loading') return
+
+        if (status === 'unauthenticated') {
+            router.push('/auth/signin')
+            return
+        }
+
+        if (!session?.user?.isAdmin) {
+            router.push('/auth/error?error=AccessDenied')
+            return
+        }
+
         fetchData()
-    }, [])
+    }, [session, status, router])
 
     async function fetchData() {
         try {
-            setLoading(true)
+            const { data: countriesData, error: countriesError } =
+                await supabase.from('countries').select('*')
 
-            // Прямой запрос к таблице стран
-            const { data: testCountries, error: testError } = await supabase
-                .from('countries')
-                .select('*')
-
-            console.log('Тестовый запрос стран:', {
-                data: testCountries,
-                error: testError,
-                status: testError?.status,
-                message: testError?.message,
-            })
-
-            if (testError) {
-                throw new Error(`Ошибка загрузки стран: ${testError.message}`)
+            if (countriesError) {
+                toast.error(`Ошибка загрузки стран: ${countriesError.message}`)
+                return
             }
 
-            // Проверяем, что данные существуют
-            if (!testCountries || testCountries.length === 0) {
-                throw new Error('Таблица стран пуста')
+            if (!countriesData || countriesData.length === 0) {
+                toast.error('Таблица стран пуста')
+                return
             }
 
-            setCountries(testCountries)
+            setCountries(countriesData)
 
-            // Загружаем автомобили
             const { data: carsData, error: carsError } = await supabase
                 .from('cars')
                 .select('*')
 
             if (carsError) {
-                throw new Error(
-                    `Ошибка загрузки автомобилей: ${carsError.message}`
-                )
+                toast.error(`Ошибка загрузки автомобилей: ${carsError.message}`)
+                return
             }
 
             setCars(carsData || [])
-        } catch (err) {
-            console.error('Подробная ошибка:', err)
-            setError(err instanceof Error ? err.message : 'Произошла ошибка')
-        } finally {
-            setLoading(false)
+        } catch {
+            toast.error('Произошла ошибка при загрузке данных')
         }
     }
 
-    // Удаление автомобиля
     const handleDelete = async (carId: string) => {
         if (!confirm('Вы уверены, что хотите удалить этот автомобиль?')) return
 
         try {
-            // Получаем данные автомобиля перед удалением
             const { data: carData, error: fetchError } = await supabase
                 .from('cars')
                 .select('*')
                 .eq('id', carId)
                 .single()
 
-            if (fetchError) throw fetchError
+            if (fetchError) {
+                toast.error('Ошибка при получении данных автомобиля')
+                return
+            }
 
-            // Удаляем изображения из storage
             if (carData.images && carData.images.length > 0) {
                 for (const imageUrl of carData.images) {
-                    // Получаем имя файла из URL
                     const fileName = imageUrl.split('/').pop()
                     if (fileName) {
                         const { error: storageError } = await supabase.storage
@@ -95,38 +93,48 @@ export default function AdminPage() {
                             .remove([fileName])
 
                         if (storageError) {
-                            console.error(
-                                'Ошибка удаления изображения:',
-                                storageError
-                            )
+                            toast.error('Ошибка при удалении изображений')
                         }
                     }
                 }
             }
 
-            // Удаляем запись из базы данных
             const { error: deleteError } = await supabase
                 .from('cars')
                 .delete()
                 .eq('id', carId)
 
-            if (deleteError) throw deleteError
+            if (deleteError) {
+                toast.error('Ошибка при удалении автомобиля')
+                return
+            }
 
-            // Обновляем список после удаления
             setCars(cars.filter((car) => car.id !== carId))
-        } catch (err) {
-            console.error('Ошибка при удалении:', err)
-            alert('Ошибка при удалении автомобиля')
+            toast.success('Автомобиль успешно удален')
+        } catch {
+            toast.error('Произошла ошибка при удалении автомобиля')
         }
     }
 
-    if (loading) return <div className="p-8">Загрузка...</div>
-    if (error) return <div className="p-8 text-red-500">Ошибка: {error}</div>
+    if (status === 'loading') {
+        return <div className="p-8">Загрузка...</div>
+    }
+
+    if (!session?.user?.isAdmin) {
+        return null // Редирект будет выполнен в useEffect
+    }
 
     return (
         <div className="p-8">
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-bold">Управление автомобилями</h1>
+                <div>
+                    <h1 className="text-2xl font-bold">
+                        Управление автомобилями
+                    </h1>
+                    <p className="text-gray-600">
+                        Вы вошли как: {session.user.email}
+                    </p>
+                </div>
                 <button
                     onClick={() => setIsAddModalOpen(true)}
                     className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
@@ -191,7 +199,7 @@ export default function AdminPage() {
                     countries={countries}
                     onSubmit={() => {
                         setIsAddModalOpen(false)
-                        fetchData() // ��бновляем список после добавления
+                        fetchData() // Обновляем список после добавления
                     }}
                     onClose={() => setIsAddModalOpen(false)}
                 />

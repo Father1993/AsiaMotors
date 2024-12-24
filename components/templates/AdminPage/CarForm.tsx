@@ -8,6 +8,29 @@ import { FiUpload, FiX, FiX as FiClose } from 'react-icons/fi'
 type Car = Database['public']['Tables']['cars']['Row']
 type Country = Database['public']['Tables']['countries']['Row']
 
+type FormData = {
+    country_id: CountryId
+    brand: string
+    model: string
+    year: number
+    category: string
+    price: number
+    equipment?: string
+    images: string[]
+    specs: {
+        mileage: number
+        engineVolume: number
+        fuelType: string
+        horsePower: number
+        transmission: string
+        driveType: string
+        color: string
+        generation: string
+        features: string[]
+    }
+    available: boolean
+}
+
 interface CarFormProps {
     car?: Car
     countries: Country[]
@@ -21,9 +44,55 @@ export const CarForm = ({
     onSubmit,
     onClose,
 }: CarFormProps) => {
-    console.log('CarForm получил страны:', countries)
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<string>('')
+    const [uploadingImages, setUploadingImages] = useState(false)
+    const fileInputRef = useRef<HTMLInputElement>(null)
+    const formRef = useRef<HTMLDivElement>(null)
 
-    // Проверка наличия стран
+    const [formData, setFormData] = useState<FormData>({
+        country_id: car?.country_id || ('' as CountryId),
+        brand: car?.brand || '',
+        model: car?.model || '',
+        year: car?.year || new Date().getFullYear(),
+        category: car?.category || '',
+        price: car?.price || 0,
+        equipment: car?.equipment || '',
+        images: car?.images || [],
+        specs: {
+            mileage: car?.specs?.mileage || 0,
+            engineVolume: car?.specs?.engineVolume || 0,
+            fuelType: car?.specs?.fuelType || '',
+            horsePower: car?.specs?.horsePower || 0,
+            transmission: car?.specs?.transmission || '',
+            driveType: car?.specs?.driveType || '',
+            color: car?.specs?.color || '',
+            generation: car?.specs?.generation || '',
+            features: car?.specs?.features || [],
+        },
+        available: car?.available ?? true,
+    })
+
+    const [previewImages, setPreviewImages] = useState<string[]>(
+        car?.images || []
+    )
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                formRef.current &&
+                !formRef.current.contains(event.target as Node)
+            ) {
+                onClose()
+            }
+        }
+
+        document.addEventListener('mousedown', handleClickOutside)
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside)
+        }
+    }, [onClose])
+
     if (!countries || countries.length === 0) {
         return (
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
@@ -41,137 +110,20 @@ export const CarForm = ({
         )
     }
 
-    const [loading, setLoading] = useState(false)
-    const [formData, setFormData] = useState(
-        car || {
-            country_id: '',
-            brand: '',
-            model: '',
-            year: new Date().getFullYear(),
-            category: '',
-            price: 0,
-            equipment: '',
-            images: [],
-            specs: {
-                mileage: 0,
-                engineVolume: 0,
-                fuelType: '',
-                horsePower: 0,
-                transmission: '',
-                driveType: '',
-                color: '',
-                generation: '',
-                features: [],
-            },
-            available: true,
-        }
-    )
-
-    const fileInputRef = useRef<HTMLInputElement>(null)
-    const [uploadingImages, setUploadingImages] = useState(false)
-    const [previewImages, setPreviewImages] = useState<string[]>(
-        car?.images || []
-    )
-
-    const formRef = useRef<HTMLDivElement>(null)
-
-    // Обработка клика вне формы
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (
-                formRef.current &&
-                !formRef.current.contains(event.target as Node)
-            ) {
-                onClose()
-            }
-        }
-
-        document.addEventListener('mousedown', handleClickOutside)
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside)
-        }
-    }, [onClose])
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-
-        // Проверяем обязательные поля
-        if (!formData.country_id) {
-            alert('Выберите страну производителя')
-            return
-        }
-
-        setLoading(true)
-
-        try {
-            const now = new Date().toISOString()
-
-            if (car) {
-                const { error } = await supabase
-                    .from('cars')
-                    .update({
-                        ...formData,
-                        updated_at: now,
-                    })
-                    .eq('id', car.id)
-
-                if (error) {
-                    console.error('Подробности ошибки обновления:', {
-                        code: error.code,
-                        message: error.message,
-                        details: error.details,
-                    })
-                    throw error
-                }
-            } else {
-                const { error } = await supabase.from('cars').insert({
-                    ...formData,
-                    created_at: now,
-                    updated_at: now,
-                })
-
-                if (error) {
-                    console.error('Подробности ошибки вставки:', {
-                        code: error.code,
-                        message: error.message,
-                        details: error.details,
-                    })
-                    throw error
-                }
-            }
-
-            onSubmit()
-        } catch (error) {
-            console.error('Полная ошибка:', error)
-            alert(
-                error instanceof Error
-                    ? `Ошибка при сохранении: ${error.message}`
-                    : 'Произошла ошибка при сохранении'
-            )
-        } finally {
-            setLoading(false)
-        }
-    }
-
     const handleInputChange = (
         e: React.ChangeEvent<
             HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
         >
     ) => {
         const { name, value } = e.target
-
-        // Для числовых полей преобразуем значение в число
-        let processedValue: string | number | CountryId = value
-
-        if (name === 'year' || name === 'price') {
-            processedValue = Number(value)
-        } else if (name === 'country_id') {
-            processedValue = value as CountryId
-        }
-
         setFormData((prev) => ({
             ...prev,
-            [name]: processedValue,
+            [name]:
+                name === 'country_id'
+                    ? (value as CountryId)
+                    : ['year', 'price'].includes(name)
+                    ? Number(value)
+                    : value,
         }))
     }
 
@@ -179,20 +131,13 @@ export const CarForm = ({
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
     ) => {
         const { name, value } = e.target
-        // Для числовых полей преобразуем значение в число
-        const processedValue = [
-            'mileage',
-            'engineVolume',
-            'horsePower',
-        ].includes(name)
-            ? Number(value)
-            : value
-
         setFormData((prev) => ({
             ...prev,
             specs: {
                 ...prev.specs,
-                [name]: processedValue,
+                [name]: ['mileage', 'engineVolume', 'horsePower'].includes(name)
+                    ? Number(value)
+                    : value,
             },
         }))
     }
@@ -208,33 +153,22 @@ export const CarForm = ({
 
         try {
             for (const file of files) {
-                // Проверяем размер файла (например, максимум 5MB)
                 if (file.size > 5 * 1024 * 1024) {
                     throw new Error(
                         'Файл слишком большой. Максимальный размер: 5MB'
                     )
                 }
 
-                // Проверяем тип файла
                 if (!file.type.startsWith('image/')) {
                     throw new Error('Можно загружать только изображения')
                 }
 
-                // Генерируем уникальное имя файла
                 const fileExt = file.name.split('.').pop()
                 const fileName = `${Date.now()}-${Math.random()
                     .toString(36)
                     .substring(2)}.${fileExt}`
 
-                console.log('Загрузка файла:', {
-                    bucket: 'car-images',
-                    fileName,
-                    fileSize: file.size,
-                    fileType: file.type,
-                })
-
-                // Загружаем файл в storage
-                const { error: uploadError, data } = await supabase.storage
+                const { error: uploadError } = await supabase.storage
                     .from('car-images')
                     .upload(fileName, file, {
                         cacheControl: '3600',
@@ -242,37 +176,23 @@ export const CarForm = ({
                         contentType: file.type,
                     })
 
-                if (uploadError) {
-                    console.error('Детали ошибки загрузки:', {
-                        error: uploadError,
-                        message: uploadError.message,
-                        name: uploadError.name,
-                    })
-                    throw uploadError
-                }
+                if (uploadError) throw uploadError
 
-                // Получаем публичный URL
                 const {
                     data: { publicUrl },
                 } = supabase.storage.from('car-images').getPublicUrl(fileName)
 
-                console.log('Файл успешно загружен:', {
-                    fileName,
-                    publicUrl,
-                })
-
                 newImages.push(publicUrl)
             }
 
-            // Обновляем состояние формы
             setFormData((prev) => ({
                 ...prev,
                 images: [...prev.images, ...newImages],
             }))
             setPreviewImages((prev) => [...prev, ...newImages])
         } catch (error) {
-            console.error('Подробная ошибка загрузки:', error)
-            alert(
+            console.error('Ошибка загрузки:', error)
+            setError(
                 error instanceof Error
                     ? error.message
                     : 'Ошибка при загрузке изображений'
@@ -287,30 +207,16 @@ export const CarForm = ({
 
     const handleRemoveImage = async (indexToRemove: number) => {
         const imageUrl = previewImages[indexToRemove]
-
         try {
-            // Извлекаем имя файла из URL
             const fileName = imageUrl.split('/').pop()
-
-            if (!fileName) {
-                throw new Error('Не удалось получить имя файла')
-            }
-
-            console.log('Удаление файла:', {
-                bucket: 'car-images',
-                fileName: `car-images/${fileName}`,
-            })
+            if (!fileName) throw new Error('Не удалось получить имя файла')
 
             const { error: storageError } = await supabase.storage
                 .from('car-images')
-                .remove([`car-images/${fileName}`])
+                .remove([fileName])
 
-            if (storageError) {
-                console.error('Ошибка удаления:', storageError)
-                throw storageError
-            }
+            if (storageError) throw storageError
 
-            // Обновляем состояние только после успешного удаления
             setFormData((prev) => ({
                 ...prev,
                 images: prev.images.filter(
@@ -321,8 +227,57 @@ export const CarForm = ({
                 prev.filter((_, index) => index !== indexToRemove)
             )
         } catch (error) {
-            console.error('Подробная ошибка удаления:', error)
-            alert('Ошибка при удалении изображения')
+            console.error('Ошибка удаления:', error)
+            setError('Ошибка при удалении изображения')
+        }
+    }
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        setError('')
+
+        if (!formData.country_id) {
+            setError('Выберите страну производителя')
+            return
+        }
+
+        setLoading(true)
+
+        try {
+            const now = new Date().toISOString()
+
+            if (car) {
+                const { error: updateError } = await supabase
+                    .from('cars')
+                    .update({
+                        ...formData,
+                        updated_at: now,
+                    })
+                    .eq('id', car.id)
+
+                if (updateError) throw updateError
+            } else {
+                const { error: insertError } = await supabase
+                    .from('cars')
+                    .insert({
+                        ...formData,
+                        created_at: now,
+                        updated_at: now,
+                    })
+
+                if (insertError) throw insertError
+            }
+
+            onSubmit()
+        } catch (error) {
+            console.error('Ошибка:', error)
+            setError(
+                error instanceof Error
+                    ? error.message
+                    : 'Произошла ошибка при сохранении'
+            )
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -332,6 +287,11 @@ export const CarForm = ({
                 ref={formRef}
                 className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto relative"
             >
+                {error && (
+                    <div className="mb-4 p-2 bg-red-100 text-red-600 rounded">
+                        {error}
+                    </div>
+                )}
                 {/* Кнопка закрытия */}
                 <button
                     onClick={onClose}
@@ -440,7 +400,7 @@ export const CarForm = ({
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                 required
                             >
-                                <option value="">Выберите кат��горию</option>
+                                <option value="">Выберите категорию</option>
                                 {categories
                                     .filter((cat) => cat !== 'Все')
                                     .map((category) => (
