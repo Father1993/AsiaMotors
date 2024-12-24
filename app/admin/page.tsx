@@ -4,13 +4,10 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { toast } from 'react-hot-toast'
-import { Database } from '@/shared/types/database.types'
 import { supabase } from '@/shared/lib/superbase/client'
 import { FiEdit2, FiTrash2, FiPlus } from 'react-icons/fi'
 import { CarForm } from '@/components/templates/AdminPage/CarForm'
-
-type Car = Database['public']['Tables']['cars']['Row']
-type Country = Database['public']['Tables']['countries']['Row']
+import { Car, Country } from '@/shared/types/adminTypes'
 
 export default function AdminPage() {
     const { data: session, status } = useSession()
