@@ -17,6 +17,28 @@ export default function AdminPage() {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false)
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const [selectedCar, setSelectedCar] = useState<Car | null>(null)
+    const [searchQuery, setSearchQuery] = useState('')
+    const [selectedCountry, setSelectedCountry] = useState<string>('')
+    const [selectedBrand, setSelectedBrand] = useState<string>('')
+
+    // Добавьте функции для получения уникальных значений
+    const getBrands = () => {
+        return [...new Set(cars.map((car) => car.brand))].sort()
+    }
+
+    // Функция фильтрации
+    const filteredCars = cars.filter((car) => {
+        const matchesSearch =
+            searchQuery === '' ||
+            car.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            car.model.toLowerCase().includes(searchQuery.toLowerCase())
+
+        const matchesCountry =
+            !selectedCountry || car.country_id === selectedCountry
+        const matchesBrand = !selectedBrand || car.brand === selectedBrand
+
+        return matchesSearch && matchesCountry && matchesBrand
+    })
 
     useEffect(() => {
         if (status === 'loading') return
@@ -118,7 +140,7 @@ export default function AdminPage() {
     }
 
     if (!session?.user?.isAdmin) {
-        return null // Редирект будет выполнен в useEffect
+        return null
     }
 
     return (
@@ -140,10 +162,73 @@ export default function AdminPage() {
                     Добавить автомобиль
                 </button>
             </div>
+            <div className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Поиск по названию */}
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Поиск
+                    </label>
+                    <input
+                        type="text"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        placeholder="Поиск по марке или модели"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                    />
+                </div>
+
+                {/* Фильтр по странам */}
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Страна
+                    </label>
+                    <select
+                        value={selectedCountry}
+                        onChange={(e) => setSelectedCountry(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                    >
+                        <option value="">Все страны</option>
+                        {countries.map((country) => (
+                            <option key={country.id} value={country.id}>
+                                {country.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                {/* Фильтр по маркам */}
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Марка
+                    </label>
+                    <select
+                        value={selectedBrand}
+                        onChange={(e) => setSelectedBrand(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                    >
+                        <option value="">Все марки</option>
+                        {getBrands().map((brand) => (
+                            <option key={brand} value={brand}>
+                                {brand}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <button
+                    onClick={() => {
+                        setSearchQuery('')
+                        setSelectedCountry('')
+                        setSelectedBrand('')
+                    }}
+                    className="mt-2 px-4 py-2 text-sm text-gray-600 hover:text-gray-800"
+                >
+                    Сбросить фильтры
+                </button>
+            </div>
 
             {/* Список автомобилей */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-10">
-                {cars.map((car) => (
+                {filteredCars.map((car) => (
                     <div
                         key={car.id}
                         className="bg-white rounded-lg shadow-md overflow-hidden"

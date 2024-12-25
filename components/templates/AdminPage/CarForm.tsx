@@ -1,42 +1,19 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 import { useState, useRef, useEffect } from 'react'
-import { Database, CountryId } from '@/shared/types/database.types'
+import { toast } from 'react-hot-toast'
+import { CountryId } from '@/shared/types/database.types'
 import { supabase } from '@/shared/lib/superbase/client'
 import { categories } from '@/shared/types/catalog'
 import { FiUpload, FiX, FiX as FiClose } from 'react-icons/fi'
-
-type Car = Database['public']['Tables']['cars']['Row']
-type Country = Database['public']['Tables']['countries']['Row']
-
-type FormData = {
-    country_id: CountryId
-    brand: string
-    model: string
-    year: number
-    category: string
-    price: number
-    equipment?: string
-    images: string[]
-    specs: {
-        mileage: number
-        engineVolume: number
-        fuelType: string
-        horsePower: number
-        transmission: string
-        driveType: string
-        color: string
-        generation: string
-        features: string[]
-    }
-    available: boolean
-}
-
-interface CarFormProps {
-    car?: Car
-    countries: Country[]
-    onSubmit: () => void
-    onClose: () => void
-}
+import {
+    CarFormProps,
+    FormData,
+    MAX_FILE_SIZE,
+    MAX_FILE_SIZE_MB,
+} from '@/shared/types/adminTypes'
+import ImageSkeleton from '@/components/common/ImageSkeleton/ImageSkeleton'
+import Image from 'next/image'
 
 export const CarForm = ({
     car,
@@ -49,6 +26,9 @@ export const CarForm = ({
     const [uploadingImages, setUploadingImages] = useState(false)
     const fileInputRef = useRef<HTMLInputElement>(null)
     const formRef = useRef<HTMLDivElement>(null)
+    const [loadingImages, setLoadingImages] = useState<{
+        [key: string]: boolean
+    }>({})
 
     const [formData, setFormData] = useState<FormData>({
         country_id: car?.country_id || ('' as CountryId),
@@ -93,23 +73,6 @@ export const CarForm = ({
         }
     }, [onClose])
 
-    if (!countries || countries.length === 0) {
-        return (
-            <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-                <div className="bg-white rounded-lg p-6">
-                    <h2 className="text-xl font-bold mb-4">Ошибка</h2>
-                    <p>Не удалось загрузить список стран</p>
-                    <button
-                        onClick={onClose}
-                        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg"
-                    >
-                        Закрыть
-                    </button>
-                </div>
-            </div>
-        )
-    }
-
     const handleInputChange = (
         e: React.ChangeEvent<
             HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -153,9 +116,9 @@ export const CarForm = ({
 
         try {
             for (const file of files) {
-                if (file.size > 5 * 1024 * 1024) {
+                if (file.size > MAX_FILE_SIZE) {
                     throw new Error(
-                        'Файл слишком большой. Максимальный размер: 5MB'
+                        `Файл слишком большой. Максимальный размер: ${MAX_FILE_SIZE_MB}`
                     )
                 }
 
@@ -190,9 +153,9 @@ export const CarForm = ({
                 images: [...prev.images, ...newImages],
             }))
             setPreviewImages((prev) => [...prev, ...newImages])
+            toast.success('Изображения успешно загружены')
         } catch (error) {
-            console.error('Ошибка загрузки:', error)
-            setError(
+            toast.error(
                 error instanceof Error
                     ? error.message
                     : 'Ошибка при загрузке изображений'
@@ -226,9 +189,13 @@ export const CarForm = ({
             setPreviewImages((prev) =>
                 prev.filter((_, index) => index !== indexToRemove)
             )
+            toast.success('Изображение успешно удалено')
         } catch (error) {
-            console.error('Ошибка удаления:', error)
-            setError('Ошибка при удалении изображения')
+            toast.error(
+                error instanceof Error
+                    ? error.message
+                    : 'Ошибка при удалении изображения'
+            )
         }
     }
 
@@ -256,6 +223,7 @@ export const CarForm = ({
                     .eq('id', car.id)
 
                 if (updateError) throw updateError
+                toast.success('Автомобиль успешно обновлен')
             } else {
                 const { error: insertError } = await supabase
                     .from('cars')
@@ -266,12 +234,12 @@ export const CarForm = ({
                     })
 
                 if (insertError) throw insertError
+                toast.success('Автомобиль успешно добавлен')
             }
 
             onSubmit()
         } catch (error) {
-            console.error('Ошибка:', error)
-            setError(
+            toast.error(
                 error instanceof Error
                     ? error.message
                     : 'Произошла ошибка при сохранении'
@@ -561,38 +529,79 @@ export const CarForm = ({
                         {/* Превью загруженных изображений */}
                         <div className="grid grid-cols-3 gap-4 mb-4">
                             {previewImages.map((url, index) => (
-                                <div
-                                    key={url}
-                                    className="relative group aspect-video"
-                                >
-                                    <img
-                                        src={url}
-                                        alt={`Preview ${index + 1}`}
-                                        className="w-full h-full object-cover rounded-lg"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => handleRemoveImage(index)}
-                                        className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
-                                    >
-                                        <FiX className="w-4 h-4" />
-                                    </button>
+                                <div key={url} className="relative group">
+                                    {loadingImages[url] ? (
+                                        <ImageSkeleton
+                                            size="md"
+                                            showIcon={true}
+                                        />
+                                    ) : (
+                                        <div className="relative aspect-video">
+                                            {index === 0 && (
+                                                <div className="absolute top-2 left-2 px-2 py-1 bg-blue-500 text-white text-xs rounded-md z-10">
+                                                    Главное фото
+                                                </div>
+                                            )}
+                                            <Image
+                                                src={url}
+                                                alt={`Preview ${index + 1}`}
+                                                fill
+                                                className="object-cover rounded-lg"
+                                                onLoad={() => {
+                                                    setLoadingImages(
+                                                        (prev) => ({
+                                                            ...prev,
+                                                            [url]: false,
+                                                        })
+                                                    )
+                                                }}
+                                            />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    handleRemoveImage(index)
+                                                }
+                                                className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600 transform hover:scale-110"
+                                                disabled={uploadingImages}
+                                            >
+                                                <FiX className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             ))}
                         </div>
 
                         {/* Кнопка загрузки */}
                         <div className="flex items-center justify-center w-full">
-                            <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                            <label
+                                className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer transition-colors ${
+                                    uploadingImages
+                                        ? 'bg-gray-100 border-gray-400'
+                                        : 'border-gray-300 bg-gray-50 hover:bg-gray-100'
+                                }`}
+                            >
                                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                    <FiUpload className="w-8 h-8 mb-4 text-gray-500" />
-                                    <p className="mb-2 text-sm text-gray-500">
-                                        <span className="font-semibold">
-                                            {uploadingImages
-                                                ? 'Загрузка...'
-                                                : 'Нажмите для загрузки'}
-                                        </span>
-                                    </p>
+                                    {uploadingImages ? (
+                                        <>
+                                            <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+                                            <p className="mb-2 text-sm text-gray-500">
+                                                <span className="font-semibold">
+                                                    Загрузка...
+                                                </span>
+                                            </p>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <FiUpload className="w-8 h-8 mb-4 text-gray-500" />
+                                            <p className="mb-2 text-sm text-gray-500">
+                                                <span className="font-semibold">
+                                                    Нажмите для загрузки
+                                                </span>
+                                            </p>
+                                        </>
+                                    )}
                                 </div>
                                 <input
                                     ref={fileInputRef}
