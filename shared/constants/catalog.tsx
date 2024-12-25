@@ -103,7 +103,7 @@ export const carsData: CarsDataType = {
             model: 'Uni-K',
             year: 2021,
             category: 'Кроссоверы',
-            price: 2495000,
+            price: 2300000,
             images: [
                 '/img/catalog/china/CHANGAN-Uni-K/19.jpg',
                 '/img/catalog/china/CHANGAN-Uni-K/18.jpg',
