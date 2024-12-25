@@ -7,7 +7,7 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "migrate-catalog": "ts-node shared/scripts/migrate-catalog-to-supabase.ts"
+        "migrate-catalog": "ts-node -r tsconfig-paths/register --project tsconfig.json shared/scripts/migrate-catalog-to-supabase.ts"
     },
     "dependencies": {
         "@auth/core": "^0.34.2",
@@ -48,17 +48,21 @@
         "@tailwindcss/forms": "^0.5.9",
         "@tailwindcss/typography": "^0.5.15",
         "@types/cli-progress": "^3.11.6",
+        "@types/dotenv": "^8.2.3",
         "@types/react": "^18",
         "@types/react-dom": "^18",
         "@types/react-input-mask": "^3.0.6",
+        "@types/uuid": "^10.0.0",
         "autoprefixer": "^10.4.20",
         "cli-progress": "^3.12.0",
+        "dotenv": "^16.4.7",
         "eslint": "^8",
         "eslint-config-next": "15.0.1",
         "postcss": "^8.4.48",
         "tailwindcss": "^3.4.14",
         "ts-node": "^10.9.2",
         "tsconfig-paths": "^4.2.0",
-        "typescript": "^5.7.2"
+        "typescript": "^5.7.2",
+        "uuid": "^11.0.3"
     }
 }
