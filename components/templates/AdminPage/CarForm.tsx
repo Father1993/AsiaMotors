@@ -537,6 +537,11 @@ export const CarForm = ({
                                         />
                                     ) : (
                                         <div className="relative aspect-video">
+                                            {index === 0 && (
+                                                <div className="absolute top-2 left-2 px-2 py-1 bg-blue-500 text-white text-xs rounded-md z-10">
+                                                    Главное фото
+                                                </div>
+                                            )}
                                             <Image
                                                 src={url}
                                                 alt={`Preview ${index + 1}`}
