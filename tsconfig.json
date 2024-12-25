@@ -24,6 +24,14 @@
             "@/*": ["./*"]
         }
     },
+    "ts-node": {
+        "esm": true,
+        "experimentalSpecifierResolution": "node",
+        "compilerOptions": {
+            "module": "esnext",
+            "moduleResolution": "node"
+        }
+    },
     "include": [
         "next-env.d.ts",
         "**/*.ts",
@@ -31,7 +39,8 @@
         ".next/types/**/*.ts",
         "app/catalog/layout.tsx",
         "components/features/CookieAlert",
-        "components/common/NotFoundPages/NotFoundPages"
+        "components/common/NotFoundPages/NotFoundPages",
+        "shared/scripts/**/*.ts"
     ],
     "exclude": ["node_modules"]
 }
