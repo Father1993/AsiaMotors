@@ -33,8 +33,6 @@ yarn-error.log*
 .env
 .env.local
 .env.*.local
-migrate-catalog-to-supabase.ts
-
 
 # vercel
 .vercel
