@@ -4,15 +4,17 @@ import toast from 'react-hot-toast'
 import { generateCarSlug } from '@/shared/utils/catalog'
 import CarPageClient from '@/components/templates/CatalogPage/CarPage/CarPage.client'
 import { supabase } from '@/shared/lib/superbase/client'
+import { PageProps } from '@/shared/types/common'
 
-interface Props {
-    params: Promise<{ slug: string }> | { slug: string }
+// Функция для безопасного получения slug
+async function getSlug(params: PageProps['params']) {
+    const resolvedParams = params instanceof Promise ? await params : params
+    return resolvedParams.slug
 }
 
 // Функция для получения автомобиля по slug
 async function getCarBySlug(slug: string) {
     try {
-        // Получаем все автомобили
         const { data: cars, error } = await supabase.from('cars').select('*')
 
         if (error) {
@@ -27,19 +29,14 @@ async function getCarBySlug(slug: string) {
     }
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    // Получаем slug из params
-    const resolvedParams = await Promise.resolve(params)
-    const car = await getCarBySlug(resolvedParams.slug)
-
-    if (!car) {
-        return {
-            title: 'Автомобиль не найден | AsiaMotors',
-            description: 'Запрашиваемый автомобиль не найден в каталоге',
-        }
-    }
-
+export async function generateMetadata({
+    params,
+}: PageProps): Promise<Metadata> {
     try {
+        // Дожидаемся получения slug
+        const slug = await getSlug(params)
+        const car = await getCarBySlug(slug)
+
         if (!car) {
             return {
                 title: 'Автомобиль не найден | AsiaMotors',
@@ -48,7 +45,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         }
 
         const price = new Intl.NumberFormat('ru-RU').format(car.price)
-        const slug = generateCarSlug(car)
+        const carSlug = generateCarSlug(car)
 
         const createImageObject = (imageUrl: string) => ({
             url: imageUrl,
@@ -65,7 +62,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
                 title: `${car.brand} ${car.model} ${car.year} | AsiaMotors`,
                 description: `${car.brand} ${car.model} ${car.year} года. Цена: ${price} ₽`,
                 type: 'website',
-                url: `https://asiamotors.su/catalog/${slug}`,
+                url: `https://asiamotors.su/catalog/${carSlug}`,
                 images: [
                     createImageObject(car.images[0]),
                     ...car.images.slice(1).map(createImageObject),
@@ -80,9 +77,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
                 creator: '@AndrejDev',
             },
             alternates: {
-                canonical: `https://asiamotors.su/catalog/${slug}`,
+                canonical: `https://asiamotors.su/catalog/${carSlug}`,
                 languages: {
-                    'ru-RU': `https://asiamotors.su/catalog/${slug}`,
+                    'ru-RU': `https://asiamotors.su/catalog/${carSlug}`,
                 },
             },
         }
@@ -95,10 +92,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
 }
 
-export default async function CarPage({ params }: Props) {
-    // Получаем slug из params
-    const resolvedParams = await Promise.resolve(params)
-    const car = await getCarBySlug(resolvedParams.slug)
+export default async function CarPage({ params }: PageProps) {
+    // Дожидаемся получения slug
+    const slug = await getSlug(params)
+    const car = await getCarBySlug(slug)
 
     if (!car) {
         notFound()

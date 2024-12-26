@@ -29,8 +29,8 @@ export interface Car {
     equipment?: string
     created_at?: string
     updated_at?: string
-    createdAt?: string
-    updatedAt?: string
+    createdAt?: number
+    updatedAt?: number
     seo?: {
         title?: string
         description?: string
