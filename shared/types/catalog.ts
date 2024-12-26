@@ -22,14 +22,15 @@ export interface Car {
         transmission: string
         driveType: string
     }
-
     category: string
     images: string[]
     available: boolean
     discount?: boolean
     equipment?: string
-    createdAt: number // Timestamp для сортировки
-    updatedAt: number
+    created_at?: string
+    updated_at?: string
+    createdAt?: string
+    updatedAt?: string
     seo?: {
         title?: string
         description?: string

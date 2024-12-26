@@ -6,10 +6,16 @@ import { carsData } from '@/shared/constants/catalog'
 import { TbAutomaticGearbox } from 'react-icons/tb'
 
 // Функция для создания slug
-export function generateCarSlug(car: any) {
-    return `${car.brand.toLowerCase()}-${car.model.toLowerCase()}-${
-        car.id
-    }`.replace(/\s+/g, '-')
+export const generateCarSlug = (car: any): string => {
+    // Создаем slug из бренда, модели и года
+    const slug = `${car.brand}-${car.model}-${car.year}`
+        .toLowerCase()
+        .replace(/\s+/g, '-') // заменяем пробелы на дефисы
+        .replace(/[^a-z0-9-]/g, '') // удаляем все кроме букв, цифр и дефисов
+        .replace(/-+/g, '-') // заменяем множественные дефисы на один
+        .replace(/^-|-$/g, '') // удаляем дефисы в начале и конце
+
+    return slug
 }
 
 // Функция для извлечения ID из slug
