@@ -4,21 +4,63 @@
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
+import toast from 'react-hot-toast'
+import { supabase } from '@/shared/lib/superbase/client'
 import { FiSearch, FiGrid, FiList } from 'react-icons/fi'
 import { HiOutlineAdjustments } from 'react-icons/hi'
-import { CountryId } from '@/shared/types/catalog'
-import { carsData, countries } from '@/shared/constants/catalog'
 import CarCard from './CarCard'
 import Breadcrumbs from '@/components/features/Breadcrumbs/Breadcrumbs'
 import { CATALOG } from '@/shared/constants/breadcrumbs'
+import { Car, Country } from '@/shared/types/adminTypes'
 
 const CatalogPage = () => {
-    const [selectedCountry, setSelectedCountry] = useState<CountryId>('china')
+    const [countries, setCountries] = useState<Country[]>([])
+    const [selectedCountry, setSelectedCountry] = useState<string>('')
     const [selectedCategory] = useState<string>('Все')
     const [selectedPrice] = useState<string>('Все цены')
     const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false)
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
     const [searchQuery, setSearchQuery] = useState<string>('')
+    const [isLoading, setIsLoading] = useState(true)
+    const [cars, setCars] = useState<Car[]>([])
+
+    // Функция получения автомобилей из БД
+    async function fetchCarsFromDB() {
+        try {
+            setIsLoading(true)
+            // Получаем страны
+            const { data: countriesData, error: countriesError } =
+                await supabase.from('countries').select('*')
+
+            if (countriesError) {
+                toast.error(`Ошибка загрузки стран: ${countriesError.message}`)
+                return
+            }
+
+            setCountries(countriesData || [])
+
+            // Получаем автомобили
+            const { data: carsData, error: carsError } = await supabase
+                .from('cars')
+                .select('*')
+
+            if (carsError) {
+                toast.error(`Ошибка загрузки автомобилей: ${carsError.message}`)
+                return
+            }
+
+            setCars(carsData || [])
+        } catch (error) {
+            toast.error('Произошла ошибка при загрузке данных')
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
+    // Вызываем функцию при монтировании компонента
+    useEffect(() => {
+        fetchCarsFromDB()
+    }, [])
 
     // Переменные для фильтра
     const [selectedBrands, setSelectedBrands] = useState<string[]>([])
@@ -32,17 +74,15 @@ const CatalogPage = () => {
 
     // Получаем уникальные значения
     const getUniqueValues = (key: ValidKeys) => {
-        const allCars = Object.values(carsData).flat()
-
         switch (key) {
             case 'specs.driveType':
-                return [...new Set(allCars.map((car) => car.specs.driveType))]
+                return [...new Set(cars.map((car) => car.specs.driveType))]
             case 'specs.fuelType':
-                return [...new Set(allCars.map((car) => car.specs.fuelType))]
+                return [...new Set(cars.map((car) => car.specs.fuelType))]
             case 'brand':
-                return [...new Set(allCars.map((car) => car.brand))]
+                return [...new Set(cars.map((car) => car.brand))]
             case 'category':
-                return [...new Set(allCars.map((car) => car.category))]
+                return [...new Set(cars.map((car) => car.category))]
             default:
                 return []
         }
@@ -54,40 +94,40 @@ const CatalogPage = () => {
     const fuelTypes = getUniqueValues('specs.fuelType')
 
     // Фильтрация автомобилей
-    const filteredCars =
-        carsData[selectedCountry]?.filter((car) => {
-            const matchesSearch =
-                searchQuery === '' ||
-                car.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                car.model.toLowerCase().includes(searchQuery.toLowerCase())
+    const filteredCars = cars.filter((car) => {
+        const matchesSearch =
+            searchQuery === '' ||
+            car.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            car.model.toLowerCase().includes(searchQuery.toLowerCase())
 
-            const matchesBrand =
-                selectedBrands.length === 0 ||
-                selectedBrands.includes(car.brand)
-            const matchesCategory =
-                selectedCategories.length === 0 ||
-                selectedCategories.includes(car.category)
-            const matchesPrice =
-                car.price >= priceRange[0] && car.price <= priceRange[1]
-            const matchesYear =
-                car.year >= yearRange[0] && car.year <= yearRange[1]
-            const matchesDriveType =
-                selectedDriveTypes.length === 0 ||
-                selectedDriveTypes.includes(car.specs.driveType)
-            const matchesFuelType =
-                selectedFuelTypes.length === 0 ||
-                selectedFuelTypes.includes(car.specs.fuelType)
+        const matchesCountry =
+            !selectedCountry || car.country_id === selectedCountry
+        const matchesBrand =
+            selectedBrands.length === 0 || selectedBrands.includes(car.brand)
+        const matchesCategory =
+            selectedCategories.length === 0 ||
+            selectedCategories.includes(car.category)
+        const matchesPrice =
+            car.price >= priceRange[0] && car.price <= priceRange[1]
+        const matchesYear = car.year >= yearRange[0] && car.year <= yearRange[1]
+        const matchesDriveType =
+            selectedDriveTypes.length === 0 ||
+            selectedDriveTypes.includes(car.specs.driveType)
+        const matchesFuelType =
+            selectedFuelTypes.length === 0 ||
+            selectedFuelTypes.includes(car.specs.fuelType)
 
-            return (
-                matchesSearch &&
-                matchesBrand &&
-                matchesCategory &&
-                matchesPrice &&
-                matchesYear &&
-                matchesDriveType &&
-                matchesFuelType
-            )
-        }) || []
+        return (
+            matchesSearch &&
+            matchesCountry &&
+            matchesBrand &&
+            matchesCategory &&
+            matchesPrice &&
+            matchesYear &&
+            matchesDriveType &&
+            matchesFuelType
+        )
+    })
 
     useEffect(() => {
         const handleResize = () => {
@@ -170,16 +210,27 @@ const CatalogPage = () => {
                     className="mb-12"
                 >
                     <div className="flex flex-wrap gap-4 justify-center">
+                        <button
+                            onClick={() => setSelectedCountry('')}
+                            className={`group px-8 py-4 rounded-2xl text-lg font-medium 
+                    transition-all duration-300 ${
+                        selectedCountry === ''
+                            ? 'bg-[#2F3136] text-white shadow-lg scale-105'
+                            : 'bg-white text-gray-700 hover:bg-gray-50 shadow hover:shadow-lg'
+                    }`}
+                        >
+                            <span>Все страны</span>
+                        </button>
                         {countries.map((country) => (
                             <button
                                 key={country.id}
                                 onClick={() => setSelectedCountry(country.id)}
                                 className={`group px-8 py-4 rounded-2xl text-lg font-medium 
-                    transition-all duration-300 ${
-                        selectedCountry === country.id
-                            ? 'bg-[#2F3136] text-white shadow-lg scale-105'
-                            : 'bg-white text-gray-700 hover:bg-gray-50 shadow hover:shadow-lg'
-                    }`}
+                        transition-all duration-300 ${
+                            selectedCountry === country.id
+                                ? 'bg-[#2F3136] text-white shadow-lg scale-105'
+                                : 'bg-white text-gray-700 hover:bg-gray-50 shadow hover:shadow-lg'
+                        }`}
                             >
                                 <span>{country.name}</span>
                             </button>
@@ -387,6 +438,8 @@ const CatalogPage = () => {
                                 setYearRange([2020, 2023])
                                 setSelectedDriveTypes([])
                                 setSelectedFuelTypes([])
+                                setSelectedCountry('')
+                                setSearchQuery('')
                             }}
                             className="w-full py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
                         >
@@ -396,21 +449,31 @@ const CatalogPage = () => {
                 </motion.div>
 
                 {/* Сетка автомобилей */}
-                <motion.div
-                    layout
-                    className={
-                        viewMode === 'grid'
-                            ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-20'
-                            : 'space-y-6 pb-20'
-                    }
-                >
-                    {filteredCars.map((car) => (
-                        <CarCard key={car.id} car={car} viewMode={viewMode} />
-                    ))}
-                </motion.div>
+                {isLoading ? (
+                    <div className="text-center py-16">
+                        <p className="text-2xl text-gray-500">Загрузка...</p>
+                    </div>
+                ) : (
+                    <motion.div
+                        layout
+                        className={
+                            viewMode === 'grid'
+                                ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-20'
+                                : 'space-y-6 pb-20'
+                        }
+                    >
+                        {filteredCars.map((car) => (
+                            <CarCard
+                                key={car.id}
+                                car={car}
+                                viewMode={viewMode}
+                            />
+                        ))}
+                    </motion.div>
+                )}
 
                 {/* Нет результатов */}
-                {filteredCars.length === 0 && (
+                {!isLoading && filteredCars.length === 0 && (
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}

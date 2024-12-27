@@ -97,13 +97,17 @@ export const CarCard = ({ car, viewMode }: CarCardProps) => {
             document.removeEventListener('mousedown', handleClickOutside)
     }, [])
 
+    const handleCardClick = () => {
+        router.push(`/catalog/${carSlug}`)
+    }
+
     const gridCard = (
         <motion.div
             variants={cardVariants}
             initial="hidden"
             animate="visible"
             whileHover={{ y: -5 }}
-            onClick={() => router.push(`/catalog/${carSlug}`)}
+            onClick={handleCardClick}
             className="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300"
         >
             {/* Секция с изображением */}
