@@ -93,15 +93,15 @@ export async function generateMetadata({
 }
 
 export default async function CarPage({ params }: PageProps) {
-    // Дожидаемся получения slug
     const slug = await getSlug(params)
-    const car = await getCarBySlug(slug)
+    const { data: allCars } = await supabase.from('cars').select('*')
+    const car = allCars?.find((car) => generateCarSlug(car) === slug)
 
-    if (!car) {
+    if (!car || !allCars) {
         notFound()
     }
 
-    return <CarPageClient car={car} />
+    return <CarPageClient car={car} allCars={allCars} />
 }
 
 // Генерация статических путей остается без изменений

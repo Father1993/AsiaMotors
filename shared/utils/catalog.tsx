@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FiClock, FiSettings, FiZap, FiDroplet } from 'react-icons/fi'
 import { GiCarWheel, GiClockwiseRotation } from 'react-icons/gi'
-
-import { carsData } from '@/shared/constants/catalog'
 import { TbAutomaticGearbox } from 'react-icons/tb'
+import { supabase } from '../lib/superbase/client'
 
 // Функция для создания slug
 export const generateCarSlug = (car: any): string => {
@@ -26,18 +25,25 @@ export function getIdFromSlug(slug: string) {
 
 // Функция поиска автомобиля
 export async function findCarBySlug(slug: string) {
-    const id = getIdFromSlug(slug)
+    try {
+        const { data: cars, error } = await supabase.from('cars').select('*')
 
-    for (const countryData of Object.values(carsData)) {
-        const car = countryData.find((car) => car.id === id)
-        if (car) {
-            const expectedSlug = generateCarSlug(car)
-            if (slug === expectedSlug) {
-                return car
-            }
+        if (error) {
+            console.error('Error fetching cars:', error)
+            return null
         }
+
+        // Находим автомобиль по slug
+        const car = cars.find((car) => {
+            const expectedSlug = generateCarSlug(car)
+            return slug === expectedSlug
+        })
+
+        return car || null
+    } catch (error) {
+        console.error('Error in findCarBySlug:', error)
+        return null
     }
-    return null
 }
 
 // Функция для безопасного получения данных автомобиля
