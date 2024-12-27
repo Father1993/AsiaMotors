@@ -12,7 +12,6 @@ import {
     FiChevronLeft,
     FiChevronRight,
 } from 'react-icons/fi'
-import { CarPageProps } from '@/shared/types/carPage'
 import { CATALOG } from '@/shared/constants/breadcrumbs'
 import Breadcrumbs from '@/components/features/Breadcrumbs/Breadcrumbs'
 import { formatPrice, generateCarSlug, specIcons } from '@/shared/utils/catalog'
@@ -25,10 +24,15 @@ import {
     VKIcon,
 } from 'react-share'
 import SimilarCars from '@/components/features/SimilarCars/SimilarCars'
-import { carsData } from '@/shared/constants/catalog'
 import { OrderCarModal } from '../OrderCarModal'
+import { Car } from '@/shared/types/adminTypes'
 
-const CarPageClient = ({ car }: CarPageProps) => {
+interface CarPageProps {
+    car: Car
+    allCars: Car[] // добавить этот пропс
+}
+
+const CarPageClient = ({ car, allCars }: CarPageProps) => {
     const router = useRouter()
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
     const [isShareModalOpen, setIsShareModalOpen] = useState(false)
@@ -428,7 +432,7 @@ const CarPageClient = ({ car }: CarPageProps) => {
                     </div>
                     <SimilarCars
                         currentCar={car}
-                        allCars={Object.values(carsData).flat()}
+                        allCars={Object.values(allCars).flat()}
                     />
                 </div>
             </div>
