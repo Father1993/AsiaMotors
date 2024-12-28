@@ -939,3 +939,7 @@
         display: none;
     }
 }
+
+.specs-list__no-dot {
+    list-style-type: none;
+}
