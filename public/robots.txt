@@ -1,4 +1,10 @@
+# Основные правила
 User-agent: *
+Allow: /
+
+# Правила для Яндекс.Турбо
+User-agent: Yandex
+Allow: /api/yandex-turbo
 Allow: /
 
 # Запрет индексации служебных страниц
@@ -32,3 +38,8 @@ Host: https://asiamotors.su
 
 # Частота обхода страниц роботом (в секундах)
 Crawl-delay: 10
+
+# Специальные правила для Турбо-страниц
+Clean-param: utm_source&utm_medium&utm_campaign
+Clean-param: yclid&_openstat
+Clean-param: gclid&dclid
