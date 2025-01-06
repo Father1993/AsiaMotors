@@ -114,7 +114,7 @@ const ContactsBlock = () => {
     }
 
     return (
-        <section className="relative min-h-screen py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
+        <section className="relative py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
             <div className="absolute inset-0 bg-[url('/img/grid.svg')] opacity-10"></div>
 
             <motion.div
