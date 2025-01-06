@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -16,9 +15,7 @@ import { CarCardSkeleton } from '@/components/common/SkeletonCatalog/CarCardSkel
 
 const CatalogPage = () => {
     const [countries, setCountries] = useState<Country[]>([])
-    const [selectedCountry, setSelectedCountry] = useState<string>('')
-    const [selectedCategory] = useState<string>('Все')
-    const [selectedPrice] = useState<string>('Все цены')
+    const [selectedCountry, setSelectedCountry] = useState<string>('china')
     const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false)
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
     const [searchQuery, setSearchQuery] = useState<string>('')
@@ -51,7 +48,7 @@ const CatalogPage = () => {
             }
 
             setCars(carsData || [])
-        } catch (error) {
+        } catch {
             toast.error('Произошла ошибка при загрузке данных')
         } finally {
             setIsLoading(false)
