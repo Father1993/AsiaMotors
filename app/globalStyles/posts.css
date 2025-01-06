@@ -39,7 +39,7 @@
 .feature-value {
     font-size: 1.875rem;
     font-weight: bold;
-    color: #dc2626;
+    color: black !important;
 }
 
 .feature-description {
