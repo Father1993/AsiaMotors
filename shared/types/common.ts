@@ -73,3 +73,19 @@ export interface PageProps {
     }>
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
+
+export interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
+    className?: string
+}
+
+export interface CarCardSkeletonProps {
+    viewMode: 'grid' | 'list'
+}
+
+export interface ImageViewerProps {
+    images: string[]
+    currentIndex: number
+    isOpen: boolean
+    onClose: () => void
+    onIndexChange: (index: number) => void
+}

@@ -36,19 +36,31 @@ export const CarCard = ({ car, viewMode }: CarCardProps) => {
     const carSlug = generateCarSlug(car)
     const router = useRouter()
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
+    const [imageLoading, setImageLoading] = useState(false)
+    const [currentImage, setCurrentImage] = useState(
+        car.images[currentImageIndex]
+    )
 
     const handlePrevImage = (e?: React.MouseEvent) => {
-        e?.stopPropagation() // Предотвращаем переход на страницу авто если событие существует
-        setCurrentImageIndex((prev) =>
-            prev === 0 ? car.images.length - 1 : prev - 1
-        )
+        e?.stopPropagation()
+        setImageLoading(true)
+        const newIndex =
+            currentImageIndex === 0
+                ? car.images.length - 1
+                : currentImageIndex - 1
+        setCurrentImageIndex(newIndex)
+        setCurrentImage(car.images[newIndex])
     }
 
     const handleNextImage = (e?: React.MouseEvent) => {
         e?.stopPropagation()
-        setCurrentImageIndex((prev) =>
-            prev === car.images.length - 1 ? 0 : prev + 1
-        )
+        setImageLoading(true)
+        const newIndex =
+            currentImageIndex === car.images.length - 1
+                ? 0
+                : currentImageIndex + 1
+        setCurrentImageIndex(newIndex)
+        setCurrentImage(car.images[newIndex])
     }
 
     // Конфигурация свайпов
@@ -101,6 +113,17 @@ export const CarCard = ({ car, viewMode }: CarCardProps) => {
         router.push(`/catalog/${carSlug}`)
     }
 
+    const LoadingOverlay = () => (
+        <div className="absolute inset-0 bg-black/20 backdrop-blur-sm z-10 flex items-center justify-center">
+            <div className="relative">
+                {/* Внешний круг (тень) */}
+                <div className="absolute inset-0 w-8 h-8 border-4 border-white/30 rounded-full animate-pulse" />
+                {/* Спиннер */}
+                <div className="w-8 h-8 border-3 border-white/80 border-t-transparent rounded-full animate-spin" />
+            </div>
+        </div>
+    )
+
     const gridCard = (
         <motion.div
             variants={cardVariants}
@@ -115,13 +138,27 @@ export const CarCard = ({ car, viewMode }: CarCardProps) => {
                 className="relative aspect-[16/9] group touch-pan-y"
                 {...swipeHandlers}
             >
+                {/* Текущее изображение */}
                 <Image
-                    src={car.images[currentImageIndex]}
+                    src={currentImage}
                     alt={`${car.brand} ${car.model}`}
                     fill
-                    className="object-cover transform group-hover:scale-105 transition-transform duration-300"
-                    draggable={false} // Предотвращаем перетаскивание изображения
+                    className={`
+                        object-cover transform 
+                        group-hover:scale-105 
+                        transition-all duration-500 ease-out
+                        ${
+                            imageLoading
+                                ? 'scale-105 blur-sm'
+                                : 'scale-100 blur-0'
+                        }
+                    `}
+                    onLoadingComplete={() => setImageLoading(false)}
+                    priority={currentImageIndex === 0}
                 />
+
+                {/* Оверлей загрузки */}
+                {imageLoading && <LoadingOverlay />}
 
                 {/* Индикатор свайпа на мобильных устройствах */}
                 <div className="absolute inset-x-0 bottom-4 flex justify-center gap-1 md:hidden">
@@ -345,11 +382,25 @@ export const CarCard = ({ car, viewMode }: CarCardProps) => {
             {/* Изображение */}
             <div className="relative w-1/3 group">
                 <Image
-                    src={car.images[currentImageIndex]}
+                    src={currentImage}
                     alt={`${car.brand} ${car.model}`}
                     fill
-                    className="object-cover transform group-hover:scale-105 transition-transform duration-300"
+                    className={`
+                        object-cover transform 
+                        group-hover:scale-105 
+                        transition-all duration-500 ease-out
+                        ${
+                            imageLoading
+                                ? 'scale-105 blur-sm'
+                                : 'scale-100 blur-0'
+                        }
+                    `}
+                    onLoadingComplete={() => setImageLoading(false)}
+                    priority={currentImageIndex === 0}
                 />
+
+                {/* Оверлей загрузки */}
+                {imageLoading && <LoadingOverlay />}
 
                 {/* Кнопки навигации */}
                 <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">

@@ -41,6 +41,7 @@
         "remark-html": "^16.0.1",
         "swiper": "^11.1.14",
         "video.js": "^8.19.1",
+        "yet-another-react-lightbox": "^3.21.7",
         "zustand": "^5.0.1"
     },
     "devDependencies": {
