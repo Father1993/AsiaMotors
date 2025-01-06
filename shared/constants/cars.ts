@@ -28,7 +28,7 @@ export const CARS_DATA = [
         id: 3,
         name: 'LI L9',
         price: '8 200 000 ₽',
-        image: '/img/cars/lis.jpg',
+        image: '/img/cars/lis.webp',
         bestseller: true,
         specs: {
             year: '2023',

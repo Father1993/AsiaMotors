@@ -82,7 +82,7 @@ const HeroBlock = () => {
                     >
                         <div className="relative aspect-square rounded-3xl overflow-hidden shadow-2xl">
                             <Image
-                                src="/img/team/china/all_team.jpg"
+                                src="/img/team/china/all_team.webp"
                                 alt="Команда Asia Motors в офисе в Китае"
                                 fill
                                 className="object-cover"

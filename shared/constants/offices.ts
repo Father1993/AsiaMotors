@@ -7,7 +7,7 @@ export const offices: Offices = {
         phone: '+7 (4212) 93-5555',
         email: 'asiamotors27@mail.ru',
         workHours: 'Пн-Пт: 9:00-18:00, Сб: 10:00-15:00',
-        image: '/img/office/khabarovsk.jpg',
+        image: '/img/office/khabarovsk.webp',
         mapComponent: 'khv',
     },
     vladivostok: {
@@ -16,7 +16,7 @@ export const offices: Offices = {
         phone: '+7 (4212) 98-5-888',
         email: 'asiamotors27@mail.ru',
         workHours: 'Пн-Пт: 9:00-18:00, Сб: 10:00-15:00',
-        image: '/img/office/vdk.jpg',
+        image: '/img/office/vdk.webp',
         mapComponent: 'vdk',
     },
     shl: {
@@ -25,7 +25,7 @@ export const offices: Offices = {
         phone: '+7 (962) 580-40-06',
         email: 'asiamotors27@mail.ru',
         workHours: 'Пн-Пт: 9:00-18:00, Сб: 10:00-15:00',
-        image: '/img/office/sahalin.jpg',
+        image: '/img/office/sahalin.webp',
         mapComponent: 'shl',
     },
     kmch: {
@@ -34,7 +34,7 @@ export const offices: Offices = {
         phone: '+7 (961) 968-88-88',
         email: 'asiamotors27@mail.ru',
         workHours: 'Пн-Пт: 9:00-18:00, Сб: 10:00-15:00',
-        image: '/img/office/kamchatka.png',
+        image: '/img/office/kamchatka.webp',
         mapComponent: 'kmch',
     },
     harbin: {
@@ -44,7 +44,7 @@ export const offices: Offices = {
         phone: '+86-138-22-14-08-45',
         email: 'asiamotors27@mail.ru',
         workHours: 'Пн-Пт: 9:00-18:00, Сб: 10:00-15:00',
-        image: '/img/office/harbin.jpg',
+        image: '/img/office/harbin.webp',
         mapComponent: 'harbin',
     },
     suifenhe: {
@@ -54,7 +54,7 @@ export const offices: Offices = {
         phone: '',
         email: 'asiamotors27@mail.ru',
         workHours: 'Пн-Пт: 9:00-18:00, Сб: 10:00-16:00',
-        image: '/img/office/suifenhe.jpeg',
+        image: '/img/office/suifenhe.webp',
         mapComponent: 'suifenhe',
     },
 }
