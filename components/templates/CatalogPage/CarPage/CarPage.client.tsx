@@ -5,6 +5,11 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useSwipeable } from 'react-swipeable'
+import Lightbox from 'yet-another-react-lightbox'
+import 'yet-another-react-lightbox/styles.css'
+import Zoom from 'yet-another-react-lightbox/plugins/zoom'
+import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails'
+import 'yet-another-react-lightbox/plugins/thumbnails.css'
 import {
     FiArrowLeft,
     // FiHeart,
@@ -40,6 +45,10 @@ const CarPageClient = ({ car, allCars }: CarPageProps) => {
     const [isCopied, setIsCopied] = useState(false)
     const carSlug = generateCarSlug(car)
     const [isOrderModalOpen, setIsOrderModalOpen] = useState(false)
+    const [isLightboxOpen, setIsLightboxOpen] = useState(false)
+
+    // Подготавливаем массив изображений для лайтбокса
+    const slides = car.images.map((src) => ({ src }))
 
     const breadcrumbItems = [
         ...CATALOG,
@@ -125,17 +134,55 @@ const CarPageClient = ({ car, allCars }: CarPageProps) => {
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                         exit={{ opacity: 0 }}
-                                        className="relative w-full h-full"
+                                        className="relative w-full h-full cursor-pointer"
                                     >
                                         <Image
                                             src={car.images[currentImageIndex]}
-                                            alt={`${car.brand} ${car.model} ${car.year}`}
+                                            alt={`${car.brand} ${car.model}`}
                                             fill
-                                            className="object-cover"
+                                            className="object-cover transition-transform duration-300 group-hover:scale-105"
                                             priority
-                                            draggable={false}
+                                            onClick={() =>
+                                                setIsLightboxOpen(true)
+                                            }
                                         />
-                                        {/* Индикатор свайпа на мобильных устройствах */}
+                                        <Lightbox
+                                            open={isLightboxOpen}
+                                            close={() =>
+                                                setIsLightboxOpen(false)
+                                            }
+                                            slides={slides}
+                                            index={currentImageIndex}
+                                            plugins={[Zoom, Thumbnails]}
+                                            carousel={{
+                                                preload: 1,
+                                            }}
+                                        />
+                                        {/* кнопки навигации */}
+                                        {car.images.length > 1 && (
+                                            <>
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        handlePrevImage()
+                                                    }}
+                                                    className="absolute left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 bg-white shadow-lg z-10"
+                                                >
+                                                    <FiChevronLeft className="w-6 h-6" />
+                                                </button>
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        handleNextImage()
+                                                    }}
+                                                    className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 bg-white shadow-lg z-10"
+                                                >
+                                                    <FiChevronRight className="w-6 h-6" />
+                                                </button>
+                                            </>
+                                        )}
+
+                                        {/* Индикатор для мобильных */}
                                         <div className="absolute inset-x-0 bottom-4 flex justify-center gap-1 md:hidden">
                                             {car.images.map((_, index) => (
                                                 <div
@@ -151,23 +198,6 @@ const CarPageClient = ({ car, allCars }: CarPageProps) => {
                                         </div>
                                     </motion.div>
                                 </AnimatePresence>
-
-                                {car.images.length > 1 && (
-                                    <div className="absolute inset-0 flex items-center justify-between p-4 opacity-0 group-hover:opacity-100 transition-opacity hidden md:flex">
-                                        <button
-                                            onClick={handlePrevImage}
-                                            className="p-2 rounded-full bg-white/80 hover:bg-white shadow-lg"
-                                        >
-                                            <FiChevronLeft className="w-6 h-6" />
-                                        </button>
-                                        <button
-                                            onClick={handleNextImage}
-                                            className="p-2 rounded-full bg-white/80 hover:bg-white shadow-lg"
-                                        >
-                                            <FiChevronRight className="w-6 h-6" />
-                                        </button>
-                                    </div>
-                                )}
                             </div>
 
                             {/* Миниатюры */}

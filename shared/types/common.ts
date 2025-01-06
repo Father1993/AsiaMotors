@@ -81,3 +81,11 @@ export interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
 export interface CarCardSkeletonProps {
     viewMode: 'grid' | 'list'
 }
+
+export interface ImageViewerProps {
+    images: string[]
+    currentIndex: number
+    isOpen: boolean
+    onClose: () => void
+    onIndexChange: (index: number) => void
+}
