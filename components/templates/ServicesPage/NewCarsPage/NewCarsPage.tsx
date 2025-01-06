@@ -21,7 +21,7 @@ const NewCarsPage = () => {
                 {/* Hero Section */}
                 <div className="relative h-[600px] rounded-2xl overflow-hidden mb-16 ">
                     <Image
-                        src="/img/new-cars-bg.jpg"
+                        src="/img/new-cars-bg.webp"
                         alt="Подержанные автомобили из Китая"
                         fill
                         className="object-cover"

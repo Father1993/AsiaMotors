@@ -219,7 +219,7 @@ const ContactsBlock = () => {
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10"></div>
                             {isClient && (
                                 <DynamicImage
-                                    src="/img/team/Mihail.png"
+                                    src="/img/team/Mihail.webp"
                                     alt="Михаил Ананьев Азия Моторс"
                                     width={800}
                                     height={1000}

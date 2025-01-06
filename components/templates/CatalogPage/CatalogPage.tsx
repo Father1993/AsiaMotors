@@ -153,7 +153,7 @@ const CatalogPage = () => {
                     className="relative rounded-3xl overflow-hidden mb-12 h-[400px]"
                 >
                     <Image
-                        src="/img/catalog/bg.jpg"
+                        src="/img/catalog/bg.webp"
                         alt="Каталог автомобилей"
                         fill
                         className="object-cover"

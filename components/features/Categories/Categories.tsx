@@ -47,7 +47,7 @@ const Categories = () => {
                     >
                         <Image
                             fill
-                            src="/img/categories/catalog-sedan.jpg"
+                            src="/img/categories/catalog-sedan.webp"
                             alt="sedan cars"
                             sizes="(max-width: 768px) 100vw, 50vw"
                             quality={75}
@@ -72,7 +72,7 @@ const Categories = () => {
                     >
                         <Image
                             fill
-                            src="/img/categories/catalog-hach.jpg"
+                            src="/img/categories/catalog-hach.webp"
                             alt="hachback cars"
                             sizes="(max-width: 768px) 100vw, 50vw"
                             quality={75}
@@ -97,7 +97,7 @@ const Categories = () => {
                     >
                         <Image
                             fill
-                            src="/img/categories/catalog-minivan.jpg"
+                            src="/img/categories/catalog-minivan.webp"
                             alt="Minivans cars"
                             sizes="(max-width: 768px) 100vw, 50vw"
                             quality={75}
@@ -147,7 +147,7 @@ const Categories = () => {
                     >
                         <Image
                             fill
-                            src="/img/categories/catalog-universal.jpg"
+                            src="/img/categories/catalog-universal.webp"
                             alt="Pickups cars"
                             sizes="(max-width: 768px) 100vw, 50vw"
                             quality={75}

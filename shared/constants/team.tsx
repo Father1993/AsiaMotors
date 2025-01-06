@@ -36,13 +36,13 @@ export const teamMembersKhv = [
     {
         name: 'Андрей Чжан',
         role: 'Основатель',
-        image: '/img/team/Andrey.png',
+        image: '/img/team/Andrey.webp',
         description: 'Эксперт с 15-летним опытом международной автологистики',
     },
     {
         name: 'Михаил Ананьев',
         role: 'Ведущий эксперт по подбору автомобилей',
-        image: '/img/team/Mihail.png',
+        image: '/img/team/Mihail.webp',
         description: (
             <>
                 Автоэксперт на портале{' '}
@@ -65,7 +65,7 @@ export const teamMembersKhv = [
     {
         name: 'Владимир Карпыш',
         role: 'Менеджер отдела продаж',
-        image: '/img/team/Vladimir-man.png',
+        image: '/img/team/Vladimir-man.webp',
         description:
             'Реализовал более 100 успешных сделок. Эксперт по подбору автомобилей',
         telephone: (
@@ -122,7 +122,7 @@ export const teamMembersHarbin = [
     {
         name: 'Яша Юй',
         role: 'Директор китайского офиса',
-        image: '/img/team/china/yasha.jpg',
+        image: '/img/team/china/yasha.webp',
         description: 'Специалист по работе с китайскими производителями',
         city: 'Хабрин',
         address:
@@ -138,7 +138,7 @@ export const teamMembersHarbin = [
     {
         name: 'Хе Чао',
         role: 'Технический инспектор',
-        image: '/img/team/china/gus.jpg',
+        image: '/img/team/china/gus.webp',
         description: 'Контроль качества и предпродажная подготовка',
         city: 'Суйфеньхэ',
         telephone: (
@@ -152,7 +152,7 @@ export const teamMembersHarbin = [
     {
         name: 'Юрий Би',
         role: 'Координатор поставок',
-        image: '/img/team/china/yra.jpg',
+        image: '/img/team/china/yra.webp',
         description: 'Организация логистики и таможенного оформления',
         city: 'Суйфеньхэ',
     },
@@ -165,7 +165,7 @@ export const teamMembersSuifenhe = [
     {
         name: 'Юрий Чау',
         role: 'Директор китайского офиса',
-        image: '/img/team/china/sunvunxe_manager.jpg',
+        image: '/img/team/china/sunvunxe_manager.webp',
         description: 'Специалист по работе с китайскими производителями',
         city: 'Хабрин',
         address:
@@ -181,7 +181,7 @@ export const teamMembersSuifenhe = [
     {
         name: 'Ван Вэй',
         role: 'Технический инспектор',
-        image: '/img/team/china/china-team.jpg',
+        image: '/img/team/china/china-team.webp',
         description: 'Контроль качества и предпродажная подготовка',
         city: 'Суйфеньхэ',
         telephone: (
@@ -195,7 +195,7 @@ export const teamMembersSuifenhe = [
     {
         name: 'Лю Ян',
         role: 'Координатор поставок',
-        image: '/img/team/china/Image_20241128162415.jpg',
+        image: '/img/team/china/Image_20241128162415.webp',
         description: 'Менеджер',
         city: 'Суйфеньхэ',
     },
@@ -203,7 +203,7 @@ export const teamMembersSuifenhe = [
     {
         name: 'Чжао Мин',
         role: 'Координатор поставок',
-        image: '/img/team/china/Image_20241128162419.jpg',
+        image: '/img/team/china/Image_20241128162419.webp',
         description: 'Поиск любого автомобиля в Китае',
         city: 'Суйфеньхэ',
     },
@@ -216,7 +216,7 @@ export const teamMembersKamch = [
     {
         name: 'Сергей Чжан',
         role: 'Руководитель филиала',
-        image: '/img/team/kamch/sergey-kmch.jpg',
+        image: '/img/team/kamch/sergey-kmch.webp',
         description: 'Развитие бизнеса на Камчатке',
         address: 'Петропавловск-Камчатский, Тундровая, 1. СТО КАМ-МОТОРС',
         telephone: (
@@ -236,7 +236,7 @@ export const teamMembersSkh = [
     {
         name: 'Акуленко Евгений',
         role: 'Руководитель филиала',
-        image: '/img/team/shl/shl2.jpg',
+        image: '/img/team/shl/shl2.webp',
         description: 'Развитие бизнеса в регионах ДВ',
         address: 'Южно-Сахалинск,  ул. 3-я Новая 17',
         telephone: (
