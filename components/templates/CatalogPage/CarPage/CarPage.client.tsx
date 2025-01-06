@@ -410,6 +410,13 @@ const CarPageClient = ({ car, allCars }: CarPageProps) => {
                                         </div>
                                     </div>
                                 </div>
+                                <hr />
+                                <div>
+                                    <h3 className="mb-2 font-bold">Описание</h3>
+                                    <p className="text-gray-600 group-hover:text-gray-900 transition-colors">
+                                        {car.equipment}
+                                    </p>
+                                </div>
                             </div>
 
                             {/* Кнопки действий */}

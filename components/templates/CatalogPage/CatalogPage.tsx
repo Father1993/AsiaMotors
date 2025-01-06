@@ -12,6 +12,7 @@ import CarCard from './CarCard'
 import Breadcrumbs from '@/components/features/Breadcrumbs/Breadcrumbs'
 import { CATALOG } from '@/shared/constants/breadcrumbs'
 import { Car, Country } from '@/shared/types/adminTypes'
+import { CarCardSkeleton } from '@/components/common/SkeletonCatalog/CarCardSkeleton'
 
 const CatalogPage = () => {
     const [countries, setCountries] = useState<Country[]>([])
@@ -450,16 +451,24 @@ const CatalogPage = () => {
 
                 {/* Сетка автомобилей */}
                 {isLoading ? (
-                    <div className="text-center py-16">
-                        <p className="text-2xl text-gray-500">Загрузка...</p>
+                    <div
+                        className={
+                            viewMode === 'grid'
+                                ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'
+                                : 'space-y-6'
+                        }
+                    >
+                        {Array.from({ length: 6 }).map((_, i) => (
+                            <CarCardSkeleton key={i} viewMode={viewMode} />
+                        ))}
                     </div>
                 ) : (
                     <motion.div
                         layout
                         className={
                             viewMode === 'grid'
-                                ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-20'
-                                : 'space-y-6 pb-20'
+                                ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'
+                                : 'space-y-6'
                         }
                     >
                         {filteredCars.map((car) => (
