@@ -137,7 +137,6 @@ Asia Motors - это современная веб-платформа для а�
 
 -   Email: enjoyhillol@gmail.com
 -   Telegram: @AndrejDev
--   GitHub: [Ваш GitHub профиль]
 
 ---
 
