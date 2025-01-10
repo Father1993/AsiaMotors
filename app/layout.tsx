@@ -114,14 +114,6 @@ export default function RootLayout({
                 <GoogleAnalytics />
             </head>
             <body suppressHydrationWarning>
-                <noscript>
-                    <iframe
-                        src="https://www.googletagmanager.com/ns.html?id=GTM-P946MKQV"
-                        height="0"
-                        width="0"
-                        style={{ display: 'none', visibility: 'hidden' }}
-                    />
-                </noscript>
                 <Providers>
                     <PagesLayout>
                         <LoadingProvider>
