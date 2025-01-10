@@ -8,6 +8,7 @@ import './globalStyles/globals.css'
 import './globalStyles/popup.css'
 import './globalStyles/cookie-popup.css'
 import './globalStyles/posts.css'
+import GoogleAnalytics from '@/components/features/Analitics/GoogleAnalitycs'
 
 export const metadata: Metadata = {
     metadataBase: new URL('https://asiamotors.su'),
@@ -109,8 +110,18 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="ru">
-            <head />
+            <head>
+                <GoogleAnalytics />
+            </head>
             <body suppressHydrationWarning>
+                <noscript>
+                    <iframe
+                        src="https://www.googletagmanager.com/ns.html?id=GTM-P946MKQV"
+                        height="0"
+                        width="0"
+                        style={{ display: 'none', visibility: 'hidden' }}
+                    />
+                </noscript>
                 <Providers>
                     <PagesLayout>
                         <LoadingProvider>
