@@ -102,7 +102,7 @@ const Slider = () => {
                                                 {car.price}
                                             </span>
                                             <span className="text-sm text-gray-500">
-                                                В наличии г.Харбин
+                                                цена под ключ в РФ
                                             </span>
                                         </div>
                                         <div className="grid grid-cols-3 gap-4 pt-4 border-t">
