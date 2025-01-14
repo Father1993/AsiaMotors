@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -14,10 +15,24 @@ const PWAPrompt = () => {
         useState<BeforeInstallPromptEvent | null>(null)
     const [showPrompt, setShowPrompt] = useState(false)
     const [isInstalled, setIsInstalled] = useState(false)
+    const [isMobile, setIsMobile] = useState(false)
+    const [isIOS, setIsIOS] = useState(false)
 
     useEffect(() => {
         // Проверяем, что код выполняется в браузере
         if (typeof window === 'undefined') return
+
+        // Определяем мобильное устройство
+        const checkDevice = () => {
+            const mobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+            const ios = /iPhone|iPad|iPod/i.test(navigator.userAgent)
+            setIsMobile(mobile)
+            setIsIOS(ios)
+        }
+        checkDevice()
+
+        // Если это десктоп - не показываем промпт
+        if (!isMobile) return
 
         // Проверяем, запущено ли приложение как PWA
         const checkIfInstalled = () => {
@@ -44,34 +59,47 @@ const PWAPrompt = () => {
                 )
                 const now = new Date().getTime()
 
-                return (
-                    !checkIfInstalled() &&
-                    (!lastPromptTime ||
-                        now - parseInt(lastPromptTime) > 5 * 60 * 1000) &&
-                    dismissCount < 3
-                )
+                // Для iOS показываем промпт всегда (так как нет нативного)
+                if (isIOS) {
+                    return (
+                        !checkIfInstalled() &&
+                        (!lastPromptTime ||
+                            now - parseInt(lastPromptTime) > 5 * 60 * 1000) &&
+                        dismissCount < 3
+                    )
+                }
+
+                // Для Android используем стандартный механизм
+                return !checkIfInstalled()
             } catch (error) {
                 console.error('Error checking prompt conditions:', error)
                 return false
             }
         }
 
-        // Обработчик события beforeinstallprompt
+        // Обработчик события beforeinstallprompt (только для Android)
         const handleBeforeInstallPrompt = (e: Event) => {
-            try {
-                e.preventDefault()
-                setDeferredPrompt(e as BeforeInstallPromptEvent)
+            if (!isIOS) {
+                try {
+                    e.preventDefault()
+                    setDeferredPrompt(e as BeforeInstallPromptEvent)
 
-                if (shouldShowPrompt()) {
-                    setShowPrompt(true)
-                    localStorage.setItem(
-                        'pwaPromptTime',
-                        new Date().getTime().toString()
-                    )
+                    if (shouldShowPrompt()) {
+                        setShowPrompt(true)
+                        localStorage.setItem(
+                            'pwaPromptTime',
+                            new Date().getTime().toString()
+                        )
+                    }
+                } catch (error) {
+                    console.error('Error handling install prompt:', error)
                 }
-            } catch (error) {
-                console.error('Error handling install prompt:', error)
             }
+        }
+
+        // Если это iOS - показываем кастомный промпт
+        if (isIOS && shouldShowPrompt()) {
+            setShowPrompt(true)
         }
 
         let mediaQuery: MediaQueryList | null = null
@@ -163,7 +191,7 @@ const PWAPrompt = () => {
 
     return (
         <AnimatePresence>
-            {showPrompt && (
+            {showPrompt && isMobile && (
                 <motion.div
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
