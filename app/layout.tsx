@@ -3,12 +3,13 @@ import PagesLayout from '@/components/layout/PageLayout'
 import { LoadingProvider } from '@/components/provider/CustomProviderSpinner'
 import ModalProvider from '@/components/provider/ModalProvider'
 import { Providers } from './providers'
+import GoogleAnalytics from '@/components/features/Analitics/GoogleAnalitycs'
 import './globalStyles/normalize.css'
 import './globalStyles/globals.css'
 import './globalStyles/popup.css'
 import './globalStyles/cookie-popup.css'
 import './globalStyles/posts.css'
-import GoogleAnalytics from '@/components/features/Analitics/GoogleAnalitycs'
+import PWAPrompt from '@/components/common/PWAPrompt/PWAPrompt'
 
 export const metadata: Metadata = {
     metadataBase: new URL('https://asiamotors.su'),
@@ -117,7 +118,10 @@ export default function RootLayout({
                 <Providers>
                     <PagesLayout>
                         <LoadingProvider>
-                            <ModalProvider>{children}</ModalProvider>
+                            <ModalProvider>
+                                {children}
+                                <PWAPrompt />
+                            </ModalProvider>
                         </LoadingProvider>
                     </PagesLayout>
                 </Providers>
