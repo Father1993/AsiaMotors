@@ -1,8 +1,14 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+
+// Расширяем интерфейс Navigator для iOS
+interface NavigatorWithStandalone extends Navigator {
+    standalone?: boolean
+}
 
 interface BeforeInstallPromptEvent extends Event {
     prompt: () => Promise<void>
@@ -16,26 +22,35 @@ const PWAPrompt = () => {
     const [isInstalled, setIsInstalled] = useState(false)
 
     useEffect(() => {
-        // Проверяем, что код выполняется в браузере
-        if (typeof window === 'undefined') return
+        const isMobile = () => {
+            const userAgent = window.navigator.userAgent.toLowerCase()
+            return /iphone|ipad|ipod|android|mobile|phone/i.test(userAgent)
+        }
 
-        // Проверяем, запущено ли приложение как PWA
+        if (typeof window === 'undefined' || !isMobile()) return
+
+        const isIOS = /iphone|ipad|ipod/i.test(
+            window.navigator.userAgent.toLowerCase()
+        )
+
         const checkIfInstalled = () => {
             try {
-                const isStandalone =
-                    window.matchMedia('(display-mode: standalone)').matches ||
-                    (window.navigator as any).standalone || // Для iOS
-                    document.referrer.includes('android-app://') // Для Android
+                if (isIOS) {
+                    // Правильное приведение типов для iOS
+                    const nav = window.navigator as NavigatorWithStandalone
+                    return nav.standalone === true
+                }
 
-                setIsInstalled(isStandalone)
-                return isStandalone
+                return (
+                    window.matchMedia('(display-mode: standalone)').matches ||
+                    document.referrer.includes('android-app://')
+                )
             } catch (error) {
                 console.error('Error checking PWA status:', error)
                 return false
             }
         }
 
-        // Проверяем, нужно ли показывать промпт
         const shouldShowPrompt = () => {
             try {
                 const lastPromptTime = localStorage.getItem('pwaPromptTime')
