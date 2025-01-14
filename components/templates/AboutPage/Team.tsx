@@ -1,10 +1,34 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { teamOffices } from '@/shared/constants/team'
+import CustomSkeleton from '@/components/common/ImageSkeleton/CustomSkeleton'
 
 const Team = () => {
     const [currentOffice, setCurrentOffice] = useState(teamOffices[0])
+    // Изменим на объект для отслеживания загрузки каждого изображения
+    const [loadingImages, setLoadingImages] = useState<{
+        [key: string]: boolean
+    }>({})
+
+    useEffect(() => {
+        // При смене офиса устанавливаем все изображения как загружающиеся
+        const initialLoadingState = currentOffice.members.reduce(
+            (acc, member) => {
+                acc[member.image] = true
+                return acc
+            },
+            {} as { [key: string]: boolean }
+        )
+        setLoadingImages(initialLoadingState)
+    }, [currentOffice])
+
+    const handleImageLoad = (imageSrc: string) => {
+        setLoadingImages((prev) => ({
+            ...prev,
+            [imageSrc]: false,
+        }))
+    }
 
     return (
         <section className="mb-16">
@@ -59,15 +83,30 @@ const Team = () => {
                         whileHover={{ scale: 1.05 }}
                         className="bg-white rounded-2xl p-6 shadow-lg text-center w-[300px]"
                     >
-                        <Image
-                            src={member.image}
-                            alt={member.name}
-                            width={300}
-                            height={300}
-                            className="rounded-full mx-auto mb-4 w-48 h-48 object-cover"
-                            quality={75}
-                            loading="lazy"
-                        />
+                        <div className="relative w-48 h-48 mx-auto mb-4">
+                            {loadingImages[member.image] && (
+                                <div className="absolute inset-0 z-10">
+                                    <CustomSkeleton />
+                                </div>
+                            )}
+                            <Image
+                                src={member.image}
+                                alt={member.name}
+                                width={300}
+                                height={300}
+                                className={`rounded-full object-cover w-full h-full transition-all duration-500 ${
+                                    loadingImages[member.image]
+                                        ? 'opacity-0 scale-105 blur-sm'
+                                        : 'opacity-100 scale-100 blur-0'
+                                }`}
+                                quality={75}
+                                loading="lazy"
+                                onLoadingComplete={() =>
+                                    handleImageLoad(member.image)
+                                }
+                                onLoad={() => handleImageLoad(member.image)}
+                            />
+                        </div>
                         <h3 className="text-xl font-bold">{member.name}</h3>
                         <p className="text-gray-600 mb-3">{member.role}</p>
                         <p className="text-sm text-gray-500">

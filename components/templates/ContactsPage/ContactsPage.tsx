@@ -1,7 +1,6 @@
-/* eslint-disable @next/next/no-img-element */
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import {
@@ -27,8 +26,10 @@ import SahalinMap from '@/components/common/Maps/SahalinMap'
 import KamchatkaMap from '@/components/common/Maps/KamchatkaMap'
 import SuifenheMap from '@/components/common/Maps/SuifenheMap'
 import HarbinMap from '@/components/common/Maps/HarbinMap'
+import CustomSkeleton from '@/components/common/ImageSkeleton/CustomSkeleton'
 
 const ContactsPage = () => {
+    const [imageLoading, setImageLoading] = useState(true)
     const MapComponents = {
         khv: KhvMap,
         vdk: VdkMap,
@@ -44,6 +45,10 @@ const ContactsPage = () => {
 
     // Получаем компонент карты на основе текущего офиса
     const CurrentMap = MapComponents[currentOffice.mapComponent]
+
+    useEffect(() => {
+        setImageLoading(true)
+    }, [selectedOffice])
 
     return (
         <>
@@ -104,14 +109,23 @@ const ContactsPage = () => {
                             {/* Информация об офисе */}
                             <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
                                 <div className="relative h-64 mb-8 rounded-2xl overflow-hidden">
+                                    {imageLoading && <CustomSkeleton />}
                                     <Image
                                         src={currentOffice.image}
                                         alt={`Офис Asia Motors в городе ${currentOffice.city}`}
-                                        className="object-cover"
+                                        className={`object-cover transition-all duration-500 ${
+                                            imageLoading
+                                                ? 'opacity-0 scale-105 blur-sm'
+                                                : 'opacity-100 scale-100 blur-0'
+                                        }`}
                                         fill
                                         sizes="(max-width: 768px) 100vw, 50vw"
                                         priority={true}
                                         quality={75}
+                                        onLoadingComplete={() =>
+                                            setImageLoading(false)
+                                        }
+                                        onLoad={() => setImageLoading(false)}
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                                     <div className="absolute bottom-6 left-6 right-6 text-white">
