@@ -32,6 +32,7 @@ import SimilarCars from '@/components/features/SimilarCars/SimilarCars'
 import { OrderCarModal } from '../OrderCarModal'
 import { Car } from '@/shared/types/adminTypes'
 import News from '@/components/features/News/News'
+import FAQ from '@/components/features/Faq/FAQ'
 
 interface CarPageProps {
     car: Car
@@ -475,6 +476,7 @@ const CarPageClient = ({ car, allCars }: CarPageProps) => {
                 </div>
             </div>
             <News />
+            <FAQ />
         </div>
     )
 }

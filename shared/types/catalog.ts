@@ -1,3 +1,5 @@
+import { Car as Cars } from '@/shared/types/adminTypes'
+
 export type CountryId = 'china' | 'japan' | 'korea' | 'europe'
 
 export interface Country {
@@ -86,4 +88,9 @@ export type PageParams = {
         slug: string
     }
     searchParams?: { [key: string]: string | string[] | undefined }
+}
+
+export interface CarPageProps {
+    car: Cars
+    allCars: Cars[]
 }
