@@ -112,6 +112,12 @@ export default function RootLayout({
     return (
         <html lang="ru">
             <head>
+                <link
+                    rel="alternate"
+                    type="application/rss+xml"
+                    title="RSS"
+                    href="/api/turbo-feed"
+                />
                 <GoogleAnalytics />
             </head>
             <body suppressHydrationWarning>
