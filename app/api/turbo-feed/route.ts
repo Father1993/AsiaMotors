@@ -2,7 +2,7 @@ import { getAllPosts } from '@/shared/utils/posts'
 
 async function generateTurboContent() {
     const domain = 'asiamotors.su'
-    const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https'
+    const protocol = 'https'
     const baseUrl = `${protocol}://${domain}`
 
     // Получаем все посты блога
