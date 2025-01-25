@@ -4,12 +4,12 @@ import { LoadingProvider } from '@/components/provider/CustomProviderSpinner'
 import ModalProvider from '@/components/provider/ModalProvider'
 import { Providers } from './providers'
 import GoogleAnalytics from '@/components/features/Analitics/GoogleAnalitycs'
+import PWAPrompt from '@/components/common/PWAPrompt/PWAPrompt'
 import './globalStyles/normalize.css'
 import './globalStyles/globals.css'
 import './globalStyles/popup.css'
 import './globalStyles/cookie-popup.css'
 import './globalStyles/posts.css'
-import PWAPrompt from '@/components/common/PWAPrompt/PWAPrompt'
 
 export const metadata: Metadata = {
     metadataBase: new URL('https://asiamotors.su'),
@@ -112,12 +112,6 @@ export default function RootLayout({
     return (
         <html lang="ru">
             <head>
-                <link
-                    rel="alternate"
-                    type="application/rss+xml"
-                    title="RSS"
-                    href="/api/turbo-feed"
-                />
                 <GoogleAnalytics />
             </head>
             <body suppressHydrationWarning>
