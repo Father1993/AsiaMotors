@@ -13,12 +13,6 @@ import { CATALOG } from '@/shared/constants/breadcrumbs'
 import { Car, Country } from '@/shared/types/adminTypes'
 import { CarCardSkeleton } from '@/components/common/SkeletonCatalog/CarCardSkeleton'
 
-// Создаем клиент с отключенным кешированием
-const supabaseNoCache = supabase.from('cars').select('*', {
-    head: false,
-    count: 'exact',
-})
-
 const CatalogPage = () => {
     const [countries, setCountries] = useState<Country[]>([])
     const [selectedCountry, setSelectedCountry] = useState<string>('china')
@@ -32,6 +26,7 @@ const CatalogPage = () => {
     async function fetchCarsFromDB() {
         try {
             setIsLoading(true)
+
             // Получаем страны
             const { data: countriesData, error: countriesError } =
                 await supabase.from('countries').select('*')
@@ -43,16 +38,21 @@ const CatalogPage = () => {
 
             setCountries(countriesData || [])
 
-            // Получаем автомобили без кеширования
-            const { data: carsData, error: carsError } = await supabaseNoCache
+            // Получаем автомобили
+            const { data: carsData, error: carsError } = await supabase
+                .from('cars')
+                .select('*')
 
             if (carsError) {
                 toast.error(`Ошибка загрузки автомобилей: ${carsError.message}`)
                 return
             }
 
-            setCars(carsData || [])
-        } catch {
+            if (Array.isArray(carsData)) {
+                setCars(carsData)
+            }
+        } catch (error) {
+            console.error('Ошибка при загрузке данных:', error)
             toast.error('Произошла ошибка при загрузке данных')
         } finally {
             setIsLoading(false)
@@ -61,18 +61,29 @@ const CatalogPage = () => {
 
     // Вызываем функцию при монтировании компонента
     useEffect(() => {
-        fetchCarsFromDB()
+        let mounted = true
+
+        const loadData = async () => {
+            try {
+                await fetchCarsFromDB()
+            } catch (error) {
+                console.error('Ошибка при загрузке данных:', error)
+            }
+        }
+
+        loadData()
 
         // Обновляем данные при возврате на вкладку
         const handleVisibilityChange = () => {
-            if (document.visibilityState === 'visible') {
-                fetchCarsFromDB()
+            if (document.visibilityState === 'visible' && mounted) {
+                loadData()
             }
         }
 
         document.addEventListener('visibilitychange', handleVisibilityChange)
 
         return () => {
+            mounted = false
             document.removeEventListener(
                 'visibilitychange',
                 handleVisibilityChange
