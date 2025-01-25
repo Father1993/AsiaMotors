@@ -26,6 +26,7 @@ const CatalogPage = () => {
     async function fetchCarsFromDB() {
         try {
             setIsLoading(true)
+
             // Получаем страны
             const { data: countriesData, error: countriesError } =
                 await supabase.from('countries').select('*')
@@ -47,8 +48,11 @@ const CatalogPage = () => {
                 return
             }
 
-            setCars(carsData || [])
-        } catch {
+            if (Array.isArray(carsData)) {
+                setCars(carsData)
+            }
+        } catch (error) {
+            console.error('Ошибка при загрузке данных:', error)
             toast.error('Произошла ошибка при загрузке данных')
         } finally {
             setIsLoading(false)
@@ -57,7 +61,34 @@ const CatalogPage = () => {
 
     // Вызываем функцию при монтировании компонента
     useEffect(() => {
-        fetchCarsFromDB()
+        let mounted = true
+
+        const loadData = async () => {
+            try {
+                await fetchCarsFromDB()
+            } catch (error) {
+                console.error('Ошибка при загрузке данных:', error)
+            }
+        }
+
+        loadData()
+
+        // Обновляем данные при возврате на вкладку
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'visible' && mounted) {
+                loadData()
+            }
+        }
+
+        document.addEventListener('visibilitychange', handleVisibilityChange)
+
+        return () => {
+            mounted = false
+            document.removeEventListener(
+                'visibilitychange',
+                handleVisibilityChange
+            )
+        }
     }, [])
 
     // Переменные для фильтра
