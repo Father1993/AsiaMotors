@@ -13,6 +13,12 @@ import { CATALOG } from '@/shared/constants/breadcrumbs'
 import { Car, Country } from '@/shared/types/adminTypes'
 import { CarCardSkeleton } from '@/components/common/SkeletonCatalog/CarCardSkeleton'
 
+// Создаем клиент с отключенным кешированием
+const supabaseNoCache = supabase.from('cars').select('*', {
+    head: false,
+    count: 'exact',
+})
+
 const CatalogPage = () => {
     const [countries, setCountries] = useState<Country[]>([])
     const [selectedCountry, setSelectedCountry] = useState<string>('china')
@@ -37,10 +43,8 @@ const CatalogPage = () => {
 
             setCountries(countriesData || [])
 
-            // Получаем автомобили
-            const { data: carsData, error: carsError } = await supabase
-                .from('cars')
-                .select('*')
+            // Получаем автомобили без кеширования
+            const { data: carsData, error: carsError } = await supabaseNoCache
 
             if (carsError) {
                 toast.error(`Ошибка загрузки автомобилей: ${carsError.message}`)
@@ -58,6 +62,22 @@ const CatalogPage = () => {
     // Вызываем функцию при монтировании компонента
     useEffect(() => {
         fetchCarsFromDB()
+
+        // Обновляем данные при возврате на вкладку
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'visible') {
+                fetchCarsFromDB()
+            }
+        }
+
+        document.addEventListener('visibilitychange', handleVisibilityChange)
+
+        return () => {
+            document.removeEventListener(
+                'visibilitychange',
+                handleVisibilityChange
+            )
+        }
     }, [])
 
     // Переменные для фильтра
