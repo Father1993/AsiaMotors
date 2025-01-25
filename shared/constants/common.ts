@@ -53,3 +53,26 @@ export const errorVariants = {
         },
     },
 }
+
+export const toastConfig = {
+    duration: 3000,
+
+    style: {
+        padding: '16px',
+        borderRadius: '12px',
+        background: '#333',
+        color: '#fff',
+    },
+
+    success: {
+        style: {
+            background: '#10B981',
+        },
+    },
+
+    error: {
+        style: {
+            background: '#EF4444',
+        },
+    },
+}

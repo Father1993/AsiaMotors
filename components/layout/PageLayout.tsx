@@ -5,6 +5,7 @@ import { Toaster } from 'react-hot-toast'
 import { motion, AnimatePresence } from 'framer-motion'
 import Layout from './Layout'
 import CookieAlert from '../features/CookieAlert/CookieAlert'
+import { toastConfig } from '@/shared/constants/common'
 
 const PagesLayout = ({ children }: { children: React.ReactNode }) => {
     const [cookieAlertOpen, setCookieAlertOpen] = useState(false)
@@ -18,33 +19,6 @@ const PagesLayout = ({ children }: { children: React.ReactNode }) => {
             return () => clearTimeout(timer)
         }
     }, [])
-
-    const toastConfig = {
-        // Увеличенная длительность для лучшей читаемости
-        duration: 4000,
-
-        // Базовые стили для всех тостов
-        style: {
-            padding: '16px',
-            borderRadius: '12px',
-            background: '#333',
-            color: '#fff',
-        },
-
-        // Стили для успешных уведомлений
-        success: {
-            style: {
-                background: '#10B981',
-            },
-        },
-
-        // Стили для ошибок
-        error: {
-            style: {
-                background: '#EF4444',
-            },
-        },
-    }
 
     return (
         <>
