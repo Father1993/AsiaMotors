@@ -13,7 +13,7 @@ const Benefits = () => {
                         Почему выбирают AsiaMotors
                     </h2>
                     <p className="text-lg text-gray-600">
-                        Более 270 довольных клиентов доверили нам покупку
+                        Более 700 довольных клиентов доверили нам покупку
                         автомобиля из Китая
                     </p>
                 </div>
@@ -46,8 +46,9 @@ const Benefits = () => {
                         <div className="text-center border-b sm:border-b-0 sm:border-r border-gray-200 pb-4 sm:pb-0">
                             <div className="text-4xl font-bold text-red-600">
                                 <AnimatedCounter
-                                    startValue={270}
-                                    maxValue={300}
+                                    startValue={700}
+                                    maxValue={750}
+                                    interval={10000}
                                     className="text-4xl font-bold"
                                 />
                             </div>
@@ -57,7 +58,7 @@ const Benefits = () => {
                         </div>
                         <div className="text-center border-b sm:border-b-0 sm:border-r border-gray-200 pb-4 sm:pb-0">
                             <div className="text-4xl font-bold text-red-600">
-                                2+
+                                3+
                             </div>
                             <div className="text-sm text-gray-600">
                                 Года на рынке
