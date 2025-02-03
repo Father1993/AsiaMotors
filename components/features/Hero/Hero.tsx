@@ -35,7 +35,7 @@ const Hero: React.FC = () => {
     }, [count, words.length])
 
     return (
-        <section className="relative min-h-screen bg-white pb-10 mt-8">
+        <section className="relative min-h-screen pb-10 mt-8">
             <div className="container mx-auto px-4">
                 <div className="flex min-h-screen gap-4">
                     {/* Левая часть с текстом */}
