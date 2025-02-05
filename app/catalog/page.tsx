@@ -1,6 +1,8 @@
 import { Metadata } from 'next'
 import CatalogPage from '@/components/templates/CatalogPage/CatalogPage'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
     title: 'Каталог автомобилей из Китая | Новые авто 2024 | AsiaMotors',
     description:

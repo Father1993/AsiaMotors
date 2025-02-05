@@ -6,6 +6,9 @@ import CarPageClient from '@/components/templates/CatalogPage/CarPage/CarPage.cl
 import { supabase } from '@/shared/lib/superbase/client'
 import { PageProps } from '@/shared/types/common'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 // Функция для безопасного получения slug
 async function getSlug(params: PageProps['params']) {
     const resolvedParams = params instanceof Promise ? await params : params
