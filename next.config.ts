@@ -1,12 +1,21 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-    // Включаем кеширование статических ресурсов
+    // Отключаем кеширование для динамических страниц
     staticPageGenerationTimeout: 1000,
 
     // Настройка заголовков кеширования
     async headers() {
         return [
+            {
+                source: '/catalog/:path*',
+                headers: [
+                    {
+                        key: 'Cache-Control',
+                        value: 'no-store, must-revalidate',
+                    },
+                ],
+            },
             {
                 source: '/:all*(svg|jpg|png|webp|gif)',
                 headers: [
