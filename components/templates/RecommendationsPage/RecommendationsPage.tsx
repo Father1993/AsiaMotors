@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import ArrowLeft from '@/components/ui/ArrowLeft'
 
+/* eslint-disable react/no-unescaped-entities */
 const RecommendationsPage = () => (
     <section className="container mx-auto">
         <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden my-10">
