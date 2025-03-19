@@ -6,13 +6,13 @@ import {
     PhoneIcon,
     EnvelopeIcon,
     MapPinIcon,
+    IdentificationIcon,
 } from '@heroicons/react/24/outline'
 import YoutubeIcon from '@/components/ui/YoutubeIcon'
 import WhatsAppIcon from '@/components/ui/WhatsAppIcon'
 import VkIcon from '@/components/ui/VkIcon'
 import TelegramIcon from '@/components/ui/TelegramIcon'
 import Logo from '@/components/common/Logo/Logo'
-import CompanyCard from '@/components/ui/Footer/CompanyCardIcon'
 import PrivacyPolicyIcon from '@/components/ui/Footer/PrivacyPolicyIcon'
 import ImportIcon from '@/components/ui/Footer/ImportIcon'
 import RutubeIconFooter from '@/components/ui/Footer/RutubeFooterIcon'
@@ -42,38 +42,6 @@ const Footer = () => {
                         `,
                 }}
             />
-            {/* Добавляем счетчик Mail.ru */}
-            <Script
-                id="mail-counter"
-                strategy="afterInteractive"
-                dangerouslySetInnerHTML={{
-                    __html: `
-                        var _tmr = window._tmr || (window._tmr = []);
-                        _tmr.push({id: "3588897", type: "pageView", start: (new Date()).getTime()});
-                        (function (d, w, id) {
-                            if (d.getElementById(id)) return;
-                            var ts = d.createElement("script"); ts.type = "text/javascript"; ts.async = true; ts.id = id;
-                            ts.src = "https://top-fwz1.mail.ru/js/code.js";
-                            var f = function () {var s = d.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ts, s);};
-                            if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); }
-                        })(document, window, "tmr-code");
-                    `,
-                }}
-            />
-
-            {/* Добавляем noscript для Mail.ru */}
-            <noscript>
-                <div>
-                    <img
-                        src="https://top-fwz1.mail.ru/counter?id=3588897;js=na"
-                        style={{
-                            position: 'absolute',
-                            left: '-9999px',
-                        }}
-                        alt="Top.Mail.Ru"
-                    />
-                </div>
-            </noscript>
 
             <noscript>
                 <div>
@@ -340,26 +308,35 @@ const Footer = () => {
                         </div>
 
                         {/* Документы */}
-                        <div className="text-sm space-y-2">
-                            <h4 className="text-white font-medium mb-3">
+                        <div className="text-sm space-y-1">
+                            <h4 className="text-white font-medium mb-2">
                                 Документы
                             </h4>
-                            <div className="flex flex-col space-y-1.5">
+                            <div className="grid grid-cols-2 gap-x-2 gap-y-1">
                                 <Link
                                     href="/about#company-card"
-                                    className="hover:text-red-500 transition-colors flex items-center gap-2 w-fit"
+                                    className="hover:text-red-500 transition-colors text-xs flex items-center"
                                 >
-                                    <CompanyCard />
-                                    Карточка предприятия
+                                    <IdentificationIcon className="w-4 h-4" />
+                                    <span className="ml-1">
+                                        Карточка предприятия
+                                    </span>
                                 </Link>
                                 <Link
-                                    href="/privacy"
-                                    className="hover:text-red-500 transition-colors flex items-center gap-2 w-fit"
+                                    href="/legal"
+                                    className="hover:text-red-500 transition-colors text-xs flex items-center"
                                 >
                                     <PrivacyPolicyIcon />
-                                    Политика конфиденциальности
+                                    <span className="ml-1">
+                                        Правовая информация
+                                    </span>
                                 </Link>
                             </div>
+                            <p className="text-xs text-gray-500 mt-1">
+                                На странице правовой информации вы найдете все
+                                необходимые документы: соглашения, политики и
+                                согласия.
+                            </p>
                         </div>
 
                         {/* Статус компании */}

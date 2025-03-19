@@ -31,6 +31,10 @@ const CookieAlert = ({ setCookieAlertOpen }: CookieAlertProps) => {
                     className="underline hover:text-blue-600"
                 >
                     политикой использования файлов cookie
+                </a>{' '}
+                и нашим{' '}
+                <a href="/terms" className="underline hover:text-blue-600">
+                    пользовательским соглашением
                 </a>
                 . Вы можете изменить настройки cookie в любое время в настройках
                 вашего браузера.

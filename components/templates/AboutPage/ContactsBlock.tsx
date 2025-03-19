@@ -23,6 +23,7 @@ const ContactsBlock = () => {
     const [phone, setPhone] = useState('')
     const [nameError, setNameError] = useState('')
     const [phoneError, setPhoneError] = useState('')
+    const [consentChecked, setConsentChecked] = useState(false)
     const {
         formRef,
         isLoading: isSubmitting,
@@ -66,6 +67,11 @@ const ContactsBlock = () => {
             setPhoneError('')
         }
 
+        // Проверка согласия
+        if (!consentChecked) {
+            isValid = false
+        }
+
         return isValid
     }
 
@@ -83,6 +89,13 @@ const ContactsBlock = () => {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (!validateForm() || isSubmitting) return
+
+        if (!consentChecked) {
+            alert(
+                'Пожалуйста, подтвердите согласие на обработку персональных данных'
+            )
+            return
+        }
 
         const templateParams = {
             form_name: 'Форма консультации',
@@ -173,11 +186,46 @@ const ContactsBlock = () => {
                                     )}
                                 </div>
 
+                                <div className="flex items-start mt-4">
+                                    <input
+                                        type="checkbox"
+                                        id="consent"
+                                        checked={consentChecked}
+                                        onChange={() =>
+                                            setConsentChecked(!consentChecked)
+                                        }
+                                        className="mt-1 h-4 w-4 border border-gray-300 rounded-sm text-red-500 
+                                        focus:ring-red-500"
+                                        required
+                                    />
+                                    <label
+                                        htmlFor="consent"
+                                        className="ml-2 block text-xs sm:text-sm text-white/70"
+                                    >
+                                        Я согласен на{' '}
+                                        <a
+                                            href="/consent"
+                                            target="_blank"
+                                            className="text-red-400 hover:underline"
+                                        >
+                                            обработку персональных данных
+                                        </a>{' '}
+                                        и принимаю{' '}
+                                        <a
+                                            href="/terms"
+                                            target="_blank"
+                                            className="text-red-400 hover:underline"
+                                        >
+                                            пользовательское соглашение
+                                        </a>
+                                    </label>
+                                </div>
+
                                 <motion.button
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
                                     type="submit"
-                                    disabled={isSubmitting}
+                                    disabled={isSubmitting || !consentChecked}
                                     className="w-full py-3 sm:py-4 px-6 sm:px-8 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl sm:rounded-2xl text-sm sm:text-base font-medium shadow-xl shadow-red-500/20 hover:shadow-red-500/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {isSubmitting

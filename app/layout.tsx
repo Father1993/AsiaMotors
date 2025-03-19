@@ -3,7 +3,6 @@ import PagesLayout from '@/components/layout/PageLayout'
 import { LoadingProvider } from '@/components/provider/CustomProviderSpinner'
 import ModalProvider from '@/components/provider/ModalProvider'
 import { Providers } from './providers'
-import GoogleAnalytics from '@/components/features/Analitics/GoogleAnalitycs'
 import PWAPrompt from '@/components/common/PWAPrompt/PWAPrompt'
 import './globalStyles/normalize.css'
 import './globalStyles/globals.css'
@@ -111,9 +110,6 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="ru">
-            <head>
-                <GoogleAnalytics />
-            </head>
             <body suppressHydrationWarning>
                 <Providers>
                     <PagesLayout>
