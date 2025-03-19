@@ -290,7 +290,8 @@ const Footer = () => {
                             </h4>
                             <div className="flex flex-col space-y-1.5">
                                 <p itemProp="legalName">
-                                    © 2024 ООО "Азия моторс"
+                                    © 2022 - {new Date().getFullYear()} ООО
+                                    "Азия моторс"
                                 </p>
                                 <div className="flex items-center space-x-4">
                                     <p>
