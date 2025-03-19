@@ -1,5 +1,5 @@
 'use client'
-import { FormEvent } from 'react'
+import { FormEvent, useState } from 'react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { FiShoppingCart } from 'react-icons/fi'
@@ -15,8 +15,18 @@ import { sparesEmailConfig } from '@/shared/config/emailService'
 
 const SparesPage = () => {
     const { formRef, isLoading, sendEmail } = useEmailService(sparesEmailConfig)
+    const [consentChecked, setConsentChecked] = useState(false)
+
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
+
+        if (!consentChecked) {
+            alert(
+                'Пожалуйста, подтвердите согласие на обработку персональных данных'
+            )
+            return
+        }
+
         const form = formRef.current
         if (!form) return
         const templateParams = {
@@ -32,6 +42,7 @@ const SparesPage = () => {
         }
         await sendEmail(() => {
             form.reset()
+            setConsentChecked(false)
         }, templateParams)
     }
     return (
@@ -431,12 +442,47 @@ const SparesPage = () => {
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
-                                className="flex justify-center mt-8"
+                                className="flex flex-col items-center mt-8"
                             >
+                                <div className="flex items-start mb-4 w-full max-w-md">
+                                    <input
+                                        type="checkbox"
+                                        id="consent"
+                                        checked={consentChecked}
+                                        onChange={() =>
+                                            setConsentChecked(!consentChecked)
+                                        }
+                                        className="mt-1 h-4 w-4 border border-white rounded-sm text-red-600 
+                                        focus:ring-red-500 bg-white/20"
+                                        required
+                                    />
+                                    <label
+                                        htmlFor="consent"
+                                        className="ml-2 block text-sm text-white/80"
+                                    >
+                                        Я согласен на{' '}
+                                        <a
+                                            href="/consent"
+                                            target="_blank"
+                                            className="text-white hover:underline"
+                                        >
+                                            обработку персональных данных
+                                        </a>{' '}
+                                        и принимаю{' '}
+                                        <a
+                                            href="/terms"
+                                            target="_blank"
+                                            className="text-white hover:underline"
+                                        >
+                                            пользовательское соглашение
+                                        </a>
+                                    </label>
+                                </div>
+
                                 <motion.button
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
-                                    disabled={isLoading}
+                                    disabled={isLoading || !consentChecked}
                                     className="px-8 py-4 bg-white text-red-600 rounded-xl font-medium
                                     hover:bg-gray-100 transition-colors flex items-center gap-2
                                     disabled:opacity-70 disabled:cursor-not-allowed"

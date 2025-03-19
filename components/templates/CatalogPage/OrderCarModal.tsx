@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 import toast from 'react-hot-toast'
 import { Dialog, Transition } from '@headlessui/react'
 import { useEmailService } from '@/shared/hooks/useEmailService'
@@ -9,6 +9,7 @@ import { PatternFormat } from 'react-number-format'
 
 export const OrderCarModal = ({ isOpen, onClose, car }: OrderCarModalProps) => {
     const { formRef, isLoading, sendEmail } = useEmailService(emailConfig)
+    const [consentChecked, setConsentChecked] = useState(false)
 
     const validatePhone = (phone: string) => {
         const phoneRegex = /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/
@@ -25,13 +26,26 @@ export const OrderCarModal = ({ isOpen, onClose, car }: OrderCarModalProps) => {
             return
         }
 
-        await sendEmail(onClose, {
-            form_name: 'Форма заказа автомобиля',
-            user_name: formData.get('name') as string,
-            user_phone: formData.get('phone') as string,
-            message: formData.get('message') as string,
-            car_model: car.brand + ' ' + car.model,
-        })
+        if (!consentChecked) {
+            toast.error(
+                'Пожалуйста, подтвердите согласие на обработку персональных данных'
+            )
+            return
+        }
+
+        await sendEmail(
+            () => {
+                onClose()
+                setConsentChecked(false)
+            },
+            {
+                form_name: 'Форма заказа автомобиля',
+                user_name: formData.get('name') as string,
+                user_phone: formData.get('phone') as string,
+                message: formData.get('message') as string,
+                car_model: car.brand + ' ' + car.model,
+            }
+        )
     }
 
     return (
@@ -140,6 +154,46 @@ export const OrderCarModal = ({ isOpen, onClose, car }: OrderCarModalProps) => {
                                         />
                                     </div>
 
+                                    <div>
+                                        <div className="flex items-start mt-6 mb-4">
+                                            <input
+                                                type="checkbox"
+                                                id="order_consent"
+                                                checked={consentChecked}
+                                                onChange={() =>
+                                                    setConsentChecked(
+                                                        !consentChecked
+                                                    )
+                                                }
+                                                className="mt-1 h-4 w-4 border border-gray-300 rounded-sm text-red-600 
+                                                focus:ring-red-500"
+                                                required
+                                            />
+                                            <label
+                                                htmlFor="order_consent"
+                                                className="ml-2 block text-sm text-gray-600"
+                                            >
+                                                Я согласен на{' '}
+                                                <a
+                                                    href="/consent"
+                                                    target="_blank"
+                                                    className="text-red-500 hover:underline"
+                                                >
+                                                    обработку персональных
+                                                    данных
+                                                </a>{' '}
+                                                и принимаю{' '}
+                                                <a
+                                                    href="/terms"
+                                                    target="_blank"
+                                                    className="text-red-500 hover:underline"
+                                                >
+                                                    пользовательское соглашение
+                                                </a>
+                                            </label>
+                                        </div>
+                                    </div>
+
                                     <div className="flex gap-4 mt-6">
                                         <button
                                             type="button"
@@ -150,7 +204,9 @@ export const OrderCarModal = ({ isOpen, onClose, car }: OrderCarModalProps) => {
                                         </button>
                                         <button
                                             type="submit"
-                                            disabled={isLoading}
+                                            disabled={
+                                                isLoading || !consentChecked
+                                            }
                                             className="flex-1 px-4 py-3 text-white bg-red-500 rounded-xl hover:bg-red-600 transition-colors disabled:opacity-50"
                                         >
                                             {isLoading

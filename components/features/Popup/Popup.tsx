@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
-import { FormEvent, useEffect } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FiX, FiUser, FiPhone, FiMapPin } from 'react-icons/fi'
 import { PricePopupProps } from '@/shared/types/common'
@@ -11,6 +11,7 @@ import { emailConfig } from '@/shared/config/emailService'
 const Popup = ({ isOpen, onClose }: PricePopupProps) => {
     // Заменяем локальное состояние на хук useEmailService
     const { formRef, isLoading, sendEmail } = useEmailService(emailConfig)
+    const [consentChecked, setConsentChecked] = useState(false)
 
     useEffect(() => {
         if (isOpen) {
@@ -26,6 +27,14 @@ const Popup = ({ isOpen, onClose }: PricePopupProps) => {
     // Обновляем handleSubmit для использования sendEmail из хука
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
+
+        if (!consentChecked) {
+            alert(
+                'Пожалуйста, подтвердите согласие на обработку персональных данных'
+            )
+            return
+        }
+
         const form = formRef.current
         if (!form) return
 
@@ -151,10 +160,45 @@ const Popup = ({ isOpen, onClose }: PricePopupProps) => {
                                 />
                             </div>
 
+                            <div className="flex items-start mt-4">
+                                <input
+                                    type="checkbox"
+                                    id="consent"
+                                    checked={consentChecked}
+                                    onChange={() =>
+                                        setConsentChecked(!consentChecked)
+                                    }
+                                    className="mt-1 h-4 w-4 border border-gray-300 rounded-sm text-red-600 
+                                    focus:ring-red-500"
+                                    required
+                                />
+                                <label
+                                    htmlFor="consent"
+                                    className="ml-2 block text-sm text-gray-600"
+                                >
+                                    Я согласен на{' '}
+                                    <a
+                                        href="/consent"
+                                        target="_blank"
+                                        className="text-red-500 hover:underline"
+                                    >
+                                        обработку персональных данных
+                                    </a>{' '}
+                                    и принимаю{' '}
+                                    <a
+                                        href="/terms"
+                                        target="_blank"
+                                        className="text-red-500 hover:underline"
+                                    >
+                                        пользовательское соглашение
+                                    </a>
+                                </label>
+                            </div>
+
                             <motion.button
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
-                                disabled={isLoading}
+                                disabled={isLoading || !consentChecked}
                                 className="w-full py-4 bg-gradient-to-r from-red-600 to-purple-600
                                 text-white font-medium rounded-xl shadow-lg shadow-red-500/30
                                 hover:shadow-xl hover:shadow-red-500/40 transition-all duration-300
@@ -178,16 +222,6 @@ const Popup = ({ isOpen, onClose }: PricePopupProps) => {
                                     'Отправить заявку'
                                 )}
                             </motion.button>
-
-                            <p className="text-xs text-gray-500 text-center mt-4">
-                                Нажимая кнопку, вы соглашаетесь с{' '}
-                                <a
-                                    href="/privacy"
-                                    className="text-red-500 hover:underline"
-                                >
-                                    политикой конфиденциальности
-                                </a>
-                            </p>
                         </form>
                     </motion.div>
                 </>

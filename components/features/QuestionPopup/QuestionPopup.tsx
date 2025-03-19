@@ -1,6 +1,6 @@
 'use client'
 
-import { FormEvent, useEffect } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FiX, FiUser, FiPhone, FiMessageSquare } from 'react-icons/fi'
 import { PricePopupProps } from '@/shared/types/common'
@@ -9,6 +9,7 @@ import { emailConfig } from '@/shared/config/emailService'
 
 const QuestionPopup = ({ isOpen, onClose }: PricePopupProps) => {
     const { formRef, isLoading, sendEmail } = useEmailService(emailConfig)
+    const [consentChecked, setConsentChecked] = useState(false)
 
     useEffect(() => {
         if (isOpen) {
@@ -23,6 +24,14 @@ const QuestionPopup = ({ isOpen, onClose }: PricePopupProps) => {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
+
+        if (!consentChecked) {
+            alert(
+                'Пожалуйста, подтвердите согласие на обработку персональных данных'
+            )
+            return
+        }
+
         const form = formRef.current
         if (!form) return
 
@@ -33,7 +42,10 @@ const QuestionPopup = ({ isOpen, onClose }: PricePopupProps) => {
             message: form.message.value,
         }
 
-        await sendEmail(onClose, templateParams)
+        await sendEmail(() => {
+            onClose()
+            setConsentChecked(false)
+        }, templateParams)
     }
 
     return (
@@ -141,10 +153,45 @@ const QuestionPopup = ({ isOpen, onClose }: PricePopupProps) => {
                                 />
                             </div>
 
+                            <div className="flex items-start mt-4">
+                                <input
+                                    type="checkbox"
+                                    id="question_consent"
+                                    checked={consentChecked}
+                                    onChange={() =>
+                                        setConsentChecked(!consentChecked)
+                                    }
+                                    className="mt-1 h-4 w-4 border border-gray-300 rounded-sm text-blue-600 
+                                    focus:ring-blue-500"
+                                    required
+                                />
+                                <label
+                                    htmlFor="question_consent"
+                                    className="ml-2 block text-sm text-gray-600"
+                                >
+                                    Я согласен на{' '}
+                                    <a
+                                        href="/consent"
+                                        target="_blank"
+                                        className="text-blue-500 hover:underline"
+                                    >
+                                        обработку персональных данных
+                                    </a>{' '}
+                                    и принимаю{' '}
+                                    <a
+                                        href="/terms"
+                                        target="_blank"
+                                        className="text-blue-500 hover:underline"
+                                    >
+                                        пользовательское соглашение
+                                    </a>
+                                </label>
+                            </div>
+
                             <motion.button
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
-                                disabled={isLoading}
+                                disabled={isLoading || !consentChecked}
                                 className="w-full py-4 bg-gradient-to-r from-red-600 to-purple-600
                                 text-white font-medium rounded-xl shadow-lg shadow-red-500/30
                                 hover:shadow-xl hover:shadow-red-500/40 transition-all duration-300
