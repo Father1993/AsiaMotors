@@ -1,0 +1,54 @@
+# Системные файлы
+.DS_Store
+*.pem
+
+# Зависимости
+node_modules
+.pnp
+.pnp.js
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# Тестирование
+coverage
+
+# Next.js
+.next/
+out/
+
+# Логи
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Локальные env файлы
+.env*.local
+# Закомментировано, чтобы .env был доступен при сборке
+# .env
+
+# Верификационные файлы
+.vercel
+
+# Typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# Git файлы
+.git
+.github
+
+# Временные файлы разработки
+.vscode
+.idea
+*.swp
+*.swo
+
+# Директории, не нужные в Docker
+README.md
+.eslintrc.json
+.prettierrc
+.editorconfig 
