@@ -13,8 +13,8 @@ RUN yarn install --frozen-lockfile
 # Копирование исходного кода приложения
 COPY . .
 
-# Создание пустого .env.local файла вместо копирования
-RUN touch .env.local
+# Создаем копию .env.production для сборки
+RUN cp .env.production .env.local
 
 # Отключение ограничения памяти для Node.js при сборке
 ENV NODE_OPTIONS="--max-old-space-size=4096"
@@ -38,7 +38,6 @@ COPY --from=builder /app/package.json ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/.env.local ./
 
 # Указываем порт, который будет прослушивать приложение
 # Это требование Timeweb Cloud для работы с Nginx
