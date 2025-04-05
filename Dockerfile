@@ -39,7 +39,8 @@ ENV NODE_OPTIONS="--max-old-space-size=1024"
 
 # Копирование только необходимых файлов от builder
 COPY --from=builder /app/next.config.ts ./
-COPY --from=builder /app/package.json ./yarn.lock ./
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/yarn.lock ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
 
@@ -47,8 +48,7 @@ COPY --from=builder /app/.next ./.next
 RUN yarn install --frozen-lockfile --production=true --prefer-offline
 
 # Указываем порт, который будет прослушивать приложение
-# Это требование Timeweb Cloud для работы с Nginx
 EXPOSE 3000
 
 # Запуск приложения с оптимизацией памяти
-CMD ["node", "--optimize_for_size", "--gc_interval=100", "node_modules/.bin/next", "start"] 
+CMD ["node", "--optimize_for_size", "--gc_interval=100", "node_modules/.bin/next", "start"]
