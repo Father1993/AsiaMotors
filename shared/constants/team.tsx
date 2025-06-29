@@ -76,13 +76,6 @@ export const teamMembersKhv = [
             </>
         ),
     },
-    {
-        name: 'Спиней Андрей',
-        role: 'Разработка/Маркетинг',
-        image: '/img/team/Andrej.webp',
-        description:
-            'Специализируется на комплексной веб-разработке и digital-маркетингу',
-    },
 ]
 
 {

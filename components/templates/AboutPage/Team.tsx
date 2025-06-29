@@ -35,7 +35,7 @@ const Team = () => {
             <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">
                 Команда
             </h2>
-            {/* Современный переключатель офисов */}
+            {/* Переключатель офисов */}
             <div className="flex flex-wrap justify-center gap-3 mb-12 p-2 bg-gray-50 rounded-2xl max-w-5xl mx-auto">
                 {teamOffices.map((office) => (
                     <button
