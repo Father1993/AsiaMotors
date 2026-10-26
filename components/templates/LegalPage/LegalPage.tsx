@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, type ReactElement } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import {
@@ -15,7 +15,7 @@ interface LegalDocument {
     title: string
     description: string
     path: string
-    icon: JSX.Element
+    icon: ReactElement
 }
 
 const LegalPage = () => {

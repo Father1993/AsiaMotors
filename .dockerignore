@@ -27,8 +27,9 @@ yarn-error.log*
 
 # Локальные env файлы
 .env*.local
-# Закомментировано, чтобы .env был доступен при сборке
-# .env
+.env
+.env.*
+!.env.example
 
 # Верификационные файлы
 .vercel
@@ -49,6 +50,5 @@ next-env.d.ts
 
 # Директории, не нужные в Docker
 README.md
-.eslintrc.json
 .prettierrc
 .editorconfig 

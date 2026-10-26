@@ -1,6 +1,8 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
+    output: 'standalone',
+
     // Отключаем кеширование для динамических страниц
     staticPageGenerationTimeout: 1000,
 
@@ -18,15 +20,6 @@ const nextConfig: NextConfig = {
             },
             {
                 source: '/:all*(svg|jpg|png|webp|gif)',
-                headers: [
-                    {
-                        key: 'Cache-Control',
-                        value: 'public, max-age=31536000, immutable',
-                    },
-                ],
-            },
-            {
-                source: '/_next/static/:path*',
                 headers: [
                     {
                         key: 'Cache-Control',
@@ -57,11 +50,12 @@ const nextConfig: NextConfig = {
 
     // Настройки изображений
     images: {
-        domains: [
-            'asiamotors.su',
-            'zyhimbzmgypjlzydvelv.supabase.co', // Существующий домен
-        ],
         remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'asiamotors.su',
+                pathname: '/**',
+            },
             {
                 protocol: 'https',
                 hostname: '*.supabase.co',
@@ -69,6 +63,7 @@ const nextConfig: NextConfig = {
             },
         ],
         formats: ['image/webp'],
+        qualities: [65, 75],
         deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
         imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     },

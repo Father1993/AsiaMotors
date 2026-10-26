@@ -9,8 +9,11 @@ export const COUNTRY_NAMES: Record<CountryId, string> = {
 
 export interface Database {
     public: {
+        Views: Record<string, never>
+        Functions: Record<string, never>
         Tables: {
             countries: {
+                Relationships: []
                 Row: {
                     id: CountryId
                     name: string
@@ -25,6 +28,7 @@ export interface Database {
                 }
             }
             cars: {
+                Relationships: []
                 Row: {
                     id: string
                     country_id: CountryId
@@ -53,7 +57,11 @@ export interface Database {
                 Insert: Omit<
                     Database['public']['Tables']['cars']['Row'],
                     'id' | 'created_at' | 'updated_at'
-                >
+                > & {
+                    id?: string
+                    created_at?: string
+                    updated_at?: string
+                }
                 Update: Partial<Database['public']['Tables']['cars']['Insert']>
             }
         }

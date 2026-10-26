@@ -1,47 +1,27 @@
-# Этап 1: Базовый образ для зависимостей и сборки
-FROM node:18-alpine AS builder
-
-# Установка рабочей директории
+# syntax=docker/dockerfile:1
+FROM node:24-alpine AS dependencies
 WORKDIR /app
-
-# Установка необходимых зависимостей для совместимости
 RUN apk add --no-cache libc6-compat
+COPY package.json package-lock.json ./
+RUN npm ci --no-audit --no-fund
 
-# Копирование package.json и yarn.lock
-COPY package.json yarn.lock ./
-
-# Установка зависимостей с улучшенными параметрами
-RUN yarn install
-
-# Копирование исходного кода приложения
+FROM dependencies AS builder
+ENV NEXT_TELEMETRY_DISABLED=1
 COPY . .
+# Build-time credentials are mounted temporarily and never copied into a layer.
+RUN --mount=type=secret,id=app_env,target=/app/.env.production,required=true \
+    npm run build && rm -f .next/standalone/.env*
 
-# Сборка приложения
-RUN yarn build
-
-# Этап 2: Создание production образа
-FROM node:18-alpine AS runner
-
-# Установка рабочей директории
+FROM node:24-alpine AS runner
 WORKDIR /app
-
-ENV PORT=3000
-ENV NODE_ENV=production
-
-# Установка необходимых зависимостей
-RUN apk add --no-cache libc6-compat curl
-
-# Копирование необходимых файлов от builder
-# Копируем только известный конфигурационный файл next.config.ts
-COPY --from=builder /app/next.config.ts ./
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/yarn.lock ./
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-
-# Это требование Timeweb Cloud для работы с Nginx
+ENV NODE_ENV=production \
+    NEXT_TELEMETRY_DISABLED=1 \
+    PORT=3000 \
+    HOSTNAME=0.0.0.0
+RUN apk add --no-cache libc6-compat
+COPY --from=builder --chown=node:node /app/public ./public
+COPY --from=builder --chown=node:node /app/.next/standalone ./
+COPY --from=builder --chown=node:node /app/.next/static ./.next/static
+USER node
 EXPOSE 3000
-
-# Запуск приложения
-CMD ["yarn", "start"] 
+CMD ["node", "server.js"]
