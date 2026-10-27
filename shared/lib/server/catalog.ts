@@ -1,9 +1,11 @@
 import 'server-only'
 import { database } from './db'
 import type { Car, Country } from '@/shared/types/adminTypes'
-export async function listCars(): Promise<Car[]> {
+export async function listPublishedCars(): Promise<Car[]> {
     const { rows } = await database().query(
-        'SELECT * FROM cars ORDER BY created_at DESC, id'
+        `SELECT id,country_id,brand,model,year,category,price,equipment,
+                images,specs,available,created_at,updated_at
+         FROM cars WHERE status='published' ORDER BY created_at DESC, id`
     )
     return rows.map((r) => ({
         ...r,

@@ -54,3 +54,6 @@ README.md
 .secrets/
 backups/
 uploads/
+.test-uploads/
+test-results/
+playwright-report/

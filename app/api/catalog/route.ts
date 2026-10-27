@@ -1,10 +1,10 @@
-import { listCars, listCountries } from '@/shared/lib/server/catalog'
+import { listPublishedCars, listCountries } from '@/shared/lib/server/catalog'
 import { apiError } from '@/shared/lib/server/http'
 export const dynamic = 'force-dynamic'
 export async function GET() {
     try {
         const [cars, countries] = await Promise.all([
-            listCars(),
+            listPublishedCars(),
             listCountries(),
         ])
         return Response.json(

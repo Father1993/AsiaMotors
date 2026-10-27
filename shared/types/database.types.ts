@@ -1,4 +1,5 @@
 export type CountryId = 'china' | 'japan' | 'korea' | 'europe'
+export type CarStatus = 'draft' | 'published' | 'hidden'
 
 export const COUNTRY_NAMES: Record<CountryId, string> = {
     china: 'Китай',
@@ -36,4 +37,9 @@ export interface CarRecord {
     available: boolean
     created_at: string
     updated_at: string
+}
+
+export interface AdminCarRecord extends CarRecord {
+    status: CarStatus
+    version: number
 }

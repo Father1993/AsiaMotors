@@ -10,7 +10,8 @@ export async function GET(
         return new Response(null, { status: 404 })
     try {
         const bytes = await readFile(
-            path.join(process.env.UPLOAD_DIR || '/app/uploads', name)
+            // Runtime volume, not a file to include in the standalone image.
+            /* turbopackIgnore: true */ path.join(/* turbopackIgnore: true */ process.env.UPLOAD_DIR || '/app/uploads', name)
         )
         return new Response(new Uint8Array(bytes), {
             headers: {

@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { generateCarSlug } from '@/shared/utils/catalog'
 import CarPageClient from '@/components/templates/CatalogPage/CarPage/CarPage.client'
-import { listCars } from '@/shared/lib/server/catalog'
+import { listPublishedCars } from '@/shared/lib/server/catalog'
 import { PageProps } from '@/shared/types/common'
 
 export const dynamic = 'force-dynamic'
@@ -15,7 +15,7 @@ async function getSlug(params: PageProps['params']) {
 }
 
 async function getCarBySlug(slug: string) {
-    return (await listCars()).find(car => generateCarSlug(car) === slug) || null
+    return (await listPublishedCars()).find(car => generateCarSlug(car) === slug) || null
 }
 
 export async function generateMetadata({
@@ -83,7 +83,7 @@ export async function generateMetadata({
 
 export default async function CarPage({ params }: PageProps) {
     const slug = await getSlug(params)
-    const allCars = await listCars()
+    const allCars = await listPublishedCars()
     const car = allCars?.find((car) => generateCarSlug(car) === slug)
 
     if (!car || !allCars) {

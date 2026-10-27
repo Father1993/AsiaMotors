@@ -3,10 +3,12 @@ services:
   db:
     ports: ["127.0.0.1:35432:5432"]
   web:
+    volumes: !override ["./.test-uploads:/app/uploads"]
     ports: !override ["127.0.0.1:3110:3000"]
     environment:
       NEXTAUTH_URL: http://127.0.0.1:3110
   mail-worker:
+    volumes: !override ["./.test-uploads:/app/uploads"]
     environment:
       MAIL_DELIVERY_ENABLED: "true"
       SMTP_HOST: smtp

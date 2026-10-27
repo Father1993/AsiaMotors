@@ -35,11 +35,11 @@ export async function saveCar(input: unknown, id?: string) {
         ]
         const result = id
             ? await client.query(
-                  `UPDATE cars SET country_id=$1,brand=$2,model=$3,year=$4,category=$5,price=$6,equipment=$7,images=$8,specs=$9,available=$10,updated_at=now() WHERE id=$11 RETURNING *`,
+                  `UPDATE cars SET country_id=$1,brand=$2,model=$3,year=$4,category=$5,price=$6,equipment=$7,images=$8,specs=$9,available=$10,updated_at=now(),version=version+1 WHERE id=$11 RETURNING *`,
                   [...values, id]
               )
             : await client.query(
-                  `INSERT INTO cars(country_id,brand,model,year,category,price,equipment,images,specs,available) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *`,
+                  `INSERT INTO cars(country_id,brand,model,year,category,price,equipment,images,specs,available,status) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,'published') RETURNING *`,
                   values
               )
         if (!result.rowCount) throw new HttpError(404, 'Автомобиль не найден')
