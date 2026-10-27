@@ -48,3 +48,8 @@ next-env.d.ts
 .secrets/
 backups/
 uploads/
+
+# Browser test output and local upload fixtures
+/test-results/
+/playwright-report/
+/.test-uploads/

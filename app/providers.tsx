@@ -2,8 +2,8 @@
 
 import { ReactNode } from 'react'
 import { SessionProvider } from 'next-auth/react'
-import { LoadingContext } from '@/components/provider/LoadingContext'
-import ModalProvider from '@/components/provider/ModalProvider'
+import { Toaster } from 'react-hot-toast'
+import { toastConfig } from '@/shared/constants/common'
 
 interface ProvidersProps {
     children: ReactNode
@@ -12,11 +12,8 @@ interface ProvidersProps {
 export function Providers({ children }: ProvidersProps) {
     return (
         <SessionProvider>
-            <LoadingContext.Provider
-                value={{ isLoading: false, setIsLoading: () => {} }}
-            >
-                <ModalProvider>{children}</ModalProvider>
-            </LoadingContext.Provider>
+            {children}
+            <Toaster position="bottom-center" toastOptions={toastConfig} />
         </SessionProvider>
     )
 }

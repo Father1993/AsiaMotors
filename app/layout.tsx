@@ -1,9 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import PagesLayout from '@/components/layout/PageLayout'
-import { LoadingProvider } from '@/components/provider/CustomProviderSpinner'
-import ModalProvider from '@/components/provider/ModalProvider'
 import { Providers } from './providers'
-import PWAPrompt from '@/components/common/PWAPrompt/PWAPrompt'
 import './globalStyles/normalize.css'
 import './globalStyles/globals.css'
 import './globalStyles/popup.css'
@@ -100,7 +96,6 @@ export const viewport: Viewport = {
     themeColor: 'white',
     width: 'device-width',
     initialScale: 1,
-    maximumScale: 1,
 }
 
 export default function RootLayout({
@@ -111,16 +106,7 @@ export default function RootLayout({
     return (
         <html lang="ru">
             <body suppressHydrationWarning>
-                <Providers>
-                    <PagesLayout>
-                        <LoadingProvider>
-                            <ModalProvider>
-                                {children}
-                                <PWAPrompt />
-                            </ModalProvider>
-                        </LoadingProvider>
-                    </PagesLayout>
-                </Providers>
+                <Providers>{children}</Providers>
             </body>
         </html>
     )

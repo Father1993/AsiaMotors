@@ -85,7 +85,7 @@ export default function AdminPage() {
     return (
         <div className="container py-16">
             <Link href="/admin/requests" className="inline-block mt-10 text-blue-700 underline">Заявки с сайта</Link>
-            <div className="flex justify-between items-center mb-6 mt-10">
+            <div className="flex flex-wrap gap-4 justify-between items-center mb-6 mt-10">
                 <div>
                     <h1 className="text-2xl font-bold">
                         Управление автомобилями

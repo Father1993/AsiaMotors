@@ -1,0 +1,61 @@
+.admin-shell {
+    --admin-canvas: #f5f6f7;
+    --admin-paper: #fff;
+    --admin-ink: #20252b;
+    --admin-muted: #626b76;
+    --admin-line: #dce0e5;
+    --admin-accent: #b4232a;
+    --admin-accent-soft: #fff0ef;
+    --admin-success: #176344;
+    min-height: 100dvh;
+    background: var(--admin-canvas);
+    color: var(--admin-ink);
+    font: 400 14px/1.5 'Asiamotors Inter', sans-serif;
+    color-scheme: light;
+}
+.admin-shell h1 { font: 700 28px/1.2 'Asiamotors Montserrat', sans-serif; letter-spacing: -.025em; }
+.admin-shell h2 { font: 600 20px/1.4 'Asiamotors Inter', sans-serif; }
+.admin-shell h3 { font: 600 16px/1.4 'Asiamotors Inter', sans-serif; }
+.admin-shell :is(button, a, input, select, textarea):focus-visible { outline: 3px solid var(--admin-accent); outline-offset: 3px; }
+.admin-shell :is(button, a) { touch-action: manipulation; }
+.admin-header { display: flex; flex-wrap: wrap; align-items: center; gap: 24px; padding: 12px 32px; background: var(--admin-paper); border-bottom: 1px solid var(--admin-line); }
+.admin-logo { flex-shrink: 0; display: flex; align-items: center; gap: 16px; font-weight: 600; }
+.admin-logo span { max-width: 110px; font-size: 12px; color: var(--admin-muted); }
+.admin-nav { display: flex; gap: 4px; }
+.admin-nav a { padding: 12px 16px; border-radius: 8px; font-weight: 600; }
+.admin-nav a[aria-current] { color: var(--admin-accent); background: var(--admin-accent-soft); }
+.admin-account { margin-left: auto; display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+.admin-main { max-width: 1360px; margin: auto; padding: 40px 32px 80px; }
+.admin-muted { color: var(--admin-muted); }
+.admin-button { display: inline-flex; justify-content: center; align-items: center; gap: 8px; min-height: 44px; padding: 10px 16px; border: 1px solid var(--admin-line); border-radius: 8px; background: var(--admin-paper); color: var(--admin-ink); font-weight: 600; text-align: center; }
+.admin-button:hover { background: var(--admin-canvas); }
+.admin-button-primary { background: var(--admin-accent); border-color: var(--admin-accent); color: white; }
+.admin-button-primary:hover { background: #961d23; }
+.admin-button-danger { color: var(--admin-accent); }
+.admin-button-quiet { border-color: transparent; background: transparent; }
+.admin-button:disabled { opacity: .5; cursor: not-allowed; }
+.admin-panel { background: var(--admin-paper); border: 1px solid var(--admin-line); border-radius: 12px; padding: 24px; }
+.admin-titlebar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
+.admin-titlebar p { margin-top: 8px; }
+.admin-fields { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 20px; }
+.admin-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.admin-field label { font-weight: 600; }
+.admin-field :is(input, select, textarea), .admin-input { width: 100%; min-height: 48px; padding: 10px 12px; border: 1px solid #aeb6c0; border-radius: 8px; background: var(--admin-paper); color: var(--admin-ink); font-size: 16px; }
+.admin-field textarea { resize: vertical; min-height: 100px; }
+.admin-field [aria-invalid=true] { border-color: var(--admin-accent); }
+.admin-field-error { color: var(--admin-accent); font-size: 13px; }
+.admin-notice { padding: 16px; border-radius: 8px; background: var(--admin-accent-soft); color: #832026; }
+.admin-skip { position: fixed; top: -100px; left: 16px; z-index: 100; padding: 12px; background: var(--admin-paper); }
+.admin-skip:focus { top: 12px; }
+@media (max-width: 767px) {
+    .admin-header { padding: 12px 16px; gap: 12px; }
+    .admin-logo { flex: 1 0 100%; }
+    .admin-account { width: 100%; margin-left: 0; gap: 8px; justify-content: space-between; }
+    .admin-email { display: none; }
+    .admin-nav { order: 3; width: 100%; }
+    .admin-nav a { flex: 1; text-align: center; }
+    .admin-main { padding: 24px 16px 64px; }
+    .admin-shell h1 { font-size: 24px; }
+    .admin-panel { padding: 16px; }
+    .admin-fields { grid-template-columns: minmax(0,1fr); }
+}

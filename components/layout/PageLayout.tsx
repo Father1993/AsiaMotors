@@ -1,11 +1,9 @@
 'use client'
 import { useEffect, useState } from 'react'
 import Next13ProgressBar from 'next13-progressbar'
-import { Toaster } from 'react-hot-toast'
 import { motion, AnimatePresence } from 'framer-motion'
 import Layout from './Layout'
 import CookieAlert from '../features/CookieAlert/CookieAlert'
-import { toastConfig } from '@/shared/constants/common'
 
 const PagesLayout = ({ children }: { children: React.ReactNode }) => {
     const [cookieAlertOpen, setCookieAlertOpen] = useState(false)
@@ -22,7 +20,6 @@ const PagesLayout = ({ children }: { children: React.ReactNode }) => {
 
     return (
         <>
-            <Toaster position="bottom-center" toastOptions={toastConfig} />
             <Next13ProgressBar height="4px" color="#2F3136" showOnShallow />
             <Layout>
                 <main>{children}</main>
