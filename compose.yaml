@@ -71,6 +71,7 @@ services:
     restart: unless-stopped
     environment:
       <<: *db-environment
+      MAIL_DELIVERY_ENABLED: ${MAIL_DELIVERY_ENABLED:-false}
       SMTP_HOST: smtp.yandex.ru
       SMTP_PORT: "465"
       SMTP_SECURE: "true"

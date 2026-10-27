@@ -35,7 +35,7 @@ printf '%s\n' "$smtp_app_password" > .secrets/smtp_password
 unset smtp_app_password
 chmod 444 .secrets/smtp_password
 sudo docker compose run --rm --no-deps mail-worker node scripts/mail-worker.mjs --verify
-sudo docker compose up -d --force-recreate mail-worker
+sudo sh scripts/deploy.sh --with-mail
 ```
 
 Verification authenticates only; it does not send a message. SMTP 535 means the
@@ -46,11 +46,19 @@ not proven until working credentials are supplied and a test is received.
 ## Deployment
 
 ```sh
-sudo sh scripts/deploy.sh
+sudo sh scripts/deploy.sh --without-mail
 ```
 
-The script builds web/worker/migration images, verifies SMTP credentials, then
-starts the stack. PostgreSQL has no published port. The web port remains bound
+By default (or with --without-mail), deployment starts the database, website and
+housekeeping worker without contacting SMTP. Requests and pending mail jobs are
+saved; no email attempts are made. The switch is persisted as
+MAIL_DELIVERY_ENABLED=false in the private .env. Automatic container restarts do
+not turn mail on.
+
+After setting up Yandex, explicitly run `sudo sh scripts/deploy.sh --with-mail`.
+This builds the images, verifies SMTP authentication, then enables delivery.
+Previously queued requests will also be sent, subject to the retention policy.
+The script builds web/worker/migration images, then starts the stack. PostgreSQL has no published port. The web port remains bound
 to 127.0.0.1:3000 behind the existing Nginx HTTPS site. Migrations are transactional,
 checksummed and serialized with an advisory lock. Only migrations use a database
 administrator; the app/worker can modify application tables but cannot create

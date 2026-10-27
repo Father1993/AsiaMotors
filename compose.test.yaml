@@ -8,6 +8,7 @@ services:
       NEXTAUTH_URL: http://127.0.0.1:3110
   mail-worker:
     environment:
+      MAIL_DELIVERY_ENABLED: "true"
       SMTP_HOST: smtp
       SMTP_PORT: "2525"
       SMTP_SECURE: "false"

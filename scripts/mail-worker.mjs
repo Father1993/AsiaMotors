@@ -4,25 +4,34 @@ import { readFileSync } from 'node:fs'
 import { unlink } from 'node:fs/promises'
 import path from 'node:path'
 const db = pool()
-const smtp = nodemailer.createTransport({
-    host: process.env.SMTP_HOST || 'smtp.yandex.ru',
-    port: Number(process.env.SMTP_PORT || 465),
-    secure: process.env.SMTP_SECURE !== 'false',
-    auth: process.env.SMTP_USER
-        ? {
-              user: process.env.SMTP_USER,
-              pass: process.env.SMTP_PASSWORD_FILE
-                  ? readFileSync(process.env.SMTP_PASSWORD_FILE, 'utf8').trim()
-                  : process.env.SMTP_PASSWORD,
-          }
-        : undefined,
-    connectionTimeout: 10000,
-    greetingTimeout: 10000,
-    socketTimeout: 20000,
-    disableFileAccess: true,
-    disableUrlAccess: true,
-})
-if (process.argv.includes('--verify')) {
+const deliveryEnabled = process.env.MAIL_DELIVERY_ENABLED === 'true'
+const verifyOnly = process.argv.includes('--verify')
+const smtp =
+    deliveryEnabled || verifyOnly
+        ? nodemailer.createTransport({
+              host: process.env.SMTP_HOST || 'smtp.yandex.ru',
+              port: Number(process.env.SMTP_PORT || 465),
+              secure: process.env.SMTP_SECURE !== 'false',
+              auth: process.env.SMTP_USER
+                  ? {
+                        user: process.env.SMTP_USER,
+                        pass: process.env.SMTP_PASSWORD_FILE
+                            ? readFileSync(
+                                  process.env.SMTP_PASSWORD_FILE,
+                                  'utf8'
+                              ).trim()
+                            : process.env.SMTP_PASSWORD,
+                    }
+                  : undefined,
+              connectionTimeout: 10000,
+              greetingTimeout: 10000,
+              socketTimeout: 20000,
+              disableFileAccess: true,
+              disableUrlAccess: true,
+          })
+        : null
+
+if (verifyOnly) {
     try {
         await smtp.verify()
         console.log('SMTP authentication verified')
@@ -32,6 +41,8 @@ if (process.argv.includes('--verify')) {
     }
     await db.end()
 } else {
+    if (!deliveryEnabled)
+        console.log('Mail delivery disabled; housekeeping active')
     let stop = false
     process.on('SIGTERM', () => {
         stop = true
@@ -158,7 +169,7 @@ if (process.argv.includes('--verify')) {
     }
     while (!stop) {
         try {
-            await tick()
+            if (deliveryEnabled) await tick()
             if (Date.now() > maintenanceAt) {
                 await maintenance()
                 maintenanceAt = Date.now() + 3600000
@@ -168,6 +179,6 @@ if (process.argv.includes('--verify')) {
         }
         if (!stop) await new Promise((r) => setTimeout(r, 2000))
     }
-    smtp.close()
+    smtp?.close()
     await db.end()
 }
