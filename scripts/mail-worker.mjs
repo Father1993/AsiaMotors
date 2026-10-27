@@ -1,8 +1,7 @@
 import nodemailer from 'nodemailer'
 import { pool } from './runtime.mjs'
 import { readFileSync } from 'node:fs'
-import { unlink } from 'node:fs/promises'
-import path from 'node:path'
+import { cleanOrphanMedia } from './media-cleanup.mjs'
 const db = pool()
 const deliveryEnabled = process.env.MAIL_DELIVERY_ENABLED === 'true'
 const verifyOnly = process.argv.includes('--verify')
@@ -138,34 +137,7 @@ if (verifyOnly) {
         await db.query(
             `DELETE FROM request_limits WHERE window_start<now()-interval '1 day'`
         )
-        // Remove orphan media only after a grace period; serialize with car saves.
-        const c = await db.connect()
-        try {
-            await c.query('BEGIN')
-            const files =
-                await c.query(`SELECT filename FROM media m WHERE created_at<now()-interval '24 hours'
-              AND NOT EXISTS(SELECT 1 FROM cars c WHERE c.images @> ARRAY['/media/'||m.filename]) FOR UPDATE SKIP LOCKED`)
-            for (const f of files.rows) {
-                if (!/^[0-9a-f-]{36}\.webp$/.test(f.filename)) continue
-                await unlink(
-                    path.join(
-                        process.env.UPLOAD_DIR || '/app/uploads',
-                        f.filename
-                    )
-                ).catch((e) => {
-                    if (e.code !== 'ENOENT') throw e
-                })
-                await c.query('DELETE FROM media WHERE filename=$1', [
-                    f.filename,
-                ])
-            }
-            await c.query('COMMIT')
-        } catch (e) {
-            await c.query('ROLLBACK')
-            throw e
-        } finally {
-            c.release()
-        }
+        await cleanOrphanMedia(db, process.env.UPLOAD_DIR || '/app/uploads')
     }
     while (!stop) {
         try {

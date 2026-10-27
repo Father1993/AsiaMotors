@@ -5,30 +5,7 @@ const text = (max: number) =>
         .trim()
         .max(max)
         .refine((v) => !/[\x00-\x08\x0b\x0c\x0e-\x1f]/.test(v))
-const short = text(150).min(1)
-export const mediaPath = /^\/media\/[0-9a-f-]{36}\.webp$/
-export const carInput = z.object({
-    country_id: z.enum(['china', 'japan', 'korea', 'europe']),
-    brand: short,
-    model: short,
-    year: z.number().int().min(1900).max(2200),
-    category: short,
-    price: z.number().finite().min(0).max(999999999999),
-    equipment: text(3000).default(''),
-    images: z.array(z.string().regex(mediaPath)).min(1).max(30),
-    available: z.boolean(),
-    specs: z.object({
-        mileage: z.number().finite().min(0).max(1e8),
-        engineVolume: z.number().finite().min(0).max(100),
-        horsePower: z.number().finite().min(0).max(10000),
-        fuelType: short,
-        transmission: short,
-        driveType: short,
-        color: text(150).optional(),
-        generation: text(150).optional(),
-        features: z.array(text(300)).max(100).optional(),
-    }),
-})
+export { carInput, mediaPath } from '../car-schema'
 export const formNames = [
     'Форма расчета стоимости',
     'Форма специального предложения',

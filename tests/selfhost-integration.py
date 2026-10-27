@@ -43,12 +43,15 @@ status,data=upload(png);assert status==201,(status,data)
 image=data['url'];assert request(image)[0]==200
 assert upload(b'<svg onload="alert(1)"></svg>','test.svg')[0]==400
 car={'country_id':'china','brand':'Integration','model':'Test','year':2026,'category':'Кроссоверы','price':1000000,'equipment':'Проверка','images':[image],'available':True,'specs':{'mileage':0,'engineVolume':2,'horsePower':150,'fuelType':'Бензин','transmission':'Автомат','driveType':'Передний','color':'Белый','generation':'I','features':[]}}
+car.update({'id':str(uuid.uuid4()),'status':'published'})
 status,record=request('/api/cars','POST',car,admin);assert status==201,(status,record)
 carid=record['id'];assert request('/catalog/integration-test-2026-'+carid)[0]==200
-status,duplicate=request('/api/cars','POST',car,admin);assert status==201 and duplicate['id']!=carid
+status,duplicate=request('/api/cars','POST',{**car,'id':str(uuid.uuid4())},admin);assert status==201 and duplicate['id']!=carid
 assert request('/catalog/integration-test-2026-'+duplicate['id'])[0]==200
-assert request('/api/cars/'+duplicate['id'],'DELETE',client=admin)[0]==200
-car['price']=2000000;assert request('/api/cars/'+carid,'PUT',car,admin)[0]==200
+assert request('/api/cars/'+duplicate['id'],'DELETE',{'version':duplicate['version']},admin)[0]==200
+car.update({'price':2000000,'version':record['version']})
+status,updated=request('/api/cars/'+carid,'PUT',car,admin);assert status==200
+car['version']=updated['version']
 bad={**car,'images':['/media/'+str(uuid.uuid4())+'.webp']};assert request('/api/cars/'+carid,'PUT',bad,admin)[0]==400
 stored=[c for c in request('/api/catalog')[1]['cars'] if c['id']==carid][0];assert stored['images']==[image] and stored['price']==2000000
 Path('/tmp/asiamotors-test-car-id').write_text(carid)

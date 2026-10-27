@@ -36,7 +36,11 @@ try {
 
     // Exercise the actual public route, including its explicit public projection.
     for (const status of ['published', 'hidden', 'draft']) {
-        const car = (await client.query(insert)).rows[0]
+        const car = (await client.query(`INSERT INTO cars(country_id,brand,model,year,category,price,specs,images,status)
+            VALUES('japan','Publication test','Fixture',2020,'sedan',1000000,$1,$2,'draft') RETURNING *`, [
+            JSON.stringify({mileage:0,engineVolume:2,horsePower:150,fuelType:'Бензин',transmission:'Автомат',driveType:'Передний'}),
+            ['/media/' + randomUUID() + '.webp'],
+        ])).rows[0]
         ids.push(car.id)
         await client.query('UPDATE cars SET status=$1 WHERE id=$2', [status, car.id])
     }

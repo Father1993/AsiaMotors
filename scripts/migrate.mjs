@@ -40,8 +40,10 @@ try {
     await c.query(
         'GRANT SELECT,INSERT,UPDATE,DELETE ON countries,cars,media,leads,mail_outbox,request_limits TO asiamotors'
     )
-} catch {
-    console.error('Database migration failed')
+} catch (error) {
+    console.error('Database migration failed', error.code || '')
+    if (/^Incomplete published\/hidden car [0-9a-f-]{36}, repair before migration$/.test(error.message) || error.message === 'Migration checksum mismatch')
+        console.error(error.message)
     process.exitCode = 1
 } finally {
     await c.query('SELECT pg_advisory_unlock(27102026)').catch(() => {})

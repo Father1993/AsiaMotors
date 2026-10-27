@@ -18,6 +18,9 @@ export const generateCarSlug = (
     return `${slug}-${car.id}`
 }
 
+export const carIdFromSlug = (slug: string): string | null =>
+    slug.match(/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/i)?.[1].toLowerCase() || null
+
 export const formatPrice = (price: number) => {
     return new Intl.NumberFormat('ru-RU', {
         style: 'currency',

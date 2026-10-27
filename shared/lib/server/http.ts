@@ -6,7 +6,8 @@ import { ZodError } from 'zod'
 export class HttpError extends Error {
     constructor(
         public status: number,
-        message: string
+        message: string,
+        public fieldErrors?: Record<string, string[]>
     ) {
         super(message)
     }
@@ -66,12 +67,14 @@ export async function readJson(request: Request) {
 }
 export function apiError(error: unknown) {
     if (error instanceof HttpError)
-        return Response.json({ error: error.message }, { status: error.status })
-    if (error instanceof ZodError)
-        return Response.json(
-            { error: 'Проверьте заполнение полей' },
-            { status: 400 }
-        )
+        return Response.json({ error: error.message, fieldErrors: error.fieldErrors }, { status: error.status })
+    if (error instanceof ZodError) {
+        const fieldErrors: Record<string, string[]> = {}
+        for (const issue of error.issues) {
+            (fieldErrors[issue.path.join('.')] ??= []).push(issue.message)
+        }
+        return Response.json({ error: 'Проверьте заполнение полей', fieldErrors }, { status: 400 })
+    }
     console.error('API operation failed')
     return Response.json(
         { error: 'Сервис временно недоступен. Повторите позже.' },

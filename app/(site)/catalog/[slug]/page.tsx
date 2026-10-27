@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
-import { generateCarSlug } from '@/shared/utils/catalog'
+import { notFound, permanentRedirect } from 'next/navigation'
+import { generateCarSlug, carIdFromSlug } from '@/shared/utils/catalog'
 import CarPageClient from '@/components/templates/CatalogPage/CarPage/CarPage.client'
 import { listPublishedCars } from '@/shared/lib/server/catalog'
 import { PageProps } from '@/shared/types/common'
@@ -15,7 +15,8 @@ async function getSlug(params: PageProps['params']) {
 }
 
 async function getCarBySlug(slug: string) {
-    return (await listPublishedCars()).find(car => generateCarSlug(car) === slug) || null
+    const id = carIdFromSlug(slug)
+    return id ? (await listPublishedCars()).find(car => car.id === id) || null : null
 }
 
 export async function generateMetadata({
@@ -84,11 +85,13 @@ export async function generateMetadata({
 export default async function CarPage({ params }: PageProps) {
     const slug = await getSlug(params)
     const allCars = await listPublishedCars()
-    const car = allCars?.find((car) => generateCarSlug(car) === slug)
+    const car = allCars.find(car => car.id === carIdFromSlug(slug))
 
     if (!car || !allCars) {
         notFound()
     }
+
+    if (slug !== generateCarSlug(car)) permanentRedirect('/catalog/' + generateCarSlug(car))
 
     return <CarPageClient car={car} allCars={allCars} />
 }

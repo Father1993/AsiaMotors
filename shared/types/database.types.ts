@@ -13,33 +13,6 @@ export interface CountryRecord {
     name: string
 }
 
-export interface CarRecord {
-    id: string
-    country_id: CountryId
-    brand: string
-    model: string
-    year: number
-    category: string
-    price: number
-    equipment?: string
-    images: string[]
-    specs: {
-        mileage: number
-        engineVolume: number
-        fuelType: string
-        horsePower: number
-        transmission: string
-        driveType: string
-        color?: string
-        generation?: string
-        features?: string[]
-    }
-    available: boolean
-    created_at: string
-    updated_at: string
-}
-
-export interface AdminCarRecord extends CarRecord {
-    status: CarStatus
-    version: number
-}
+type RecordMetadata = { id: string; created_at: string; updated_at: string }
+export type CarRecord = import('../lib/car-schema').PublicCarData & RecordMetadata
+export type AdminCarRecord = import('../lib/car-schema').CarData & RecordMetadata & { version: number }

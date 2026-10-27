@@ -7,10 +7,8 @@ import { LoadingContext } from './LoadingContext'
 
 // Отдельный компонент для клиентской логики
 const ClientLoadingManager = ({
-    children,
     setIsLoading,
 }: {
-    children: React.ReactNode
     setIsLoading: (value: boolean) => void
 }) => {
     const pathname = usePathname()
@@ -24,7 +22,7 @@ const ClientLoadingManager = ({
         return () => clearTimeout(timer)
     }, [pathname, searchParams, setIsLoading])
 
-    return <>{children}</>
+    return null
 }
 
 export const LoadingProvider = ({
@@ -49,12 +47,11 @@ export const LoadingProvider = ({
 
     return (
         <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
-            <Suspense fallback={<GlobalSpinner />}>
-                <ClientLoadingManager setIsLoading={setIsLoading}>
-                    {isLoading && <GlobalSpinner />}
-                    {children}
-                </ClientLoadingManager>
+            <Suspense fallback={null}>
+                <ClientLoadingManager setIsLoading={setIsLoading} />
             </Suspense>
+            {isLoading && <GlobalSpinner />}
+            {children}
         </LoadingContext.Provider>
     )
 }
