@@ -29,7 +29,6 @@ yarn-error.log*
 .env*.local
 .env
 .env.*
-!.env.example
 
 # Верификационные файлы
 .vercel
@@ -51,4 +50,7 @@ next-env.d.ts
 # Директории, не нужные в Docker
 README.md
 .prettierrc
-.editorconfig 
+.editorconfig
+.secrets/
+backups/
+uploads/

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { supabase } from '@/shared/lib/superbase/client'
+import { loadCatalog } from '@/shared/lib/catalog-client'
 import { Car } from '@/shared/types/adminTypes'
 import Image from 'next/image'
 
@@ -10,16 +10,8 @@ const Test = () => {
     const [cars, setCars] = useState<Car[]>([])
 
     async function fetchData() {
-        const { data: carsData, error: carsError } = await supabase
-            .from('cars')
-            .select('*')
-
-        if (carsError) {
-            toast.error(`Ошибка загрузки автомобилей: ${carsError.message}`)
-            return
-        }
-
-        setCars(carsData || [])
+        try { setCars((await loadCatalog()).cars) }
+        catch { toast.error('Не удалось загрузить каталог') }
     }
 
     useEffect(() => {

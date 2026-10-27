@@ -1,7 +1,7 @@
-import { CountryId, Database } from './database.types'
+import { CountryId, CarRecord, CountryRecord } from './database.types'
 
-export type Car = Database['public']['Tables']['cars']['Row']
-export type Country = Database['public']['Tables']['countries']['Row']
+export type Car = CarRecord
+export type Country = CountryRecord
 
 export interface CarFormProps {
     car?: Car

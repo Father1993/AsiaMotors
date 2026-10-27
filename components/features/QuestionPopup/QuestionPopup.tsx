@@ -4,11 +4,11 @@ import { FormEvent, useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FiX, FiUser, FiPhone, FiMessageSquare } from 'react-icons/fi'
 import { PricePopupProps } from '@/shared/types/common'
-import { useEmailService } from '@/shared/hooks/useEmailService'
-import { emailConfig } from '@/shared/config/emailService'
+import LeadHoneypot from '@/components/features/LeadHoneypot'
+import { useLeadForm } from '@/shared/hooks/useLeadForm'
 
 const QuestionPopup = ({ isOpen, onClose }: PricePopupProps) => {
-    const { formRef, isLoading, sendEmail } = useEmailService(emailConfig)
+    const { formRef, isLoading, submitLead } = useLeadForm()
     const [consentChecked, setConsentChecked] = useState(false)
 
     useEffect(() => {
@@ -42,7 +42,7 @@ const QuestionPopup = ({ isOpen, onClose }: PricePopupProps) => {
             message: form.message.value,
         }
 
-        await sendEmail(() => {
+        await submitLead(() => {
             onClose()
             setConsentChecked(false)
         }, templateParams)
@@ -105,6 +105,7 @@ const QuestionPopup = ({ isOpen, onClose }: PricePopupProps) => {
                             onSubmit={handleSubmit}
                             className="space-y-4"
                         >
+                            <LeadHoneypot />
                             <div className="relative group">
                                 <FiUser
                                     className="absolute top-1/2 -translate-y-1/2 left-4 text-gray-400 

@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 import { CountryId } from '@/shared/types/database.types'
-import { supabase } from '@/shared/lib/superbase/client'
+import { apiRequest } from '@/shared/lib/catalog-client'
 import { categories } from '@/shared/types/catalog'
 import { FiUpload, FiX, FiX as FiClose } from 'react-icons/fi'
 import {
@@ -112,7 +112,6 @@ export const CarForm = ({
         if (!files || files.length === 0) return
 
         setUploadingImages(true)
-        const newImages: string[] = []
 
         try {
             for (const file of files) {
@@ -126,33 +125,14 @@ export const CarForm = ({
                     throw new Error('Можно загружать только изображения')
                 }
 
-                const fileExt = file.name.split('.').pop()
-                const fileName = `${Date.now()}-${Math.random()
-                    .toString(36)
-                    .substring(2)}.${fileExt}`
+                const upload = new globalThis.FormData()
+                upload.set('file', file)
+                const {url: publicUrl} = await apiRequest<{url:string}>('/api/uploads', {method:'POST', body:upload})
 
-                const { error: uploadError } = await supabase.storage
-                    .from('car-images')
-                    .upload(fileName, file, {
-                        cacheControl: '3600',
-                        upsert: false,
-                        contentType: file.type,
-                    })
-
-                if (uploadError) throw uploadError
-
-                const {
-                    data: { publicUrl },
-                } = supabase.storage.from('car-images').getPublicUrl(fileName)
-
-                newImages.push(publicUrl)
+                setFormData(prev => ({...prev, images:[...prev.images, publicUrl]}))
+                setPreviewImages(prev => [...prev, publicUrl])
             }
 
-            setFormData((prev) => ({
-                ...prev,
-                images: [...prev.images, ...newImages],
-            }))
-            setPreviewImages((prev) => [...prev, ...newImages])
             toast.success('Изображения успешно загружены')
         } catch (error) {
             toast.error(
@@ -171,15 +151,8 @@ export const CarForm = ({
     const handleRemoveImage = async (indexToRemove: number) => {
         const imageUrl = previewImages[indexToRemove]
         try {
-            const fileName = imageUrl.split('/').pop()
-            if (!fileName) throw new Error('Не удалось получить имя файла')
-
-            const { error: storageError } = await supabase.storage
-                .from('car-images')
-                .remove([fileName])
-
-            if (storageError) throw storageError
-
+            // Keep files until a saved edit detaches them; the worker collects orphans.
+            void imageUrl
             setFormData((prev) => ({
                 ...prev,
                 images: prev.images.filter(
@@ -208,34 +181,19 @@ export const CarForm = ({
             return
         }
 
+        if (!formData.images.length) {
+            setError('Добавьте хотя бы одну фотографию')
+            return
+        }
+
         setLoading(true)
 
         try {
-            const now = new Date().toISOString()
-
-            if (car) {
-                const { error: updateError } = await supabase
-                    .from('cars')
-                    .update({
-                        ...formData,
-                        updated_at: now,
-                    })
-                    .eq('id', car.id)
-
-                if (updateError) throw updateError
-                toast.success('Автомобиль успешно обновлен')
-            } else {
-                const { error: insertError } = await supabase
-                    .from('cars')
-                    .insert({
-                        ...formData,
-                        created_at: now,
-                        updated_at: now,
-                    })
-
-                if (insertError) throw insertError
-                toast.success('Автомобиль успешно добавлен')
-            }
+            await apiRequest(car ? '/api/cars/' + car.id : '/api/cars', {
+                method: car ? 'PUT' : 'POST', headers: {'Content-Type':'application/json'},
+                body: JSON.stringify(formData),
+            })
+            toast.success(car ? 'Автомобиль успешно обновлен' : 'Автомобиль успешно добавлен')
 
             onSubmit()
         } catch (error) {

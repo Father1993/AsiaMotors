@@ -4,7 +4,8 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { toast } from 'react-hot-toast'
-import { supabase } from '@/shared/lib/superbase/client'
+import { apiRequest, loadCatalog } from '@/shared/lib/catalog-client'
+import Link from 'next/link'
 import { FiEdit2, FiTrash2, FiPlus } from 'react-icons/fi'
 import { CarForm } from '@/components/templates/AdminPage/CarForm'
 import { Car, Country } from '@/shared/types/adminTypes'
@@ -58,81 +59,19 @@ export default function AdminPage() {
 
     async function fetchData() {
         try {
-            const { data: countriesData, error: countriesError } =
-                await supabase.from('countries').select('*')
-
-            if (countriesError) {
-                toast.error(`Ошибка загрузки стран: ${countriesError.message}`)
-                return
-            }
-
-            if (!countriesData || countriesData.length === 0) {
-                toast.error('Таблица стран пуста')
-                return
-            }
-
-            setCountries(countriesData)
-
-            const { data: carsData, error: carsError } = await supabase
-                .from('cars')
-                .select('*')
-
-            if (carsError) {
-                toast.error(`Ошибка загрузки автомобилей: ${carsError.message}`)
-                return
-            }
-
-            setCars(carsData || [])
-        } catch {
-            toast.error('Произошла ошибка при загрузке данных')
-        }
+            const data = await loadCatalog()
+            setCountries(data.countries)
+            setCars(data.cars)
+        } catch { toast.error('Не удалось загрузить каталог') }
     }
 
     const handleDelete = async (carId: string) => {
         if (!confirm('Вы уверены, что хотите удалить этот автомобиль?')) return
-
         try {
-            const { data: carData, error: fetchError } = await supabase
-                .from('cars')
-                .select('*')
-                .eq('id', carId)
-                .single()
-
-            if (fetchError) {
-                toast.error('Ошибка при получении данных автомобиля')
-                return
-            }
-
-            if (carData.images && carData.images.length > 0) {
-                for (const imageUrl of carData.images) {
-                    const fileName = imageUrl.split('/').pop()
-                    if (fileName) {
-                        const { error: storageError } = await supabase.storage
-                            .from('car-images')
-                            .remove([fileName])
-
-                        if (storageError) {
-                            toast.error('Ошибка при удалении изображений')
-                        }
-                    }
-                }
-            }
-
-            const { error: deleteError } = await supabase
-                .from('cars')
-                .delete()
-                .eq('id', carId)
-
-            if (deleteError) {
-                toast.error('Ошибка при удалении автомобиля')
-                return
-            }
-
-            setCars(cars.filter((car) => car.id !== carId))
+            await apiRequest('/api/cars/' + carId, {method:'DELETE'})
+            setCars(cars.filter(car => car.id !== carId))
             toast.success('Автомобиль успешно удален')
-        } catch {
-            toast.error('Произошла ошибка при удалении автомобиля')
-        }
+        } catch { toast.error('Не удалось удалить автомобиль') }
     }
 
     if (status === 'loading') {
@@ -145,6 +84,7 @@ export default function AdminPage() {
 
     return (
         <div className="container py-16">
+            <Link href="/admin/requests" className="inline-block mt-10 text-blue-700 underline">Заявки с сайта</Link>
             <div className="flex justify-between items-center mb-6 mt-10">
                 <div>
                     <h1 className="text-2xl font-bold">

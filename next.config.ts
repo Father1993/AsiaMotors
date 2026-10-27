@@ -56,11 +56,6 @@ const nextConfig: NextConfig = {
                 hostname: 'asiamotors.su',
                 pathname: '/**',
             },
-            {
-                protocol: 'https',
-                hostname: '*.supabase.co',
-                pathname: '/storage/v1/object/public/**',
-            },
         ],
         formats: ['image/webp'],
         qualities: [65, 75],

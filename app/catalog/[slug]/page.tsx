@@ -1,9 +1,8 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import toast from 'react-hot-toast'
 import { generateCarSlug } from '@/shared/utils/catalog'
 import CarPageClient from '@/components/templates/CatalogPage/CarPage/CarPage.client'
-import { supabase } from '@/shared/lib/superbase/client'
+import { listCars } from '@/shared/lib/server/catalog'
 import { PageProps } from '@/shared/types/common'
 
 export const dynamic = 'force-dynamic'
@@ -15,21 +14,8 @@ async function getSlug(params: PageProps['params']) {
     return resolvedParams.slug
 }
 
-// Функция для получения автомобиля по slug
 async function getCarBySlug(slug: string) {
-    try {
-        const { data: cars, error } = await supabase.from('cars').select('*')
-
-        if (error) {
-            toast.error('Ошибка получения данных автомобиля')
-            return null
-        }
-
-        return cars.find((car) => generateCarSlug(car) === slug) || null
-    } catch {
-        toast.error('Ошибка получения данных автомобиля')
-        return null
-    }
+    return (await listCars()).find(car => generateCarSlug(car) === slug) || null
 }
 
 export async function generateMetadata({
@@ -97,7 +83,7 @@ export async function generateMetadata({
 
 export default async function CarPage({ params }: PageProps) {
     const slug = await getSlug(params)
-    const { data: allCars } = await supabase.from('cars').select('*')
+    const allCars = await listCars()
     const car = allCars?.find((car) => generateCarSlug(car) === slug)
 
     if (!car || !allCars) {
@@ -105,13 +91,4 @@ export default async function CarPage({ params }: PageProps) {
     }
 
     return <CarPageClient car={car} allCars={allCars} />
-}
-
-// Генерация статических путей остается без изменений
-export async function generateStaticParams() {
-    const { data: cars } = await supabase.from('cars').select('*')
-
-    return (cars || []).map((car) => ({
-        slug: generateCarSlug(car),
-    }))
 }

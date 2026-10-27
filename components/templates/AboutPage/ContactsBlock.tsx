@@ -7,8 +7,8 @@ import { IMaskInput } from 'react-imask'
 import dynamic from 'next/dynamic'
 import { FaWhatsapp, FaTelegramPlane } from 'react-icons/fa'
 import { HiOutlineUser, HiOutlinePhone } from 'react-icons/hi'
-import { useEmailService } from '@/shared/hooks/useEmailService'
-import { emailConfig } from '@/shared/config/emailService'
+import LeadHoneypot from '@/components/features/LeadHoneypot'
+import { useLeadForm } from '@/shared/hooks/useLeadForm'
 
 const DynamicImage = dynamic(() => import('next/image'), {
     ssr: false,
@@ -27,8 +27,8 @@ const ContactsBlock = () => {
     const {
         formRef,
         isLoading: isSubmitting,
-        sendEmail,
-    } = useEmailService(emailConfig)
+        submitLead,
+    } = useLeadForm()
 
     useEffect(() => {
         setIsClient(true)
@@ -103,7 +103,7 @@ const ContactsBlock = () => {
             user_phone: phone,
         }
 
-        await sendEmail(() => {
+        await submitLead(() => {
             setName('')
             setPhone('')
         }, templateParams)
@@ -152,6 +152,7 @@ const ContactsBlock = () => {
                                 onSubmit={handleSubmit}
                                 className="space-y-4 sm:space-y-6 mt-8 sm:mt-12" // Адаптивные отступы между элементами
                             >
+                            <LeadHoneypot />
                                 <div className="relative group">
                                     <HiOutlineUser className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-white/60 text-lg sm:text-xl group-focus-within:text-red-500 transition-colors" />
                                     <input

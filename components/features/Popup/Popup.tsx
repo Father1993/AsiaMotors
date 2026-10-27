@@ -5,12 +5,12 @@ import { FormEvent, useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FiX, FiUser, FiPhone, FiMapPin } from 'react-icons/fi'
 import { PricePopupProps } from '@/shared/types/common'
-import { useEmailService } from '@/shared/hooks/useEmailService'
-import { emailConfig } from '@/shared/config/emailService'
+import LeadHoneypot from '@/components/features/LeadHoneypot'
+import { useLeadForm } from '@/shared/hooks/useLeadForm'
 
 const Popup = ({ isOpen, onClose }: PricePopupProps) => {
     // Заменяем локальное состояние на хук useEmailService
-    const { formRef, isLoading, sendEmail } = useEmailService(emailConfig)
+    const { formRef, isLoading, submitLead } = useLeadForm()
     const [consentChecked, setConsentChecked] = useState(false)
 
     useEffect(() => {
@@ -24,7 +24,7 @@ const Popup = ({ isOpen, onClose }: PricePopupProps) => {
         }
     }, [isOpen])
 
-    // Обновляем handleSubmit для использования sendEmail из хука
+    // Обновляем handleSubmit для использования submitLead из хука
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
 
@@ -47,7 +47,7 @@ const Popup = ({ isOpen, onClose }: PricePopupProps) => {
             car_model: form.car_model.value,
         }
 
-        await sendEmail(onClose, templateParams)
+        await submitLead(onClose, templateParams)
     }
 
     return (
@@ -108,6 +108,7 @@ const Popup = ({ isOpen, onClose }: PricePopupProps) => {
                             onSubmit={handleSubmit}
                             className="space-y-4"
                         >
+                            <LeadHoneypot />
                             <div className="relative">
                                 <FiUser className="absolute top-1/2 -translate-y-1/2 left-4 text-gray-400" />
                                 <input

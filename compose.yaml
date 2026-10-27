@@ -1,23 +1,100 @@
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+x-db-environment: &db-environment
+  PGHOST: db
+  POSTGRES_DB: asiamotors
+  POSTGRES_USER: asiamotors
+  POSTGRES_PASSWORD_FILE: /run/secrets/db_app_password
 services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: asiamotors
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_admin_password
+      POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256
+    secrets: [db_admin_password, db_app_password]
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/init-app-user.sh:/docker-entrypoint-initdb.d/10-app-user.sh:ro
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U postgres -d asiamotors"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+    logging: *logging
+  migrate:
+    build:
+      context: .
+      target: worker
+    command: [node, scripts/migrate.mjs]
+    environment:
+      <<: *db-environment
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_admin_password
+    secrets: [db_admin_password]
+    depends_on:
+      db: {condition: service_healthy}
+    logging: *logging
   web:
     build:
       context: .
-      secrets:
-        - app_env
+      target: runner
     restart: unless-stopped
     env_file: .env
-    ports:
-      - "127.0.0.1:3000:3000"
+    environment:
+      <<: *db-environment
+      UPLOAD_DIR: /app/uploads
+      APP_ALLOWED_ORIGINS: https://asiamotors.su,https://www.asiamotors.su
+    secrets: [db_app_password]
+    volumes: [uploads:/app/uploads]
+    ports: ["127.0.0.1:3000:3000"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+    healthcheck:
+      test: [CMD, node, -e, "fetch('http://127.0.0.1:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     init: true
-    security_opt:
-      - no-new-privileges:true
-    cap_drop:
-      - ALL
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "3"
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: [ALL]
+    logging: *logging
+  mail-worker:
+    build:
+      context: .
+      target: worker
+    restart: unless-stopped
+    environment:
+      <<: *db-environment
+      SMTP_HOST: smtp.yandex.ru
+      SMTP_PORT: "465"
+      SMTP_SECURE: "true"
+      SMTP_USER: asia-social
+      MAIL_FROM: asia-social@ya.ru
+      SMTP_PASSWORD_FILE: /run/secrets/smtp_password
+      MAIL_TO: asia-social@ya.ru
+      LEAD_RETENTION_DAYS: "90"
+      UPLOAD_DIR: /app/uploads
+    secrets: [db_app_password, smtp_password]
+    volumes: [uploads:/app/uploads]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+    init: true
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: [ALL]
+    logging: *logging
+volumes:
+  postgres_data:
+  uploads:
 secrets:
-  app_env:
-    file: .env
+  db_admin_password:
+    file: .secrets/db_admin_password
+  db_app_password:
+    file: .secrets/db_app_password
+  smtp_password:
+    file: .secrets/smtp_password

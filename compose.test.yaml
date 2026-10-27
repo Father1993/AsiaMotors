@@ -1,0 +1,26 @@
+# Always use a separate project: docker compose -p asiamotors-test -f compose.yaml -f compose.test.yaml ...
+services:
+  db:
+    ports: ["127.0.0.1:35432:5432"]
+  web:
+    ports: !override ["127.0.0.1:3110:3000"]
+    environment:
+      NEXTAUTH_URL: http://127.0.0.1:3110
+  mail-worker:
+    environment:
+      SMTP_HOST: smtp
+      SMTP_PORT: "2525"
+      SMTP_SECURE: "false"
+      SMTP_USER: ""
+      SMTP_PASSWORD_FILE: ""
+      MAIL_TO: sink@example.test
+    depends_on:
+      smtp: {condition: service_started}
+  smtp:
+    image: node:24-alpine
+    command: [node, /app/fake-smtp.mjs]
+    volumes:
+      - ./tests/fake-smtp.mjs:/app/fake-smtp.mjs:ro
+      - smtp_capture:/captures
+volumes:
+  smtp_capture:

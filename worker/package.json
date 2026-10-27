@@ -1,0 +1,9 @@
+{
+  "name": "asiamotors-mail-worker",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "pg": "8.23.1",
+    "nodemailer": "10.2.1"
+  }
+}

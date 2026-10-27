@@ -7,23 +7,22 @@
         "build": "next build",
         "start": "next start",
         "lint": "eslint .",
-        "migrate-catalog": "ts-node -r tsconfig-paths/register --project tsconfig.json shared/scripts/migrate-catalog-to-supabase.ts",
         "typecheck": "tsc --noEmit"
     },
     "dependencies": {
-        "@emailjs/browser": "^4.4.1",
         "@headlessui/react": "^2.2.0",
         "@heroicons/react": "^2.1.5",
         "@mdx-js/loader": "^3.1.0",
         "@mdx-js/react": "^3.1.0",
         "@next/mdx": "16.4.3",
-        "@supabase/supabase-js": "^2.47.10",
         "@types/node": "^22.10.2",
         "framer-motion": "11.18.2",
         "gray-matter": "^4.0.3",
         "next": "16.4.3",
         "next-auth": "4.24.15",
         "next13-progressbar": "^1.2.2",
+        "nodemailer": "10.2.1",
+        "pg": "8.23.1",
         "react": "19.3.1",
         "react-dom": "19.3.1",
         "react-hot-toast": "^2.4.1",
@@ -37,9 +36,12 @@
         "remark": "^15.0.1",
         "remark-gfm": "^4.0.0",
         "remark-html": "^16.0.1",
+        "server-only": "0.0.1",
+        "sharp": "0.35.5",
         "swiper": "12.1.2",
         "video.js": "^8.19.1",
         "yet-another-react-lightbox": "^3.21.7",
+        "zod": "4.6.7",
         "zustand": "^5.0.1"
     },
     "devDependencies": {
@@ -48,6 +50,8 @@
         "@tailwindcss/typography": "^0.5.15",
         "@types/cli-progress": "^3.11.6",
         "@types/dotenv": "^8.2.3",
+        "@types/nodemailer": "^8.0.2",
+        "@types/pg": "^8.23.1",
         "@types/react": "^19",
         "@types/react-dom": "^19",
         "@types/react-input-mask": "^3.0.6",
@@ -67,5 +71,10 @@
     "engines": {
         "node": ">=22.0.0"
     },
-    "packageManager": "npm@10.9.4"
+    "packageManager": "npm@10.9.4",
+    "overrides": {
+        "next-auth": {
+            "nodemailer": "$nodemailer"
+        }
+    }
 }

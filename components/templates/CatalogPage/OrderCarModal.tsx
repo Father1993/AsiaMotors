@@ -1,14 +1,14 @@
 import { Fragment, useState } from 'react'
 import toast from 'react-hot-toast'
 import { Dialog, Transition } from '@headlessui/react'
-import { useEmailService } from '@/shared/hooks/useEmailService'
-import { emailConfig } from '@/shared/config/emailService'
+import LeadHoneypot from '@/components/features/LeadHoneypot'
+import { useLeadForm } from '@/shared/hooks/useLeadForm'
 import { OrderCarModalProps } from '@/shared/types/orderCarModal'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { PatternFormat } from 'react-number-format'
 
 export const OrderCarModal = ({ isOpen, onClose, car }: OrderCarModalProps) => {
-    const { formRef, isLoading, sendEmail } = useEmailService(emailConfig)
+    const { formRef, isLoading, submitLead } = useLeadForm()
     const [consentChecked, setConsentChecked] = useState(false)
 
     const validatePhone = (phone: string) => {
@@ -33,7 +33,7 @@ export const OrderCarModal = ({ isOpen, onClose, car }: OrderCarModalProps) => {
             return
         }
 
-        await sendEmail(
+        await submitLead(
             () => {
                 onClose()
                 setConsentChecked(false)
@@ -102,6 +102,7 @@ export const OrderCarModal = ({ isOpen, onClose, car }: OrderCarModalProps) => {
                                     onSubmit={handleSubmit}
                                     className="space-y-4"
                                 >
+                            <LeadHoneypot />
                                     <div>
                                         <label
                                             htmlFor="name"

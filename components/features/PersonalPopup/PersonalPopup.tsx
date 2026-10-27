@@ -4,11 +4,11 @@ import { FormEvent, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FiX, FiUser, FiPhone, FiGift } from 'react-icons/fi'
 import { PricePopupProps } from '@/shared/types/common'
-import { useEmailService } from '@/shared/hooks/useEmailService'
-import { emailConfig } from '@/shared/config/emailService'
+import LeadHoneypot from '@/components/features/LeadHoneypot'
+import { useLeadForm } from '@/shared/hooks/useLeadForm'
 
 const PersonalPopup = ({ isOpen, onClose }: PricePopupProps) => {
-    const { formRef, isLoading, sendEmail } = useEmailService(emailConfig)
+    const { formRef, isLoading, submitLead } = useLeadForm()
 
     useEffect(() => {
         if (isOpen) {
@@ -32,7 +32,7 @@ const PersonalPopup = ({ isOpen, onClose }: PricePopupProps) => {
             user_phone: form.user_phone.value,
         }
 
-        await sendEmail(onClose, templateParams)
+        await submitLead(onClose, templateParams)
     }
 
     return (
@@ -136,6 +136,8 @@ const PersonalPopup = ({ isOpen, onClose }: PricePopupProps) => {
                             onSubmit={handleSubmit}
                             className="space-y-4"
                         >
+                            <LeadHoneypot />
+                            <label className="flex items-start gap-2 text-sm my-3"><input type="checkbox" required /><span>Даю <a href="/consent" target="_blank" rel="noopener noreferrer" className="underline">согласие на обработку персональных данных</a> для ответа на заявку.</span></label>
                             <div className="relative group">
                                 <FiUser
                                     className="absolute top-1/2 -translate-y-1/2 left-4 text-gray-400 

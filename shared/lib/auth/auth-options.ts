@@ -1,14 +1,9 @@
 import { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 
-// Проверяем наличие необходимых переменных окружения
-if (!process.env.ADMIN_EMAIL || !process.env.ADMIN_PASSWORD) {
-    throw new Error('Missing environment variables for authentication')
-}
-
-// Сохраняем переменные в константы с явной типизацией
-const ADMIN_EMAIL: string = process.env.ADMIN_EMAIL
-const ADMIN_PASSWORD: string = process.env.ADMIN_PASSWORD
+// Runtime configuration; production secrets are not needed during image builds.
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || ''
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || ''
 
 export const authOptions: NextAuthOptions = {
     providers: [
@@ -19,7 +14,7 @@ export const authOptions: NextAuthOptions = {
                 password: { label: 'Password', type: 'password' },
             },
             async authorize(credentials) {
-                if (!credentials?.email || !credentials?.password) {
+                if (!ADMIN_EMAIL || !ADMIN_PASSWORD || !credentials?.email || !credentials?.password) {
                     return null
                 }
 

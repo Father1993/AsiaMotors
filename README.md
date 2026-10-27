@@ -8,7 +8,7 @@ Asia Motors - это современная веб-платформа для а�
 
 -   **Frontend:**
 
-    -   Next.js 15 (App Router)
+    -   Next.js 16.4.3 (App Router)
     -   TypeScript
     -   Tailwind CSS
     -   Framer Motion
@@ -19,9 +19,9 @@ Asia Motors - это современная веб-платформа для а�
 
 -   **Backend & Database:**
 
-    -   Supabase (PostgreSQL)
-    -   Supabase Storage для медиафайлов
-    -   Serverless Functions
+    -   PostgreSQL 17 в Docker
+    -   Постоянный Docker-том для медиафайлов
+    -   Серверные обработчики Next.js
     -   JWT Authentication
 
 -   **Deployment & Infrastructure:**
@@ -60,11 +60,8 @@ Asia Motors - это современная веб-платформа для а�
 ### Запуск через Docker
 
 ```bash
-# Сборка образа
-docker build -t asiamotors-app .
-
-# Запуск контейнера
-docker run -p 3000:3000 asiamotors-app
+# Подготовьте .env и .secrets по DEPLOYMENT.md, затем:
+sudo sh scripts/deploy.sh
 ```
 
 ## ✨ Основные функции
@@ -91,9 +88,9 @@ docker run -p 3000:3000 asiamotors-app
 
 -   **Серверная часть:**
 
-    -   Serverless архитектура
+    -   Серверная архитектура Next.js
     -   Защищенные API роуты
-    -   Интеграция с Supabase
+    -   Собственные серверные API каталога
     -   Оптимизированная работа с медиафайлами
 
 -   **Инфраструктура:**
@@ -173,7 +170,7 @@ docker run -p 3000:3000 asiamotors-app
 -   Опыт работы с современными фреймворками
 -   Глубокое понимание веб-безопасности
 -   Оптимизация производительности
--   Serverless архитектура
+-   Серверная архитектура Next.js
 -   Работа с базами данных
 -   UI/UX дизайн
 -   Docker контейнеризация
@@ -187,3 +184,6 @@ docker run -p 3000:3000 asiamotors-app
 ---
 
 © 2024 Asia Motors. Все права защищены.
+
+
+Развёртывание базы, фотографий и SMTP описано в [DEPLOYMENT.md](DEPLOYMENT.md).

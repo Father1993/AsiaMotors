@@ -10,11 +10,11 @@ import {
 } from '@/shared/constants/spares'
 import Breadcrumbs from '@/components/features/Breadcrumbs/Breadcrumbs'
 import { SPARES } from '@/shared/constants/breadcrumbs'
-import { useEmailService } from '@/shared/hooks/useEmailService'
-import { sparesEmailConfig } from '@/shared/config/emailService'
+import LeadHoneypot from '@/components/features/LeadHoneypot'
+import { useLeadForm } from '@/shared/hooks/useLeadForm'
 
 const SparesPage = () => {
-    const { formRef, isLoading, sendEmail } = useEmailService(sparesEmailConfig)
+    const { formRef, isLoading, submitLead } = useLeadForm()
     const [consentChecked, setConsentChecked] = useState(false)
 
     const handleSubmit = async (e: FormEvent) => {
@@ -40,7 +40,7 @@ const SparesPage = () => {
             part_number: form.part_number.value,
             message: form.message.value,
         }
-        await sendEmail(() => {
+        await submitLead(() => {
             form.reset()
             setConsentChecked(false)
         }, templateParams)
@@ -276,6 +276,7 @@ const SparesPage = () => {
                             onSubmit={handleSubmit}
                             className="space-y-6"
                         >
+                            <LeadHoneypot />
                             <div className="grid md:grid-cols-2 gap-6">
                                 <motion.div
                                     initial={{ opacity: 0, x: -20 }}

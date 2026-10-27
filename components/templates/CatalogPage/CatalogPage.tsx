@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import toast from 'react-hot-toast'
-import { supabase } from '@/shared/lib/superbase/client'
+import { loadCatalog } from '@/shared/lib/catalog-client'
 import { FiSearch, FiGrid, FiList } from 'react-icons/fi'
 import { HiOutlineAdjustments } from 'react-icons/hi'
 import CarCard from './CarCard'
@@ -27,30 +27,9 @@ const CatalogPage = () => {
         try {
             setIsLoading(true)
 
-            // Получаем страны
-            const { data: countriesData, error: countriesError } =
-                await supabase.from('countries').select('*')
-
-            if (countriesError) {
-                toast.error(`Ошибка загрузки стран: ${countriesError.message}`)
-                return
-            }
-
-            setCountries(countriesData || [])
-
-            // Получаем автомобили
-            const { data: carsData, error: carsError } = await supabase
-                .from('cars')
-                .select('*')
-
-            if (carsError) {
-                toast.error(`Ошибка загрузки автомобилей: ${carsError.message}`)
-                return
-            }
-
-            if (Array.isArray(carsData)) {
-                setCars(carsData)
-            }
+            const data = await loadCatalog()
+            setCountries(data.countries)
+            setCars(data.cars)
         } catch (error) {
             console.error('Ошибка при загрузке данных:', error)
             toast.error('Произошла ошибка при загрузке данных')
@@ -91,11 +70,13 @@ const CatalogPage = () => {
         }
     }, [])
 
+    const maximumPrice = cars.reduce((max, car) => Math.max(max, car.price), 9000000)
+
     // Переменные для фильтра
     const [selectedBrands, setSelectedBrands] = useState<string[]>([])
     const [selectedCategories, setSelectedCategories] = useState<string[]>([])
-    const [priceRange, setPriceRange] = useState<[number, number]>([0, 9000000])
-    const [yearRange, setYearRange] = useState<[number, number]>([2010, 2023])
+    const [priceRange, setPriceRange] = useState<[number, number]>([0, Infinity])
+    const [yearRange, setYearRange] = useState<[number, number]>([1900, 2200])
     const [selectedDriveTypes, setSelectedDriveTypes] = useState<string[]>([])
     const [selectedFuelTypes, setSelectedFuelTypes] = useState<string[]>([])
 
@@ -378,9 +359,9 @@ const CatalogPage = () => {
                                 <input
                                     type="range"
                                     min={0}
-                                    max={5000000}
+                                    max={maximumPrice}
                                     step={100000}
-                                    value={priceRange[1]}
+                                    value={Number.isFinite(priceRange[1]) ? priceRange[1] : maximumPrice}
                                     onChange={(e) =>
                                         setPriceRange([
                                             priceRange[0],
@@ -394,7 +375,7 @@ const CatalogPage = () => {
                                         {priceRange[0].toLocaleString()} ₽
                                     </span>
                                     <span>
-                                        {priceRange[1].toLocaleString()} ₽
+                                        {(Number.isFinite(priceRange[1]) ? priceRange[1] : maximumPrice).toLocaleString()} ₽
                                     </span>
                                 </div>
                             </div>
@@ -463,8 +444,8 @@ const CatalogPage = () => {
                             onClick={() => {
                                 setSelectedBrands([])
                                 setSelectedCategories([])
-                                setPriceRange([0, 5000000])
-                                setYearRange([2020, 2023])
+                                setPriceRange([0, Infinity])
+                                setYearRange([1900, 2200])
                                 setSelectedDriveTypes([])
                                 setSelectedFuelTypes([])
                                 setSelectedCountry('')

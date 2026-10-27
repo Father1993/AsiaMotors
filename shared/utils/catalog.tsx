@@ -1,11 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { CarRecord } from '@/shared/types/database.types'
 import { FiClock, FiSettings, FiZap, FiDroplet } from 'react-icons/fi'
 import { GiCarWheel, GiClockwiseRotation } from 'react-icons/gi'
 import { TbAutomaticGearbox } from 'react-icons/tb'
-import { supabase } from '../lib/superbase/client'
 
 // Функция для создания slug
-export const generateCarSlug = (car: any): string => {
+export const generateCarSlug = (
+    car: Pick<CarRecord, 'id' | 'brand' | 'model' | 'year'>
+): string => {
     // Создаем slug из бренда, модели и года
     const slug = `${car.brand}-${car.model}-${car.year}`
         .toLowerCase()
@@ -14,42 +15,7 @@ export const generateCarSlug = (car: any): string => {
         .replace(/-+/g, '-') // заменяем множественные дефисы на один
         .replace(/^-|-$/g, '') // удаляем дефисы в начале и конце
 
-    return slug
-}
-
-// Функция для извлечения ID из slug
-export function getIdFromSlug(slug: string) {
-    const parts = slug.split('-')
-    return parts[parts.length - 1]
-}
-
-// Функция поиска автомобиля
-export async function findCarBySlug(slug: string) {
-    try {
-        const { data: cars, error } = await supabase.from('cars').select('*')
-
-        if (error) {
-            console.error('Error fetching cars:', error)
-            return null
-        }
-
-        // Находим автомобиль по slug
-        const car = cars.find((car) => {
-            const expectedSlug = generateCarSlug(car)
-            return slug === expectedSlug
-        })
-
-        return car || null
-    } catch (error) {
-        console.error('Error in findCarBySlug:', error)
-        return null
-    }
-}
-
-// Функция для безопасного получения данных автомобиля
-export async function getCarData(params: { slug: string }) {
-    const resolvedParams = params instanceof Promise ? await params : params
-    return findCarBySlug(resolvedParams.slug)
+    return `${slug}-${car.id}`
 }
 
 export const formatPrice = (price: number) => {
