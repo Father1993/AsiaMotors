@@ -11,7 +11,7 @@ not hide newly entered years or expensive cars.
 - `.env`: NEXTAUTH_URL, NEXTAUTH_SECRET, ADMIN_EMAIL, ADMIN_PASSWORD. Mode 600.
 - `.secrets/db_admin_password`: independent random database administrator password.
 - `.secrets/db_app_password`: independent random restricted application password.
-- `.secrets/smtp_password`: Yandex application password for asia-social@ya.ru.
+- `.secrets/smtp_password`: Yandex application password for asiamotors-social@yandex.ru.
 
 The secrets directory must have mode 700. Secret files have mode 444 because
 Compose bind mounts preserve host permissions and PostgreSQL uses its own UID.
@@ -20,10 +20,10 @@ files, print them in logs, or copy them into an image. Neither image build needs
 production configuration, a running database or SMTP credentials.
 
 Configure Yandex mail-client access and generate an application password for
-**Mail**, belonging to **asia-social@ya.ru**. SMTP: smtp.yandex.ru, TLS port 465.
-The SMTP login is asia-social (personal Yandex account); the worker sends
-from/to asia-social@ya.ru. Existing forwarding to
-asiamotors27@mail.ru is configured in the Yandex mailbox, outside this repo.
+**Mail**, belonging to **asiamotors-social@yandex.ru**. SMTP: smtp.yandex.ru, TLS port 465.
+The SMTP login is asiamotors-social@yandex.ru; the worker sends
+from/to asiamotors-social@yandex.ru. Forwarding to asiamotors27@mail.ru must be configured and checked in this
+Yandex mailbox, outside this repo.
 
 To replace the password on the VPS without shell-history exposure (Bash):
 

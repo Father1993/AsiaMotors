@@ -75,10 +75,10 @@ services:
       SMTP_HOST: smtp.yandex.ru
       SMTP_PORT: "465"
       SMTP_SECURE: "true"
-      SMTP_USER: asia-social
-      MAIL_FROM: asia-social@ya.ru
+      SMTP_USER: asiamotors-social@yandex.ru
+      MAIL_FROM: asiamotors-social@yandex.ru
       SMTP_PASSWORD_FILE: /run/secrets/smtp_password
-      MAIL_TO: asia-social@ya.ru
+      MAIL_TO: asiamotors-social@yandex.ru
       LEAD_RETENTION_DAYS: "90"
       UPLOAD_DIR: /app/uploads
     secrets: [db_app_password, smtp_password]

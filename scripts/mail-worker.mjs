@@ -80,7 +80,7 @@ if (verifyOnly) {
                                 ([k, label]) => label + ': ' + item.payload[k]
                             ),
                     ].join('\n')
-                    const recipient = process.env.MAIL_TO || 'asia-social@ya.ru'
+                    const recipient = process.env.MAIL_TO || 'asiamotors-social@yandex.ru'
                     const result = await smtp.sendMail({
                         from: {
                             name: 'AsiaMotors — заявки',
