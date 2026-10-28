@@ -1,0 +1,534 @@
+/* Requests and article reading use the same workspace controls and surfaces. */
+.admin-shell {
+    --admin-info: #23578a;
+    --admin-info-soft: #edf4fb;
+    --admin-warning: #80501a;
+    --admin-warning-soft: #fff4df;
+}
+.admin-badge-neutral {
+    background: #edf0f3;
+    color: #4b5563;
+}
+.admin-badge-info {
+    background: var(--admin-info-soft);
+    color: var(--admin-info);
+}
+.admin-badge-warning {
+    background: var(--admin-warning-soft);
+    color: var(--admin-warning);
+}
+.admin-badge-danger {
+    background: var(--admin-accent-soft);
+    color: var(--admin-accent);
+}
+.admin-caption {
+    display: block;
+    color: var(--admin-muted);
+    font-size: 12px;
+    font-weight: 500;
+}
+.admin-mail-mode {
+    padding: 20px 24px;
+    border: 1px solid var(--admin-line);
+    border-radius: 12px;
+    background: var(--admin-paper);
+    margin-bottom: 24px;
+}
+.admin-mail-mode p {
+    margin-top: 8px;
+    max-width: 90ch;
+}
+.admin-status-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 24px 0 16px;
+}
+.admin-status-tabs a {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+.admin-status-tabs a:hover {
+    background: var(--admin-line);
+}
+.admin-status-tabs a[aria-current] {
+    background: var(--admin-ink);
+    color: var(--admin-paper);
+}
+.admin-status-tabs span {
+    font-variant-numeric: tabular-nums;
+    opacity: 0.8;
+}
+.admin-filter-panel {
+    margin-bottom: 24px;
+}
+.admin-filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 16px;
+}
+.admin-filter-form .admin-field {
+    flex: 1 1 180px;
+}
+.admin-filter-form .admin-filter-search {
+    flex: 2 1 240px;
+}
+.admin-filter-form .admin-button {
+    min-height: 48px;
+}
+.admin-feedback {
+    margin-bottom: 20px;
+}
+.admin-feedback:empty {
+    display: none;
+}
+.admin-feedback .admin-button {
+    margin-top: 12px;
+}
+.admin-success-message {
+    color: var(--admin-success);
+}
+.admin-records {
+    padding: 0;
+    overflow: hidden;
+}
+.admin-result-count {
+    padding: 20px 24px;
+    color: var(--admin-muted);
+    font-variant-numeric: tabular-nums;
+    border-bottom: 1px solid var(--admin-line);
+}
+.admin-empty {
+    padding: 40px 24px;
+    text-align: center;
+}
+.admin-empty p {
+    margin-top: 8px;
+}
+.admin-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 20px 24px;
+    font-variant-numeric: tabular-nums;
+}
+.admin-footnote {
+    margin-top: 20px;
+    color: var(--admin-muted);
+    font-size: 12px;
+}
+.request-row {
+    display: grid;
+    grid-template-columns: minmax(140px, 1.1fr) minmax(140px, 1.3fr) 115px minmax(150px, 1fr) auto;
+    align-items: center;
+    gap: 24px;
+    padding: 24px;
+    border-bottom: 1px solid var(--admin-line);
+}
+.request-row:last-child {
+    border-bottom: 0;
+}
+.request-row > div {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+.admin-record-title {
+    font-weight: 600;
+    font-size: 16px;
+    display: block;
+}
+.admin-record-title:hover,
+.admin-blog-card h2 a:hover {
+    color: var(--admin-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.admin-phone {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    color: var(--admin-info);
+    white-space: nowrap;
+}
+.request-client > span {
+    display: block;
+}
+.request-subject time {
+    display: block;
+    font-size: 12px;
+    color: var(--admin-muted);
+    margin-top: 8px;
+    font-variant-numeric: tabular-nums;
+}
+.request-state,
+.request-delivery {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+.admin-detail-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 24px;
+    align-items: start;
+}
+.admin-detail-main,
+.admin-detail-aside {
+    display: grid;
+    gap: 24px;
+    min-width: 0;
+}
+.admin-detail-grid h2 {
+    margin-bottom: 16px;
+}
+.admin-detail-grid .admin-mail-mode {
+    margin: 0;
+}
+.admin-contact-phone {
+    display: inline-flex;
+    align-items: center;
+    min-height: 48px;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--admin-info);
+    margin: 0 0 8px;
+}
+.admin-status-control {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 16px;
+    margin-top: 20px;
+}
+.admin-status-control .admin-field {
+    flex: 1;
+    min-width: 160px;
+}
+.admin-status-control .admin-badge {
+    margin-bottom: 12px;
+}
+.admin-data-list {
+    margin: 16px 0;
+}
+.admin-data-list > div {
+    display: grid;
+    grid-template-columns: 140px minmax(0, 1fr);
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--admin-line);
+}
+.admin-data-list > div:last-child {
+    border-bottom: 0;
+}
+.admin-data-list dt {
+    color: var(--admin-muted);
+}
+.admin-data-list dd {
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
+.admin-detail-aside .admin-data-list > div {
+    grid-template-columns: 1fr;
+    gap: 4px;
+}
+.admin-detail-aside .admin-notice {
+    margin: 16px 0;
+}
+.admin-detail-aside .admin-button {
+    margin-top: 16px;
+}
+.admin-technical summary {
+    cursor: pointer;
+    min-height: 44px;
+    font-weight: 600;
+}
+.admin-technical summary:focus-visible {
+    outline: 3px solid var(--admin-accent);
+    outline-offset: 3px;
+}
+.admin-readonly-note {
+    color: var(--admin-muted);
+    margin-bottom: 24px;
+}
+.admin-blog-count {
+    margin-bottom: 16px;
+    color: var(--admin-muted);
+}
+.admin-blog-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+}
+.admin-blog-card {
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.admin-blog-image,
+.admin-blog-cover {
+    position: relative;
+    display: block;
+    aspect-ratio: 16/9;
+    background: var(--admin-line);
+}
+.admin-blog-image img,
+.admin-blog-cover img {
+    object-fit: cover;
+}
+.admin-blog-card-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px;
+}
+.admin-blog-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    font-size: 12px;
+    color: var(--admin-muted);
+}
+.admin-blog-card h2 {
+    font-size: 18px;
+}
+.admin-blog-excerpt {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.admin-blog-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.admin-blog-tags span {
+    font-size: 12px;
+    padding: 4px 8px;
+    background: var(--admin-canvas);
+    color: var(--admin-muted);
+    border-radius: 4px;
+    overflow-wrap: anywhere;
+}
+.admin-blog-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 8px;
+}
+.admin-blog-article {
+    max-width: 960px;
+    margin: auto;
+    padding: 40px;
+}
+.admin-blog-article header {
+    display: grid;
+    gap: 24px;
+}
+.admin-blog-article h1 {
+    font-size: 32px;
+    text-wrap: balance;
+}
+.admin-article-excerpt {
+    color: var(--admin-muted);
+    font-size: 18px;
+}
+.admin-blog-cover {
+    border-radius: 8px;
+    overflow: hidden;
+}
+.admin-article-content {
+    margin-top: 32px;
+    font-size: 16px;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+}
+.admin-article-content :is(h2, h3, h4) {
+    margin: 28px 0 16px;
+}
+.admin-article-content p {
+    margin: 16px 0;
+}
+.admin-article-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+.admin-article-content a {
+    color: var(--admin-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.admin-article-content :is(ul, ol) {
+    padding-left: 24px;
+}
+.admin-article-content ul {
+    list-style: disc;
+}
+.admin-article-content ol {
+    list-style: decimal;
+}
+.admin-article-content table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+}
+/* Existing article HTML is preserved; its decorative cards stay quiet in the workspace. */
+.admin-article-content :is(.intro-block, .feature-card, .faq-item, .pros-cons-container, .content-section) {
+    box-shadow: none;
+    transform: none;
+    transition: none;
+    background: var(--admin-canvas);
+    padding: 24px;
+}
+.admin-article-content .intro-block::before {
+    display: none;
+}
+.admin-article-content .feature-value {
+    background: none;
+    -webkit-text-fill-color: var(--admin-ink);
+    color: var(--admin-ink);
+}
+@media (max-width: 1100px) {
+    .request-row {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+        gap: 16px;
+    }
+    .request-subject {
+        grid-column: 1;
+        grid-row: 2;
+    }
+    .request-state {
+        grid-column: 2;
+        grid-row: 1;
+    }
+    .request-delivery {
+        grid-column: 2;
+        grid-row: 2;
+    }
+    .request-open {
+        grid-column: 3;
+        grid-row: 1;
+    }
+    .admin-blog-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .admin-detail-grid {
+        grid-template-columns: minmax(0, 1fr) 300px;
+    }
+}
+@media (max-width: 767px) {
+    .admin-mail-mode {
+        padding: 16px;
+    }
+    .admin-status-tabs {
+        gap: 4px;
+    }
+    .admin-status-tabs a {
+        padding: 10px 12px;
+    }
+    .admin-filter-form .admin-field {
+        flex-basis: 100%;
+    }
+    .admin-result-count {
+        padding: 16px;
+    }
+    .request-row {
+        grid-template-columns: minmax(0, 1fr) auto;
+        padding: 20px 16px;
+    }
+    .request-client {
+        grid-column: 1;
+        grid-row: 1;
+    }
+    .request-open {
+        grid-column: 2;
+        grid-row: 1;
+    }
+    .request-subject {
+        grid-column: 1/-1;
+        grid-row: 2;
+    }
+    .request-state {
+        grid-column: 1;
+        grid-row: 3;
+    }
+    .request-delivery {
+        grid-column: 1/-1;
+        grid-row: 4;
+    }
+    .admin-pagination {
+        padding: 16px 8px;
+        gap: 4px;
+        font-size: 12px;
+    }
+    .admin-pagination .admin-button {
+        padding: 10px;
+    }
+    .admin-detail-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .admin-data-list > div {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 4px;
+    }
+    .admin-contact-phone {
+        font-size: 23px;
+    }
+    .admin-blog-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 20px;
+    }
+    .admin-blog-card-body {
+        padding: 20px;
+    }
+    .admin-blog-article {
+        padding: 20px;
+    }
+    .admin-blog-article h1 {
+        font-size: 24px;
+    }
+    .admin-article-content
+        :is(.intro-block, .feature-card, .faq-item, .pros-cons-container, .content-section) {
+        padding: 16px;
+    }
+}
+.admin-image-warning {
+    max-width: 960px;
+    margin: 0 auto 24px;
+    border-color: var(--admin-warning);
+}
+.admin-image-warning p {
+    margin-top: 8px;
+    color: var(--admin-muted);
+}
+.admin-image-warning details {
+    margin-top: 12px;
+    overflow-wrap: anywhere;
+}
+.admin-image-warning summary {
+    min-height: 44px;
+    cursor: pointer;
+}
+.admin-image-warning summary:focus-visible {
+    outline: 3px solid var(--admin-accent);
+    outline-offset: 3px;
+}
+.admin-image-missing {
+    padding: 24px;
+    border: 1px dashed var(--admin-line);
+    background: var(--admin-canvas);
+    color: var(--admin-muted);
+    border-radius: 8px;
+}

@@ -4,9 +4,10 @@ import { redirect } from 'next/navigation'
 import { authOptions } from '@/shared/lib/auth/auth-options'
 import { AdminShell } from '@/components/admin/AdminShell'
 import './admin.css'
+import './workspace.css'
 
 export const metadata: Metadata = {
-    title: 'Управление каталогом | AsiaMotors',
+    title: 'Управление сайтом | AsiaMotors',
     robots: { index: false, follow: false },
 }
 

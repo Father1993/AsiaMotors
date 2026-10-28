@@ -6,14 +6,8 @@ const text = (max: number) =>
         .max(max)
         .refine((v) => !/[\x00-\x08\x0b\x0c\x0e-\x1f]/.test(v))
 export { carInput, mediaPath } from '../car-schema'
-export const formNames = [
-    'Форма расчета стоимости',
-    'Форма специального предложения',
-    'Форма вопроса',
-    'Форма заказа автомобиля',
-    'Форма консультации',
-    'Форма заказа запчастей',
-] as const
+import { formNames } from '../leads'
+export { formNames } from '../leads'
 export const leadInput = z.object({
     request_key: z.uuid(),
     consent: z.literal(true),

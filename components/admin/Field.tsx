@@ -6,15 +6,17 @@ export function Field({
     hint,
     error,
     children,
+    className,
 }: {
     name: string
     label: string
     hint?: string
     error?: string
     children: ReactNode
+    className?: string
 }) {
     return (
-        <div className="admin-field">
+        <div className={['admin-field', className].filter(Boolean).join(' ')}>
             <label htmlFor={name}>{label}</label>
             {hint && (
                 <p id={name + '-hint'} className="admin-muted">

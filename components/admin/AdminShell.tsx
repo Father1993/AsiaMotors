@@ -45,12 +45,13 @@ export function AdminShell({ children, email }: { children: React.ReactNode; ema
                             loading="eager"
                             className="object-contain shrink-0"
                         />
-                        <span>Управление каталогом</span>
+                        <span>Управление сайтом</span>
                     </Link>
                     <nav aria-label="Администрирование" className="admin-nav">
                         {[
                             ['/admin', 'Автомобили'],
                             ['/admin/requests', 'Заявки'],
+                            ['/admin/blog', 'Блог'],
                         ].map(([href, label]) => (
                             <Link
                                 key={href}
@@ -58,7 +59,7 @@ export function AdminShell({ children, email }: { children: React.ReactNode; ema
                                 aria-current={
                                     (
                                         href === '/admin'
-                                            ? !pathname.startsWith('/admin/requests')
+                                            ? pathname === '/admin' || pathname.startsWith('/admin/cars')
                                             : pathname.startsWith(href)
                                     )
                                         ? 'page'
