@@ -11,7 +11,7 @@ with tempfile.TemporaryDirectory(prefix='asiamotors-mail-off-') as directory:
     disabled = compose + ['-f', str(override)]
     try:
         run(disabled + ['up', '-d', '--no-build', '--no-deps', 'mail-worker'])
-        lead = {'request_key': key, 'consent': True, 'consent_version': '2026-10-27', 'form_name': 'Проверка выключенной почты', 'user_name': 'Тест без почты', 'user_phone': '+7 (999) 000-00-00'}
+        lead = {'request_key': key, 'consent': True, 'consent_version': '2026-10-27', 'form_name': 'Форма консультации', 'user_name': 'Тест без почты', 'user_phone': '+7 (999) 000-00-00'}
         request = urllib.request.Request('http://127.0.0.1:3110/api/leads', data=json.dumps(lead).encode(), headers={'Origin': 'http://127.0.0.1:3110', 'Content-Type': 'application/json', 'X-Real-IP': key}, method='POST')
         assert urllib.request.urlopen(request).status == 202
         # Worker polls every five seconds: observe more than two opportunities to send.
