@@ -24,4 +24,15 @@ PY
 docker compose up -d --wait --wait-timeout 180
 docker compose ps
 curl --fail --silent --show-error http://127.0.0.1:3000/api/health
+# Database health alone does not prove that the upload handler was shipped.
+docker compose exec -T web node -e '
+fetch("http://127.0.0.1:3000/api/uploads", {
+  method: "POST",
+  headers: {Origin: new URL(process.env.NEXTAUTH_URL).origin, "Content-Type": "multipart/form-data; boundary=probe"},
+  body: "--probe--\r\n"
+}).then(r => {
+  if (r.status !== 401) throw Error("Upload route check failed: HTTP " + r.status);
+  console.log("Upload route and authentication: OK");
+}).catch(e => {console.error(e.message); process.exit(1)});
+'
 printf '\nMail delivery enabled: %s\n' "$mail_setting"
