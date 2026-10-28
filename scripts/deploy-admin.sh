@@ -62,11 +62,19 @@ git archive "$compat_commit" | tar -xf - -C "$work_dir/source"
 # Compose renders secrets as host paths; credentials never enter the build context.
 docker compose config --format json > "$work_dir/original.json"
 python3 - "$work_dir" "$release" <<'PY'
-import copy, json, sys
+import copy, json, subprocess, sys
 from pathlib import Path
 work, release = Path(sys.argv[1]), sys.argv[2]
 base = json.loads((work / 'original.json').read_text())
 base['services']['mail-worker']['environment']['MAIL_DELIVERY_ENABLED'] = 'false'
+# A retry may start from a previous named release, rather than Compose's default tags.
+# Pin the actual running images before any build can replace tags.
+for service in ('web', 'mail-worker'):
+    container = subprocess.check_output(['docker', 'compose', 'ps', '-q', service], text=True).strip()
+    if not container or '\n' in container:
+        raise SystemExit(f'Expected one running {service} container before deployment')
+    image = subprocess.check_output(['docker', 'inspect', '--format', '{{.Image}}', container], text=True).strip()
+    base['services'][service]['image'] = image
 (work / 'original.json').write_text(json.dumps(base))
 for phase in ('compat', 'main'):
     config = copy.deepcopy(base)
