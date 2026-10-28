@@ -62,7 +62,12 @@ test('requests: filters, phone search, pagination, detail, statuses, deletion an
         await expect(page.getByRole('status')).toContainText('Статус заявки сохранён')
         await page.getByRole('link', { name: '← К заявкам' }).click()
         await expect(page).toHaveURL(/page=2/)
-        await page.goto('/admin/requests/' + ids[0])
+        await page.goto(
+            '/admin/requests/' +
+                ids[0] +
+                '?returnTo=' +
+                encodeURIComponent('/admin/requests?q=' + marker + '&page=2'),
+        )
         await expect(page.getByText('Ошибка отправки', { exact: true })).toBeVisible()
         await expect(page.getByText('Почтовый сервер отклонил вход.', { exact: false })).toBeVisible()
         await expect(page.getByRole('button', { name: 'Повторить отправку', exact: true })).toBeDisabled()
@@ -77,10 +82,15 @@ test('requests: filters, phone search, pagination, detail, statuses, deletion an
         await page.getByRole('button', { name: 'Удалить заявку', exact: true }).click()
         await expect(page.getByRole('dialog')).toContainText(marker + ' 0')
         await page.getByRole('dialog').getByRole('button', { name: 'Отмена', exact: true }).click()
+        await expect(page.getByRole('button', { name: 'Удалить заявку', exact: true })).toBeFocused()
         expect((await context.request.get('/api/admin/leads/' + ids[0])).status()).toBe(200)
         await page.getByRole('button', { name: 'Удалить заявку', exact: true }).click()
         await page.getByRole('dialog').getByRole('button', { name: 'Удалить заявку', exact: true }).click()
-        await expect(page).toHaveURL(origin + '/admin/requests')
+        await expect(page).toHaveURL(
+            (url) => url.pathname === '/admin/requests' && url.searchParams.get('q') === marker,
+        )
+        await expect(page).not.toHaveURL(/page=2/)
+        await expect(page.getByText('Найдено:', { exact: false })).toContainText('25')
         expect((await context.request.get('/api/admin/leads/' + ids[0])).status()).toBe(404)
         await page.getByLabel('Имя, телефон или автомобиль').fill('89990002233')
         await page.getByRole('button', { name: 'Найти', exact: true }).click()

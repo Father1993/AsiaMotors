@@ -26,6 +26,15 @@ export function LeadList() {
         })
             .then((data) => {
                 if (!controller.signal.aborted) {
+                    const lastPage = Math.max(1, Math.ceil(data.total / data.pageSize))
+                    if (data.page > lastPage) {
+                        const next = new URLSearchParams(query)
+                        next.delete('page')
+                        if (lastPage > 1) next.set('page', String(lastPage))
+                        setResult(null)
+                        router.replace('/admin/requests' + (next.size ? '?' + next : ''), { scroll: false })
+                        return
+                    }
                     setResult(data)
                     setError(null)
                 }
@@ -44,7 +53,7 @@ export function LeadList() {
                 if (!controller.signal.aborted) setLoaded(key)
             })
         return () => controller.abort()
-    }, [query, key])
+    }, [query, key, router])
     function statusUrl(status: string) {
         const next = new URLSearchParams(query)
         next.delete('page')
