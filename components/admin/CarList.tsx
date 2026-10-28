@@ -42,12 +42,14 @@ export function CarList({ countries }: { countries: CountryRecord[] }) {
                 }
             })
             .catch((cause) => {
-                if (!controller.signal.aborted)
+                if (!controller.signal.aborted) {
+                    setResult(null)
                     setError(
                         cause instanceof ApiError
                             ? cause
                             : new ApiError('Не удалось загрузить автомобили. Проверьте соединение.', 0),
                     )
+                }
             })
             .finally(() => {
                 if (!controller.signal.aborted) setLoadedKey(loadKey)

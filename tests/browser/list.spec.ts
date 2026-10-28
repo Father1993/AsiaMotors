@@ -59,9 +59,19 @@ test('catalog list filters, pagination, delete confirmation and responsive layou
             ).toBeVisible()
             await page.screenshot({ path: `/tmp/asiamotors-list-${width}.png`, fullPage: true })
         }
+        await page.route('**/api/cars?*', (route) =>
+            route.fulfill({ status: 503, json: { error: 'Filter failed' } }),
+        )
+        await page.getByLabel('Публикация', { exact: true }).selectOption('published')
+        await page.getByRole('button', { name: 'Найти', exact: true }).click()
+        await expect(page.getByRole('main').getByRole('alert')).toContainText('Filter failed')
+        await expect(page.locator('.car-list-name')).toHaveCount(0)
+        await page.unroute('**/api/cars?*')
+        await page.getByLabel('Публикация', { exact: true }).selectOption('draft')
         await page.getByLabel('Марка или модель').fill(marker + ' missing')
         await page.getByRole('button', { name: 'Найти', exact: true }).click()
         await expect(page.getByRole('heading', { name: 'Автомобили не найдены' })).toBeVisible()
+        await page.goBack()
         await page.goBack()
         await expect(page.getByLabel('Марка или модель')).toHaveValue(marker + ' Camry')
         await expect(page.getByText('Найдено:', { exact: false })).toContainText('25')
