@@ -1,0 +1,272 @@
+.car-list-filters {
+    margin-bottom: 24px;
+}
+.car-list-filters form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 16px;
+}
+.car-list-filters .admin-field {
+    flex: 1 1 160px;
+}
+.car-list-filters .car-list-search {
+    flex: 2 1 240px;
+}
+.car-list-filters .admin-button {
+    min-height: 48px;
+}
+.car-list-results {
+    padding: 0;
+    overflow: hidden;
+}
+.car-list-count {
+    padding: 20px 24px;
+    color: var(--admin-muted);
+    font-variant-numeric: tabular-nums;
+}
+.car-list-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    table-layout: fixed;
+}
+.car-list-table th {
+    color: var(--admin-muted);
+    background: #f9fafb;
+    font-weight: 500;
+    font-size: 12px;
+}
+.car-list-table :is(th, td) {
+    padding: 16px;
+    border-bottom: 1px solid var(--admin-line);
+    vertical-align: middle;
+}
+.car-list-table :is(th, td):first-child {
+    padding-left: 24px;
+    width: 33%;
+}
+.car-list-table :is(th, td):nth-child(2) {
+    width: 16%;
+}
+.car-list-table :is(th, td):nth-child(3) {
+    width: 19%;
+}
+.car-list-table :is(th, td):last-child {
+    padding-right: 24px;
+}
+.car-list-identity {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    min-width: 0;
+}
+.car-list-identity > div {
+    min-width: 0;
+}
+.car-list-photo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 96px;
+    height: 72px;
+    flex-shrink: 0;
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--admin-canvas);
+    color: var(--admin-muted);
+    font-size: 12px;
+}
+.car-list-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.car-list-name {
+    font-size: 16px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+.car-list-name:hover {
+    text-decoration: underline;
+}
+.car-list-identity p {
+    margin-top: 4px;
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+.car-list-price {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+}
+.car-list-stock {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--admin-muted);
+}
+.car-list-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+.car-list-actions .admin-button {
+    padding: 10px 8px;
+    font-size: 12px;
+}
+.car-list-cards {
+    display: none;
+}
+.car-list-empty {
+    display: grid;
+    justify-items: start;
+    gap: 12px;
+    padding: 40px 24px;
+}
+.car-list-empty p {
+    max-width: 520px;
+}
+.car-list-empty .admin-button {
+    margin-top: 8px;
+}
+.car-list-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 24px;
+    font-variant-numeric: tabular-nums;
+}
+.car-list-pagination > span {
+    font-size: 12px;
+    color: var(--admin-muted);
+}
+.car-list-feedback {
+    margin-bottom: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+}
+.car-list-notice {
+    padding: 16px;
+    margin-bottom: 24px;
+    border: 1px solid var(--admin-line);
+    border-radius: 8px;
+    background: var(--admin-paper);
+}
+.car-list-loading {
+    padding: 24px;
+}
+.car-list-loading p {
+    margin-bottom: 20px;
+    color: var(--admin-muted);
+}
+.car-list-skeleton {
+    height: 72px;
+    border-radius: 6px;
+    background: var(--admin-canvas);
+    margin-top: 16px;
+}
+.admin-confirm-root {
+    min-height: 0;
+    background: transparent;
+    position: relative;
+    z-index: 80;
+}
+.admin-confirm-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgb(20 25 30 / 0.45);
+}
+.admin-confirm-container {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+.admin-confirm-panel {
+    max-width: 480px;
+    width: 100%;
+}
+.admin-confirm-panel p {
+    margin-top: 12px;
+    overflow-wrap: anywhere;
+}
+.admin-confirm-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+}
+@media (max-width: 1100px) and (min-width: 900px) {
+    .car-list-photo {
+        width: 72px;
+        height: 60px;
+    }
+    .car-list-identity {
+        gap: 12px;
+    }
+}
+@media (max-width: 899px) {
+    .car-list-table {
+        display: none;
+    }
+    .car-list-cards {
+        display: grid;
+    }
+    .car-list-card {
+        padding: 20px 24px;
+        border-bottom: 1px solid var(--admin-line);
+        min-width: 0;
+    }
+    .car-list-card-details {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+        margin: 16px 0 12px;
+    }
+    .car-list-card-details .car-list-price {
+        flex: 1 0 100%;
+        font-size: 18px;
+    }
+    .car-list-card .car-list-actions .admin-button {
+        font-size: 14px;
+    }
+    .car-list-results {
+        padding: 0;
+    }
+}
+@media (max-width: 479px) {
+    .car-list-filters .admin-field {
+        flex-basis: 100%;
+    }
+    .car-list-filters .admin-button {
+        flex: 1 1 auto;
+    }
+    .car-list-count,
+    .car-list-card,
+    .car-list-pagination,
+    .car-list-empty {
+        padding: 16px;
+    }
+    .car-list-pagination {
+        gap: 8px;
+    }
+    .car-list-pagination .admin-button {
+        padding: 10px;
+        font-size: 12px;
+    }
+    .admin-confirm-container {
+        padding: 16px;
+    }
+    .admin-confirm-actions .admin-button {
+        flex: 1 0 100%;
+    }
+}
