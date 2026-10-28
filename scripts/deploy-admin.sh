@@ -59,6 +59,9 @@ trap 'exit 143' HUP TERM
 git rev-parse --verify "$compat_commit^{commit}" >/dev/null
 mkdir "$work_dir/source"
 git archive "$compat_commit" | tar -xf - -C "$work_dir/source"
+# tar obeys umask 077; COPY keeps modes, so non-root image users need readable source.
+# The parent directory remains 0700 and the archive contains no runtime secrets.
+chmod -R a+rX "$work_dir/source"
 # Compose renders secrets as host paths; credentials never enter the build context.
 docker compose config --format json > "$work_dir/original.json"
 python3 - "$work_dir" "$release" <<'PY'
