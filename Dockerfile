@@ -9,7 +9,9 @@ FROM dependencies AS builder
 ENV NEXT_TELEMETRY_DISABLED=1
 COPY . .
 # Builds require neither database connectivity nor production secrets.
-RUN npm run build && rm -f .next/standalone/.env*
+RUN npm run build \
+    && test -f .next/server/app/api/uploads/route.js \
+    && rm -f .next/standalone/.env*
 
 FROM node:24-alpine AS worker
 WORKDIR /app
