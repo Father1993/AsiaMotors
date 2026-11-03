@@ -39,9 +39,8 @@ sudo sh scripts/deploy.sh --with-mail
 ```
 
 Verification authenticates only; it does not send a message. SMTP 535 means the
-account, application password or mail-client access needs correction. The
-currently supplied password was rejected during verification; real delivery is
-not proven until working credentials are supplied and a test is received.
+account, application password or mail-client access needs correction. Successful verification proves authentication only. Real delivery to the configured
+Yandex mailbox and forwarding to the final recipient must be checked separately.
 
 ## Deployment
 
@@ -134,55 +133,25 @@ is included in integration checks. Production dependency audit is separate from
 functional verification and does not prove legal compliance or absence of all
 security defects.
 
-## First release of the catalog administration workspace
+## Branches and subsequent releases
 
-After checking out the complete administration release, run:
+`master` contains the accepted production code; `dev` is the base for development.
+Both branches retain the complete release history. Merge reviewed work from `dev`
+into `master` before deploying; do not force-push these branches.
 
-```sh
-sudo sh scripts/deploy-admin.sh --without-mail
-```
+The one-time catalog compatibility rollout is complete. Its helper was removed;
+previous source remains in Git history. Existing private rollback configurations,
+database/media backups and Docker volumes must be retained according to the backup
+policy. Do not restore an old database over newer catalog entries or requests.
 
-The checkout must have no tracked edits (including staged edits). The helper uses
-`flock` to prevent concurrent releases and trusts only the exact checkout path for
-Git commands run through sudo.
-
-This one-time helper first builds compatibility commit `6b7a3a9` from `git archive`
-in a private temporary directory, without switching the working checkout. It uses
-host secret paths from the resolved Compose configuration; secrets are never copied
-into either image build context. Outbound email is forced off and persisted in `.env`.
-
-The helper stops web/worker, takes a consistent database/media backup, applies the
-compatibility migrations through `002`, and starts/health-checks that compatible
-application. It then builds the new application while the compatible site runs,
-stops writers again, applies the remaining migrations, and starts the new version.
-If migration or activation of the new version fails, it starts the saved compatibility
-images against the current database. **It does not restore the database or delete
-new drafts.** An error before migration `002` instead restarts the original images.
-A failed build of the compatibility images leaves the current site running.
-
-The private `backups/admin-<release>/` contains the consistent dump, uploads archive,
-checksums, configuration/secrets, and resolved runtime configurations. Compatibility
-image tags remain on the Docker host. To roll the application back later, use the
-exact command printed by the helper:
+For the current production server, where SMTP has been verified and enabled:
 
 ```sh
-sudo docker compose -f /home/ops/asiamotors/backups/admin-<release>/compat.compose.json up -d --no-build --no-deps --wait web mail-worker
+cd /home/ops/asiamotors
+git switch master
+git pull --ff-only origin master
+sudo sh -c 'sh scripts/backup.sh && sh scripts/deploy.sh --with-mail'
 ```
 
-Keep the saved images until final acceptance; do not prune them. The temporary
-compatibility source is removed, so rollback must use `--no-build`. Ordinary future
-releases use `scripts/deploy.sh --without-mail`. The initial catalog release must
-use this helper rather than running all new migrations with the old site active.
-
-The helper also honors `COMPOSE_PROJECT_NAME` and `COMPOSE_FILE`. Compose resolves
-relative bind/secret paths before the helper creates its private configurations;
-health checks run inside the web container and do not assume a host port. For a local
-trial, use a **separate disposable test project and volumes**, with database migrations
-initially no newer than `002` and SMTP disabled. Never reuse production volumes for
-that test. If using `sudo`, pass the intended Compose variables explicitly, since
-sudo may otherwise discard them. The existing PostgreSQL container must already be
-running and healthy. The helper neither provisions a new server nor configures Nginx.
-
-Automatic rollback cannot repair infrastructure failures such as an unavailable
-Docker daemon or database. It reports a failed restart and the private saved config
-location for recovery; all original database/media volumes remain untouched.
+Use `--without-mail` only when deliberately disabling delivery. It persists that
+mode, so the choice must be explicit on every release.

@@ -61,7 +61,7 @@ Asia Motors - это современная веб-платформа для а�
 
 ```bash
 # Подготовьте .env и .secrets по DEPLOYMENT.md, затем:
-sudo sh scripts/deploy.sh
+sudo sh scripts/deploy.sh --without-mail
 ```
 
 ## ✨ Основные функции
@@ -187,3 +187,16 @@ sudo sh scripts/deploy.sh
 
 
 Развёртывание базы, фотографий и SMTP описано в [DEPLOYMENT.md](DEPLOYMENT.md).
+
+## Ветки и дальнейшая разработка
+
+- `master` — принятый код для production.
+- `dev` — текущая разработка; изменения проходят проверки перед переносом в `master`.
+
+Завершённые рабочие ветки удаляются после включения в `master` и `dev`.
+Автотесты в `tests/` и `compose.test.yaml` сохраняются для проверки изменений
+на отдельной тестовой БД. Команды: [docs/admin-verification.md](docs/admin-verification.md).
+Результаты тестов и кэш сборки не хранятся в Git.
+
+На действующем сервере почта включена: для выпуска используйте `--with-mail`
+по [DEPLOYMENT.md](DEPLOYMENT.md). `--without-mail` явно отключает отправку.
