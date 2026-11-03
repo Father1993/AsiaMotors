@@ -8,11 +8,17 @@ case "${1:---without-mail}" in
 esac
 # A fresh database starts empty except for the four country categories.
 docker compose config --quiet
-# Keep the running web image address before builds replace mutable tags.
+# Pin the running web before builds can replace its only mutable image tag.
+release_name="$(date -u +%Y%m%dT%H%M%SZ)-$$"
 previous_web_image=""
 previous_web_container=$(docker compose ps -q web)
 if [ -n "$previous_web_container" ]; then
-  previous_web_image=$(docker inspect --format '{{.Image}}' "$previous_web_container")
+  running_web_image=$(docker inspect --format '{{.Image}}' "$previous_web_container")
+  if docker image tag "$running_web_image" "asiamotors-web-rollback:$release_name"; then
+    previous_web_image="asiamotors-web-rollback:$release_name"
+  else
+    printf 'Previous web image is unavailable; continuing without an application rollback image. Database/media backups are unaffected.\n' >&2
+  fi
 fi
 docker compose build web mail-worker migrate
 if [ "$mail_setting" = true ]; then
@@ -35,14 +41,12 @@ docker compose up -d --no-deps --wait --wait-timeout 180 mail-worker
 # Roll back only the web, keeping the new worker that protects article media.
 if [ -n "$previous_web_image" ]; then
   umask 077
-  release_name="$(date -u +%Y%m%dT%H%M%SZ)-$$"
   release_dir="backups/release-$release_name"
   mkdir -p "$release_dir"
   docker compose config --format json > "$release_dir/rollback.compose.json"
   worker_container=$(docker compose ps -q mail-worker)
-  worker_image=$(docker inspect --format '{{.Image}}' "$worker_container")
-  docker image tag "$previous_web_image" "asiamotors-web-rollback:$release_name"
-  docker image tag "$worker_image" "asiamotors-worker-rollback:$release_name"
+  worker_image=$(docker inspect --format '{{.Config.Image}}' "$worker_container")
+  if docker image tag "$worker_image" "asiamotors-worker-rollback:$release_name"; then
   python3 - "$release_dir/rollback.compose.json" "asiamotors-web-rollback:$release_name" "asiamotors-worker-rollback:$release_name" <<'PYROLLBACK'
 import json, sys
 from pathlib import Path
@@ -55,6 +59,10 @@ p.write_text(json.dumps(config))
 p.chmod(0o600)
 PYROLLBACK
   printf 'Application rollback (keeps article-aware worker): docker compose -f %s/rollback.compose.json up -d --no-build --no-deps --wait web mail-worker\n' "$release_dir"
+  else
+    rm -f "$release_dir/rollback.compose.json"
+    printf 'Worker rollback image could not be pinned; continuing activation.\n' >&2
+  fi
 fi
 docker compose up -d --no-deps --wait --wait-timeout 180 web
 docker compose ps
