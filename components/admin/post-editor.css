@@ -1,0 +1,223 @@
+.post-editor-layout {
+    border: 0;
+    padding: 0;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
+    gap: 24px;
+    align-items: start;
+}
+.post-editor-main,
+.post-editor-sidebar {
+    min-width: 0;
+    display: grid;
+    gap: 24px;
+}
+.post-editor-section {
+    display: grid;
+    gap: 16px;
+    padding: 24px;
+}
+.post-metadata-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+.post-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+.post-toolbar .admin-button {
+    padding: 8px 12px;
+    min-height: 44px;
+}
+.post-toolbar [aria-pressed='true'] {
+    background: var(--admin-accent-soft);
+    color: var(--admin-accent);
+    border-color: var(--admin-accent);
+}
+.post-insert-panel {
+    border-bottom: 1px solid var(--admin-line);
+    padding: 12px 0;
+}
+.post-insert-panel summary {
+    cursor: pointer;
+    font-weight: 600;
+    min-height: 28px;
+}
+.post-inline-fields {
+    display: grid;
+    gap: 12px;
+    padding: 12px 0;
+}
+.post-inline-fields label {
+    display: grid;
+    gap: 6px;
+}
+.post-inline-fields input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--admin-line);
+    border-radius: 8px;
+    font-size: 16px;
+}
+.post-rich-content {
+    min-height: 440px;
+    padding: 24px 8px;
+    overflow-wrap: anywhere;
+    outline: 0;
+}
+.post-rich-content:focus {
+    outline: 2px solid var(--admin-accent);
+    outline-offset: 4px;
+}
+.post-rich-content p {
+    margin: 12px 0;
+}
+.post-rich-content h2 {
+    margin: 24px 0 12px;
+    font-size: 24px;
+}
+.post-rich-content h3 {
+    margin: 20px 0 10px;
+    font-size: 20px;
+}
+.post-rich-content ul {
+    list-style: disc;
+    padding-left: 24px;
+}
+.post-rich-content ol {
+    list-style: decimal;
+    padding-left: 24px;
+}
+.post-rich-content blockquote {
+    border-left: 3px solid var(--admin-line);
+    padding-left: 16px;
+    color: var(--admin-muted);
+}
+.post-rich-content a {
+    color: var(--admin-accent);
+    text-decoration: underline;
+}
+.post-rich-content img {
+    max-height: 500px;
+    max-width: 100%;
+    display: block;
+    margin: 16px 0;
+}
+.post-rich-content .ProseMirror-selectednode {
+    outline: 3px solid var(--admin-accent);
+}
+.post-rich-content .tableWrapper {
+    overflow-x: auto;
+}
+.post-rich-content table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 16px 0;
+    table-layout: fixed;
+}
+.post-rich-content :is(td, th) {
+    border: 1px solid var(--admin-line);
+    padding: 10px;
+    min-width: 50px;
+    vertical-align: top;
+    position: relative;
+}
+.post-rich-content th {
+    background: var(--admin-canvas);
+    font-weight: 600;
+}
+.post-rich-content .selectedCell {
+    background: var(--admin-accent-soft);
+}
+.post-cover-preview {
+    display: grid;
+    gap: 8px;
+}
+.post-cover-preview img {
+    width: 100%;
+    max-height: 240px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+.post-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+.post-checkbox input {
+    margin-top: 4px;
+    width: 20px;
+    height: 20px;
+}
+.post-search-preview {
+    padding: 16px;
+    border: 1px solid var(--admin-line);
+    border-radius: 8px;
+    overflow-wrap: anywhere;
+}
+.post-search-preview small {
+    display: block;
+    color: var(--admin-muted);
+}
+.post-search-preview strong {
+    display: block;
+    color: #254792;
+    font-size: 18px;
+    margin: 6px 0;
+}
+.post-savebar {
+    margin-top: 24px;
+    display: grid;
+    gap: 16px;
+    padding: 20px;
+}
+.post-editor-section details ul {
+    padding-left: 20px;
+    list-style: disc;
+}
+.post-editor-section details li {
+    margin: 8px 0;
+}
+.post-editor-layout:disabled {
+    opacity: 0.75;
+}
+@media (max-width: 1000px) {
+    .post-editor-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .post-editor-sidebar {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .post-editor-sidebar > section:last-child {
+        grid-column: 1/-1;
+    }
+}
+@media (max-width: 600px) {
+    .post-editor-section {
+        padding: 16px;
+    }
+    .post-editor-sidebar,
+    .post-metadata-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .post-rich-content {
+        padding: 16px 4px;
+        min-height: 320px;
+    }
+    .post-savebar {
+        padding: 16px;
+    }
+    .post-savebar .post-toolbar {
+        align-items: stretch;
+    }
+    .post-savebar .admin-button {
+        flex: 1 1 150px;
+    }
+    .post-editor-sidebar > section:last-child {
+        grid-column: auto;
+    }
+}

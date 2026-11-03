@@ -1,4 +1,4 @@
-'use server'
+import 'server-only'
 import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
@@ -10,6 +10,7 @@ const postsDirectory = path.join(process.cwd(), 'public', 'posts')
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {
     try {
+        if (!(await getAllPostSlugs()).includes(slug)) return null
         const fullPath = path.join(postsDirectory, `${slug}.mdx`)
         const fileContents = await fs.promises.readFile(fullPath, 'utf8')
 
@@ -50,7 +51,7 @@ export async function getAllPosts(): Promise<Post[]> {
                     // Изменяем замену расширения
                     const slug = fileName.replace(/\.mdx$/, '')
                     return getPostBySlug(slug)
-                })
+                }),
         )
 
         return posts
@@ -58,7 +59,7 @@ export async function getAllPosts(): Promise<Post[]> {
             .sort(
                 (post1, post2) =>
                     new Date(post2.date).getTime() -
-                    new Date(post1.date).getTime()
+                    new Date(post1.date).getTime(),
             )
     } catch (error) {
         console.error('Error loading posts:', error)

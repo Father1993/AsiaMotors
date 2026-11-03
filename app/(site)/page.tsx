@@ -11,6 +11,8 @@ import News from '@/components/features/News/News'
 import FAQ from '@/components/features/Faq/FAQ'
 import TestimonialsBlock from '@/components/templates/AboutPage/TestimonialsBlock'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
     title: 'AsiaMotors — Продажа новых и БУ автомобилей из Китая | Надежные авто напрямую от поставщиков',
     description:

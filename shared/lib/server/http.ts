@@ -55,10 +55,10 @@ export async function readBody(request: Request, limit: number) {
     }
     return Buffer.concat(chunks)
 }
-export async function readJson(request: Request) {
+export async function readJson(request: Request, limit = 32768) {
     if (!request.headers.get('content-type')?.startsWith('application/json'))
         throw new HttpError(415, 'Ожидается JSON')
-    const bytes = await readBody(request, 32768)
+    const bytes = await readBody(request, limit)
     try {
         return JSON.parse(bytes.toString('utf8'))
     } catch {

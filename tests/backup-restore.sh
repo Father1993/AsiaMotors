@@ -18,7 +18,7 @@ tar -C .test-uploads -czf "$scratch/uploads.tar.gz" .
 compose exec -T db createdb -U postgres "$restore_db"
 compose exec -T db pg_restore --exit-on-error -U postgres -d "$restore_db" < "$scratch/database.dump"
 # Compare every application's table, including schema checksums and saved draft JSON.
-for table in countries cars media leads mail_outbox request_limits schema_migrations; do
+for table in countries cars media posts post_media leads mail_outbox request_limits schema_migrations; do
   sql="SELECT md5(coalesce(string_agg(row_to_json(t)::text, '' ORDER BY row_to_json(t)::text), '')) FROM $table t"
   original=$(compose exec -T db psql -U postgres -d asiamotors -Atc "$sql")
   restored=$(compose exec -T db psql -U postgres -d "$restore_db" -Atc "$sql")

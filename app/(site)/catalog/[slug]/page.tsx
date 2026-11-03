@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import News from '@/components/features/News/News'
 import { notFound, permanentRedirect } from 'next/navigation'
 import { generateCarSlug, carIdFromSlug } from '@/shared/utils/catalog'
 import CarPageClient from '@/components/templates/CatalogPage/CarPage/CarPage.client'
@@ -93,5 +94,5 @@ export default async function CarPage({ params }: PageProps) {
 
     if (slug !== generateCarSlug(car)) permanentRedirect('/catalog/' + generateCarSlug(car))
 
-    return <CarPageClient car={car} allCars={allCars} />
+    return <CarPageClient car={car} allCars={allCars} news={<News />} />
 }

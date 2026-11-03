@@ -38,7 +38,7 @@ try {
     }
     await c.query('GRANT USAGE ON SCHEMA public TO asiamotors')
     await c.query(
-        'GRANT SELECT,INSERT,UPDATE,DELETE ON countries,cars,media,leads,mail_outbox,request_limits TO asiamotors'
+        'GRANT SELECT,INSERT,UPDATE,DELETE ON countries,cars,media,leads,mail_outbox,request_limits,posts,post_media TO asiamotors'
     )
 } catch (error) {
     console.error('Database migration failed', error.code || '')

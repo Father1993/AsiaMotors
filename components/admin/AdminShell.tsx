@@ -16,7 +16,7 @@ export function confirmLeave() {
 }
 export function clearCarRecovery() {
     for (const key of Object.keys(sessionStorage)) {
-        if (key.startsWith('asiamotors:car:')) sessionStorage.removeItem(key)
+        if (key.startsWith('asiamotors:car:') || key.startsWith('asiamotors:post:')) sessionStorage.removeItem(key)
     }
 }
 

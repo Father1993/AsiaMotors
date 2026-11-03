@@ -31,15 +31,16 @@ import {
 import SimilarCars from '@/components/features/SimilarCars/SimilarCars'
 import { OrderCarModal } from '../OrderCarModal'
 import { Car } from '@/shared/types/adminTypes'
-import News from '@/components/features/News/News'
+import type { ReactNode } from 'react'
 import FAQ from '@/components/features/Faq/FAQ'
 
 interface CarPageProps {
+    news?: ReactNode
     car: Car
     allCars: Car[] // добавить этот пропс
 }
 
-const CarPageClient = ({ car, allCars }: CarPageProps) => {
+const CarPageClient = ({ car, allCars, news }: CarPageProps) => {
     const router = useRouter()
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
     const [isShareModalOpen, setIsShareModalOpen] = useState(false)
@@ -475,7 +476,7 @@ const CarPageClient = ({ car, allCars }: CarPageProps) => {
                     />
                 </div>
             </div>
-            <News />
+            {news}
             <FAQ />
         </div>
     )

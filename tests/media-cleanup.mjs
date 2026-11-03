@@ -15,10 +15,10 @@ const directory = await mkdtemp(path.join(os.tmpdir(), 'asiamotors-media-'))
 const db = new pg.Pool({ ...dbConfig(), options: '-c search_path=' + schema, max: 3 })
 try {
     await owner.query(`CREATE SCHEMA ${schema}`)
-    for (const name of ['001_initial.sql', '002_car_publication.sql']) {
+    for (const name of ['001_initial.sql', '002_car_publication.sql', '004_posts.sql']) {
         await db.query(await readFile('db/migrations/' + name, 'utf8'))
     }
-    const filenames = Array.from({ length: 5 }, () => randomUUID() + '.webp')
+    const filenames = Array.from({ length: 7 }, () => randomUUID() + '.webp')
     for (const [index, filename] of filenames.entries()) {
         await writeFile(path.join(directory, filename), 'synthetic image')
         await db.query("INSERT INTO media(filename,created_at) VALUES($1,now()-($2*interval '1 hour'))", [filename, index === 1 ? 1 : 48])
@@ -27,6 +27,10 @@ try {
         await db.query(`INSERT INTO cars(country_id,brand,model,year,category,price,specs,images,status)
             VALUES('china','Cleanup','Fixture',2026,'Test',1,'{}',$1,$2)`, [['/media/' + filenames[index]], status])
     }
+    // Both draft and published article images remain referenced while hidden.
+    const postId = randomUUID()
+    await db.query(`INSERT INTO posts(id,slug,draft,published,status,published_at) VALUES($1,'cleanup-article','{}','{}','hidden',now())`, [postId])
+    for (const filename of filenames.slice(5)) await db.query('INSERT INTO post_media(post_id,filename) VALUES($1,$2)', [postId,filename])
     // A save holding the media lock must be skipped, then retained after commit.
     const saving = await db.connect()
     try {
@@ -43,7 +47,7 @@ try {
     await cleanOrphanMedia(db, directory)
     await assert.rejects(access(path.join(directory, filenames[0])))
     for (const filename of filenames.slice(1)) await access(path.join(directory, filename))
-    assert.equal((await db.query('SELECT count(*)::int AS count FROM media')).rows[0].count, 4)
+    assert.equal((await db.query('SELECT count(*)::int AS count FROM media')).rows[0].count, 6)
     console.log('PASS: orphan grace period, draft/hidden media and concurrent save survive cleanup')
 } finally {
     await db.end()
