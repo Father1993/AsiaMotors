@@ -1,14 +1,55 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { EditorContent, useEditor, type JSONContent } from '@tiptap/react'
+import { useEffect, useRef, useState } from 'react'
+import {
+    EditorContent,
+    useEditor,
+    useEditorState,
+    type JSONContent,
+    type Editor,
+} from '@tiptap/react'
+import type { SelectionBookmark } from '@tiptap/pm/state'
+import { closeHistory } from '@tiptap/pm/history'
 import StarterKit from '@tiptap/starter-kit'
 import Image from '@tiptap/extension-image'
 import { TableKit } from '@tiptap/extension-table'
+import {
+    Dialog,
+    DialogBackdrop,
+    DialogPanel,
+    DialogTitle,
+    Description,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuItems,
+} from '@headlessui/react'
+import {
+    LinkIcon,
+    PhotoIcon,
+    TableCellsIcon,
+    ArrowUturnLeftIcon,
+    ArrowUturnRightIcon,
+    ListBulletIcon,
+    NumberedListIcon,
+} from '@heroicons/react/24/outline'
 import { apiRequest } from '@/shared/lib/catalog-client'
 import { safePostLink, type DocumentNode } from '@/shared/lib/post-schema'
 
 const ArticleImage = Image.extend({
+    parseHTML() {
+        return [
+            {
+                tag: 'img[src]',
+                getAttrs: (element) =>
+                    /^\/media\/[0-9a-f-]{36}\.webp$/.test(
+                        element.getAttribute('src') || '',
+                    )
+                        ? null
+                        : false,
+            },
+        ]
+    },
     addAttributes() {
         return {
             ...this.parent?.(),
@@ -52,6 +93,27 @@ function cleanNode(node: JSONContent): DocumentNode {
             : {}),
     } as DocumentNode
 }
+function toolbarState(editor: Editor | null) {
+    return editor
+        ? {
+              style: editor.isActive('heading', { level: 2 })
+                  ? 'h2'
+                  : editor.isActive('heading', { level: 3 })
+                    ? 'h3'
+                    : 'paragraph',
+              bold: editor.isActive('bold'),
+              italic: editor.isActive('italic'),
+              bullet: editor.isActive('bulletList'),
+              ordered: editor.isActive('orderedList'),
+              quote: editor.isActive('blockquote'),
+              image: editor.isActive('image'),
+              link: editor.isActive('link'),
+              table: editor.isActive('table'),
+              undo: editor.can().undo(),
+              redo: editor.can().redo(),
+          }
+        : null
+}
 export function PostContentEditor({
     value,
     onChange,
@@ -63,11 +125,18 @@ export function PostContentEditor({
     disabled: boolean
     onUploading: (value: boolean) => void
 }) {
+    const [dialog, setDialog] = useState<'link' | 'image' | null>(null)
+    const [href, setHref] = useState('')
+    const [linkText, setLinkText] = useState('')
+    const [imageUrl, setImageUrl] = useState('')
     const [imageAlt, setImageAlt] = useState('')
     const [caption, setCaption] = useState('')
-    const [href, setHref] = useState('')
-    const [uploadError, setUploadError] = useState('')
+    const [editingImage, setEditingImage] = useState(false)
+    const [problem, setProblem] = useState('')
     const [uploading, setUploading] = useState(false)
+    const selection = useRef<SelectionBookmark | null>(null)
+    const originalLinkText = useRef('')
+    const mounted = useRef(true)
     const editor = useEditor({
         immediatelyRender: false,
         extensions: [
@@ -96,41 +165,94 @@ export function PostContentEditor({
                 'aria-multiline': 'true',
                 id: 'post-content',
             },
+            transformPastedHTML(html) {
+                // Keep local media only; Word styles and unsupported nodes are discarded by the schema parser.
+                const template = document.createElement('template')
+                template.innerHTML = html
+                template.content.querySelectorAll('img').forEach((image) => {
+                    if (
+                        !/^\/media\/[0-9a-f-]{36}\.webp$/.test(
+                            image.getAttribute('src') || '',
+                        )
+                    )
+                        image.remove()
+                })
+                return template.innerHTML
+            },
         },
         onUpdate: ({ editor }) => onChange(cleanNode(editor.getJSON())),
     })
+    const selected = useEditorState({
+        editor,
+        selector: ({ editor }) => toolbarState(editor),
+    })
+    const current = selected || toolbarState(editor)
+    useEffect(() => {
+        mounted.current = true
+        return () => {
+            mounted.current = false
+        }
+    }, [])
     useEffect(() => {
         editor?.setEditable(!disabled && !uploading, false)
     }, [editor, disabled, uploading])
     useEffect(() => {
-        if (
-            editor &&
-            JSON.stringify(cleanNode(editor.getJSON())) !==
-                JSON.stringify(value)
-        )
+        if (editor && !editor.state.doc.eq(editor.schema.nodeFromJSON(value)))
             editor.commands.setContent(value as JSONContent, {
                 emitUpdate: false,
             })
     }, [editor, value])
-    useEffect(() => {
+    function rememberSelection() {
+        if (editor) selection.current = editor.state.selection.getBookmark()
+    }
+    function restoreSelection() {
         if (!editor) return
-        const update = () => {
-            const attrs = editor.getAttributes('image')
-            if (editor.isActive('image')) {
-                setImageAlt(attrs.alt || '')
-                setCaption(attrs.caption || '')
+        const bookmark = selection.current
+        if (bookmark)
+            editor.commands.command(({ tr }) => {
+                tr.setSelection(bookmark.resolve(tr.doc))
+                return true
+            })
+    }
+    function openLink() {
+        if (!editor) return
+        if (editor.isActive('link')) editor.commands.extendMarkRange('link')
+        rememberSelection()
+        const { from, to } = editor.state.selection
+        setHref(editor.getAttributes('link').href || '')
+        originalLinkText.current = editor.state.doc.textBetween(from, to, ' ')
+        setLinkText(originalLinkText.current)
+        setProblem('')
+        setDialog('link')
+    }
+    function openImage() {
+        if (!editor) return
+        rememberSelection()
+        const existing = editor.isActive('image')
+        const attrs = existing ? editor.getAttributes('image') : {}
+        setEditingImage(existing)
+        setImageUrl(attrs.src || '')
+        setImageAlt(attrs.alt || '')
+        setCaption(attrs.caption || '')
+        setProblem('')
+        setDialog('image')
+    }
+    function closeDialog() {
+        if (uploading) return
+        setDialog(null)
+        setProblem('')
+        requestAnimationFrame(() => {
+            if (editor && !editor.isDestroyed) {
+                restoreSelection()
+                editor.commands.focus()
             }
-        }
-        editor.on('selectionUpdate', update)
-        return () => {
-            editor.off('selectionUpdate', update)
-        }
-    }, [editor])
+        })
+    }
     async function upload(file?: File) {
-        if (!file || !editor) return
+        if (!file) return
         setUploading(true)
         onUploading(true)
-        setUploadError('')
+        setProblem('')
         try {
             const body = new FormData()
             body.set('file', file)
@@ -138,259 +260,559 @@ export function PostContentEditor({
                 method: 'POST',
                 body,
             })
-            editor
-                .chain()
-                .focus()
-                .setImage({ src: result.url, alt: imageAlt })
-                .updateAttributes('image', { caption })
-                .run()
+            if (mounted.current) setImageUrl(result.url)
         } catch (error) {
-            setUploadError(
-                error instanceof Error
-                    ? error.message
-                    : 'Не удалось загрузить фото',
-            )
+            if (mounted.current)
+                setProblem(
+                    error instanceof Error
+                        ? error.message
+                        : 'Не удалось загрузить фотографию. Повторите загрузку.',
+                )
         } finally {
-            setUploading(false)
+            if (mounted.current) setUploading(false)
             onUploading(false)
         }
     }
-    if (!editor) return <p className="admin-muted">Загрузка редактора…</p>
-    const buttons = [
+    function historyBoundary() {
+        if (editor) editor.view.dispatch(closeHistory(editor.state.tr))
+    }
+    function applyDialog() {
+        if (!editor || uploading) return
+        if (dialog === 'link') {
+            if (!safePostLink(href.trim()) || !linkText.trim()) {
+                setProblem(
+                    'Укажите текст и адрес ссылки: https://… или путь /catalog.',
+                )
+                return
+            }
+            restoreSelection()
+            historyBoundary()
+            if (
+                linkText === originalLinkText.current &&
+                !editor.state.selection.empty
+            ) {
+                editor.chain().focus().setLink({ href: href.trim() }).run()
+            } else {
+                const marks = (
+                    editor.state.storedMarks ||
+                    editor.state.selection.$from.marks()
+                )
+                    .filter((mark) =>
+                        ['bold', 'italic'].includes(mark.type.name),
+                    )
+                    .map((mark) => ({ type: mark.type.name }))
+                editor
+                    .chain()
+                    .focus()
+                    .insertContent({
+                        type: 'text',
+                        text: linkText,
+                        marks: [
+                            ...marks,
+                            { type: 'link', attrs: { href: href.trim() } },
+                        ],
+                    })
+                    .run()
+            }
+        } else {
+            if (!imageUrl) {
+                setProblem('Сначала выберите и загрузите фотографию.')
+                return
+            }
+            restoreSelection()
+            historyBoundary()
+            if (editingImage)
+                editor
+                    .chain()
+                    .focus()
+                    .updateAttributes('image', {
+                        src: imageUrl,
+                        alt: imageAlt.trim(),
+                        caption: caption.trim(),
+                    })
+                    .run()
+            else
+                editor
+                    .chain()
+                    .focus()
+                    .setImage({ src: imageUrl, alt: imageAlt.trim() })
+                    .updateAttributes('image', { caption: caption.trim() })
+                    .run()
+        }
+        historyBoundary()
+        setDialog(null)
+        setProblem('')
+    }
+    if (!editor || !current)
+        return <p className="admin-muted">Загрузка редактора…</p>
+    const tableCommands = [
         [
-            'Абзац',
-            () => editor.chain().focus().setParagraph().run(),
-            editor.isActive('paragraph'),
+            'Вставить таблицу 3 × 3',
+            () =>
+                editor
+                    .chain()
+                    .focus()
+                    .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+                    .run(),
+            false,
         ],
         [
-            'H2',
-            () => editor.chain().focus().toggleHeading({ level: 2 }).run(),
-            editor.isActive('heading', { level: 2 }),
+            'Добавить строку ниже',
+            () => editor.chain().focus().addRowAfter().run(),
+            true,
         ],
         [
-            'H3',
-            () => editor.chain().focus().toggleHeading({ level: 3 }).run(),
-            editor.isActive('heading', { level: 3 }),
+            'Добавить столбец справа',
+            () => editor.chain().focus().addColumnAfter().run(),
+            true,
         ],
         [
-            'Жирный',
-            () => editor.chain().focus().toggleBold().run(),
-            editor.isActive('bold'),
+            'Сделать строку заголовком',
+            () => editor.chain().focus().toggleHeaderRow().run(),
+            true,
         ],
         [
-            'Курсив',
-            () => editor.chain().focus().toggleItalic().run(),
-            editor.isActive('italic'),
+            'Удалить строку',
+            () => editor.chain().focus().deleteRow().run(),
+            true,
         ],
         [
-            'Список',
-            () => editor.chain().focus().toggleBulletList().run(),
-            editor.isActive('bulletList'),
+            'Удалить столбец',
+            () => editor.chain().focus().deleteColumn().run(),
+            true,
         ],
         [
-            'Нумерация',
-            () => editor.chain().focus().toggleOrderedList().run(),
-            editor.isActive('orderedList'),
+            'Удалить таблицу',
+            () => editor.chain().focus().deleteTable().run(),
+            true,
         ],
-        [
-            'Цитата',
-            () => editor.chain().focus().toggleBlockquote().run(),
-            editor.isActive('blockquote'),
-        ],
-        ['Отменить', () => editor.chain().focus().undo().run(), false],
-        ['Повторить', () => editor.chain().focus().redo().run(), false],
     ] as const
     return (
         <div className="post-editor-content">
             <div
-                className="post-toolbar"
-                role="group"
+                className="post-format-toolbar"
+                role="toolbar"
                 aria-label="Форматирование текста"
+                onKeyDown={(event) => {
+                    if (
+                        event.target instanceof HTMLSelectElement ||
+                        !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(
+                            event.key,
+                        )
+                    )
+                        return
+                    const controls = Array.from(
+                        event.currentTarget.querySelectorAll<
+                            HTMLButtonElement | HTMLSelectElement
+                        >('button:not(:disabled), select:not(:disabled)'),
+                    )
+                    const index = controls.indexOf(
+                        event.target as HTMLButtonElement,
+                    )
+                    if (index < 0) return
+                    event.preventDefault()
+                    controls[
+                        event.key === 'Home'
+                            ? 0
+                            : event.key === 'End'
+                              ? controls.length - 1
+                              : (index +
+                                    (event.key === 'ArrowRight' ? 1 : -1) +
+                                    controls.length) %
+                                controls.length
+                    ]?.focus()
+                }}
             >
-                {buttons.map(([label, action, active]) => (
-                    <button
-                        key={label}
-                        type="button"
-                        className="admin-button"
-                        aria-pressed={active}
-                        disabled={disabled || uploading}
-                        onClick={() => action()}
-                    >
-                        {label}
-                    </button>
-                ))}
-            </div>
-            <details className="post-insert-panel">
-                <summary>Ссылка</summary>
-                <div className="post-inline-fields">
-                    <label>
-                        Адрес ссылки
-                        <input
-                            type="text"
-                            inputMode="url"
-                            value={href}
-                            onChange={(event) => setHref(event.target.value)}
-                            placeholder="https://… или /catalog"
-                        />
+                <div className="post-tool-group">
+                    <label className="sr-only" htmlFor="post-text-style">
+                        Стиль текста
                     </label>
-                    <button
-                        type="button"
-                        className="admin-button"
-                        disabled={disabled || !href.trim()}
-                        onClick={() => {
-                            const url = href.trim()
-                            if (!safePostLink(url)) {
-                                setUploadError(
-                                    'Укажите безопасную ссылку https://… или путь /catalog',
-                                )
-                                return
-                            }
-                            editor
-                                .chain()
-                                .focus()
-                                .extendMarkRange('link')
-                                .setLink({ href: url })
-                                .run()
+                    <select
+                        id="post-text-style"
+                        value={current.style}
+                        disabled={disabled}
+                        onChange={(event) => {
+                            const chain = editor.chain().focus()
+                            if (event.target.value === 'paragraph')
+                                chain.setParagraph().run()
+                            else
+                                chain
+                                    .toggleHeading({
+                                        level:
+                                            event.target.value === 'h2' ? 2 : 3,
+                                    })
+                                    .run()
                         }}
                     >
-                        Применить к выделенному тексту
+                        <option value="paragraph">Обычный текст</option>
+                        <option value="h2">Заголовок раздела</option>
+                        <option value="h3">Подзаголовок</option>
+                    </select>
+                </div>
+                <div
+                    className="post-tool-group"
+                    role="group"
+                    aria-label="Начертание"
+                >
+                    <button
+                        type="button"
+                        title="Полужирный · Ctrl+B"
+                        aria-label="Полужирный"
+                        aria-pressed={current.bold}
+                        disabled={disabled}
+                        onMouseDown={(event) => event.preventDefault()}
+                        onClick={() =>
+                            editor.chain().focus().toggleBold().run()
+                        }
+                    >
+                        <strong>Ж</strong>
                     </button>
                     <button
                         type="button"
-                        className="admin-button"
+                        title="Курсив · Ctrl+I"
+                        aria-label="Курсив"
+                        aria-pressed={current.italic}
                         disabled={disabled}
-                        onClick={() => editor.chain().focus().unsetLink().run()}
+                        onMouseDown={(event) => event.preventDefault()}
+                        onClick={() =>
+                            editor.chain().focus().toggleItalic().run()
+                        }
                     >
-                        Убрать ссылку
+                        <em>К</em>
                     </button>
                 </div>
-            </details>
-            <details className="post-insert-panel">
-                <summary>Фотография и подпись</summary>
-                <div className="post-inline-fields">
-                    <label>
-                        Описание фотографии (alt)
-                        <input
-                            value={imageAlt}
-                            maxLength={300}
-                            onChange={(event) =>
-                                setImageAlt(event.target.value)
-                            }
-                        />
-                    </label>
-                    <label>
-                        Подпись под фотографией
-                        <input
-                            value={caption}
-                            maxLength={500}
-                            onChange={(event) => setCaption(event.target.value)}
-                        />
-                    </label>
-                    <label>
-                        Загрузить JPG, PNG или WebP до 10 МБ
-                        <input
-                            type="file"
-                            accept="image/jpeg,image/png,image/webp"
-                            disabled={disabled || uploading}
-                            onChange={(event) => {
-                                void upload(event.target.files?.[0])
-                                event.target.value = ''
-                            }}
-                        />
-                    </label>
+                <div
+                    className="post-tool-group"
+                    role="group"
+                    aria-label="Списки и цитата"
+                >
                     <button
                         type="button"
-                        className="admin-button"
-                        disabled={disabled || !editor.isActive('image')}
+                        title="Маркированный список"
+                        aria-label="Маркированный список"
+                        aria-pressed={current.bullet}
+                        disabled={disabled}
+                        onMouseDown={(event) => event.preventDefault()}
                         onClick={() =>
-                            editor
-                                .chain()
-                                .focus()
-                                .updateAttributes('image', {
-                                    alt: imageAlt,
-                                    caption,
-                                })
-                                .run()
+                            editor.chain().focus().toggleBulletList().run()
                         }
                     >
-                        Обновить выбранную фотографию
+                        <ListBulletIcon />
                     </button>
                     <button
                         type="button"
-                        className="admin-button"
-                        disabled={disabled || !editor.isActive('image')}
+                        title="Нумерованный список"
+                        aria-label="Нумерованный список"
+                        aria-pressed={current.ordered}
+                        disabled={disabled}
+                        onMouseDown={(event) => event.preventDefault()}
                         onClick={() =>
-                            editor.chain().focus().deleteSelection().run()
+                            editor.chain().focus().toggleOrderedList().run()
                         }
                     >
-                        Удалить выбранную фотографию
+                        <NumberedListIcon />
+                    </button>
+                    <button
+                        type="button"
+                        title="Цитата"
+                        aria-label="Цитата"
+                        aria-pressed={current.quote}
+                        disabled={disabled}
+                        onMouseDown={(event) => event.preventDefault()}
+                        onClick={() =>
+                            editor.chain().focus().toggleBlockquote().run()
+                        }
+                    >
+                        « »
                     </button>
                 </div>
-            </details>
-            <details className="post-insert-panel">
-                <summary>Таблица сравнения</summary>
-                <div className="post-toolbar">
+                <div
+                    className="post-tool-group"
+                    role="group"
+                    aria-label="Вставить в статью"
+                >
                     <button
                         type="button"
-                        className="admin-button"
                         disabled={disabled}
-                        onClick={() =>
-                            editor
-                                .chain()
-                                .focus()
-                                .insertTable({
-                                    rows: 3,
-                                    cols: 3,
-                                    withHeaderRow: true,
-                                })
-                                .run()
+                        aria-label={
+                            current.link ? 'Изменить ссылку' : 'Вставить ссылку'
                         }
+                        title="Ссылка"
+                        onClick={openLink}
                     >
-                        Вставить таблицу 3 × 3
+                        <LinkIcon />
+                        <span>Ссылка</span>
                     </button>
-                    {(
-                        [
-                            'addRowAfter',
-                            'deleteRow',
-                            'addColumnAfter',
-                            'deleteColumn',
-                            'deleteTable',
-                        ] as const
-                    ).map((command, index) => (
-                        <button
-                            key={command}
+                    <button
+                        type="button"
+                        disabled={disabled}
+                        aria-label={
+                            current.image
+                                ? 'Изменить фотографию'
+                                : 'Вставить фотографию'
+                        }
+                        title="Фотография"
+                        onClick={openImage}
+                    >
+                        <PhotoIcon />
+                        <span>Фото</span>
+                    </button>
+                    <Menu>
+                        <MenuButton
                             type="button"
-                            className="admin-button"
-                            disabled={disabled || !editor.isActive('table')}
-                            onClick={() =>
-                                editor.chain().focus()[command]().run()
-                            }
+                            disabled={disabled}
+                            onClick={rememberSelection}
+                            onKeyDown={(event) => {
+                                if (
+                                    [
+                                        'Enter',
+                                        ' ',
+                                        'ArrowDown',
+                                        'ArrowUp',
+                                    ].includes(event.key)
+                                )
+                                    rememberSelection()
+                            }}
+                            title="Таблица"
                         >
-                            {
-                                [
-                                    'Добавить строку',
-                                    'Удалить строку',
-                                    'Добавить столбец',
-                                    'Удалить столбец',
-                                    'Удалить таблицу',
-                                ][index]
-                            }
-                        </button>
-                    ))}
+                            <TableCellsIcon />
+                            <span>Таблица</span>
+                        </MenuButton>
+                        <MenuItems
+                            anchor="bottom start"
+                            className="admin-shell post-table-menu"
+                        >
+                            {tableCommands.map(
+                                ([label, command, requiresTable]) => (
+                                    <MenuItem
+                                        key={label}
+                                        as="button"
+                                        type="button"
+                                        disabled={
+                                            requiresTable && !current.table
+                                        }
+                                        onClick={() => {
+                                            restoreSelection()
+                                            command()
+                                        }}
+                                    >
+                                        {label}
+                                    </MenuItem>
+                                ),
+                            )}
+                        </MenuItems>
+                    </Menu>
                 </div>
-            </details>
+                <div
+                    className="post-tool-group"
+                    role="group"
+                    aria-label="История изменений"
+                >
+                    <button
+                        type="button"
+                        title="Отменить · Ctrl+Z"
+                        aria-label="Отменить действие"
+                        disabled={disabled || !current.undo}
+                        onMouseDown={(event) => event.preventDefault()}
+                        onClick={() => editor.chain().focus().undo().run()}
+                    >
+                        <ArrowUturnLeftIcon />
+                    </button>
+                    <button
+                        type="button"
+                        title="Повторить · Ctrl+Shift+Z"
+                        aria-label="Повторить действие"
+                        disabled={disabled || !current.redo}
+                        onMouseDown={(event) => event.preventDefault()}
+                        onClick={() => editor.chain().focus().redo().run()}
+                    >
+                        <ArrowUturnRightIcon />
+                    </button>
+                </div>
+            </div>
             <EditorContent editor={editor} />
-            {uploading && <p role="status">Фотография загружается…</p>}
-            {uploadError && (
-                <p role="alert" className="admin-field-error">
-                    {uploadError} Повторите действие; текст и загруженные
-                    изображения сохранены.
-                </p>
-            )}
-            <p className="admin-muted">
-                Заголовок статьи станет H1 автоматически. В тексте используйте
-                H2 и H3. Вставка из Word очищается от посторонних стилей.
-            </p>
+            <div className="post-content-status">
+                <span>
+                    Выделите текст, чтобы изменить оформление или добавить
+                    ссылку.
+                </span>
+                <span>Ctrl+B · Ctrl+I · Ctrl+Z</span>
+            </div>
+            <Dialog
+                open={!!dialog}
+                onClose={closeDialog}
+                className="admin-shell admin-confirm-root"
+            >
+                <DialogBackdrop className="admin-confirm-backdrop" />
+                <div className="admin-confirm-container">
+                    <DialogPanel className="admin-panel post-edit-dialog">
+                        <DialogTitle as="h2">
+                            {dialog === 'link'
+                                ? 'Ссылка в статье'
+                                : editingImage
+                                  ? 'Изменить фотографию'
+                                  : 'Добавить фотографию'}
+                        </DialogTitle>
+                        <Description className="admin-muted">
+                            {dialog === 'link'
+                                ? 'Ссылка будет добавлена в том месте, где находилось выделение.'
+                                : 'Фотографии хранятся на сервере сайта. Изменения карточки применятся после сохранения статьи.'}
+                        </Description>
+                        <div className="post-dialog-fields">
+                            {dialog === 'link' ? (
+                                <>
+                                    <label>
+                                        Текст ссылки
+                                        <input
+                                            data-autofocus
+                                            value={linkText}
+                                            maxLength={1000}
+                                            onChange={(event) =>
+                                                setLinkText(event.target.value)
+                                            }
+                                        />
+                                    </label>
+                                    <label>
+                                        Адрес ссылки
+                                        <input
+                                            type="text"
+                                            inputMode="url"
+                                            value={href}
+                                            maxLength={2048}
+                                            placeholder="https://… или /catalog"
+                                            onChange={(event) =>
+                                                setHref(event.target.value)
+                                            }
+                                        />
+                                    </label>
+                                    {current.link && (
+                                        <button
+                                            type="button"
+                                            className="admin-button"
+                                            onClick={() => {
+                                                restoreSelection()
+                                                historyBoundary()
+                                                editor
+                                                    .chain()
+                                                    .focus()
+                                                    .unsetLink()
+                                                    .run()
+                                                historyBoundary()
+                                                setDialog(null)
+                                            }}
+                                        >
+                                            Убрать ссылку
+                                        </button>
+                                    )}
+                                </>
+                            ) : (
+                                <>
+                                    {imageUrl && (
+                                        <div className="post-dialog-photo">
+                                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                                            <img
+                                                src={imageUrl}
+                                                alt={
+                                                    imageAlt ||
+                                                    'Выбранная фотография'
+                                                }
+                                            />
+                                        </div>
+                                    )}
+                                    <label>
+                                        Фотография
+                                        <input
+                                            data-autofocus
+                                            type="file"
+                                            accept="image/jpeg,image/png,image/webp"
+                                            disabled={uploading}
+                                            onChange={(event) => {
+                                                void upload(
+                                                    event.target.files?.[0],
+                                                )
+                                                event.target.value = ''
+                                            }}
+                                        />
+                                    </label>
+                                    <p className="admin-muted">
+                                        JPG, PNG или WebP, до 10 МБ.
+                                    </p>
+                                    <label>
+                                        Что изображено на фотографии (alt)
+                                        <input
+                                            value={imageAlt}
+                                            maxLength={300}
+                                            onChange={(event) =>
+                                                setImageAlt(event.target.value)
+                                            }
+                                        />
+                                    </label>
+                                    <label>
+                                        Подпись под фотографией
+                                        <input
+                                            value={caption}
+                                            maxLength={500}
+                                            onChange={(event) =>
+                                                setCaption(event.target.value)
+                                            }
+                                        />
+                                    </label>
+                                    {editingImage && (
+                                        <button
+                                            type="button"
+                                            className="admin-button admin-button-danger"
+                                            disabled={uploading}
+                                            onClick={() => {
+                                                restoreSelection()
+                                                historyBoundary()
+                                                editor
+                                                    .chain()
+                                                    .focus()
+                                                    .deleteSelection()
+                                                    .run()
+                                                historyBoundary()
+                                                setDialog(null)
+                                            }}
+                                        >
+                                            Удалить фотографию из текста
+                                        </button>
+                                    )}
+                                </>
+                            )}
+                            {uploading && (
+                                <p role="status">Фотография загружается…</p>
+                            )}
+                            {problem && (
+                                <p role="alert" className="admin-field-error">
+                                    {problem}
+                                </p>
+                            )}
+                        </div>
+                        <div className="admin-confirm-actions">
+                            <button
+                                type="button"
+                                className="admin-button"
+                                disabled={uploading}
+                                onClick={closeDialog}
+                            >
+                                Отмена
+                            </button>
+                            <button
+                                type="button"
+                                className="admin-button admin-button-primary"
+                                disabled={uploading}
+                                onClick={applyDialog}
+                            >
+                                {dialog === 'link'
+                                    ? 'Применить ссылку'
+                                    : editingImage
+                                      ? 'Сохранить фотографию'
+                                      : 'Вставить фотографию'}
+                            </button>
+                        </div>
+                    </DialogPanel>
+                </div>
+            </Dialog>
         </div>
     )
 }

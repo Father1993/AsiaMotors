@@ -1,0 +1,69 @@
+.pwa-panel {
+    font:
+        16px/1.5 var(--font-inter),
+        system-ui,
+        sans-serif;
+    color: #111827;
+    background: #fff;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 24px #00000012;
+    z-index: 60;
+}
+.pwa-panel p {
+    margin: 8px 0;
+}
+.pwa-panel button {
+    font: inherit;
+    min-height: 44px;
+    border: 1px solid #b91c1c;
+    border-radius: 8px;
+    background: #b91c1c;
+    color: #fff;
+    padding: 8px 14px;
+    cursor: pointer;
+}
+.pwa-panel button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+.pwa-panel button:focus-visible {
+    outline: 3px solid #111827;
+    outline-offset: 3px;
+}
+.pwa-panel .pwa-later {
+    margin-left: 8px;
+    background: #fff;
+    color: #374151;
+    border-color: #d1d5db;
+}
+.pwa-panel-client {
+    position: fixed;
+    bottom: max(16px, env(safe-area-inset-bottom));
+    left: 16px;
+    max-width: 380px;
+    width: calc(100% - 32px);
+}
+.pwa-panel-manager {
+    margin: 0 0 24px;
+    max-width: 760px;
+}
+.pwa-panel strong {
+    font-weight: 650;
+}
+
+.manager-auth {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+}
+.manager-auth > .pwa-panel-manager {
+    width: min(760px, calc(100% - 32px));
+    margin: 16px auto 0;
+}
+.manager-auth > .min-h-screen {
+    min-height: 0;
+    flex: 1;
+    padding-block: 24px;
+}

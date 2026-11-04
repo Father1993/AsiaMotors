@@ -15,7 +15,7 @@ export default function SignIn() {
 
     useEffect(() => {
         if (status === 'authenticated' && session?.user?.isAdmin) {
-            router.push('/admin')
+            router.replace('/admin/dashboard')
         }
     }, [session, status, router])
 

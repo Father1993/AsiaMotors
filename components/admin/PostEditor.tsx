@@ -1,10 +1,12 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
 import type { AdminPost } from '@/shared/lib/server/posts'
 import { documentText, type PostDocument } from '@/shared/lib/post-schema'
+import { adminDate } from '@/shared/lib/admin-date'
 import { Field } from './Field'
 import { ConfirmDialog } from './ConfirmDialog'
 import { confirmLeave } from './AdminShell'
@@ -12,6 +14,21 @@ import { PostContentEditor } from './PostContentEditor'
 import { usePostEditor } from './usePostEditor'
 import './post-editor.css'
 
+const tabs = ['Основное', 'Анонс', 'Текст статьи', 'SEO', 'Публикация']
+function localPublicationTime(value: string) {
+    const parts = new Intl.DateTimeFormat('sv-SE', {
+        timeZone: 'Asia/Vladivostok',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        hourCycle: 'h23',
+    }).formatToParts(new Date(value))
+    const part = (type: Intl.DateTimeFormatPartTypes) =>
+        parts.find((item) => item.type === type)?.value
+    return `${part('year')}-${part('month')}-${part('day')}T${part('hour')}:${part('minute')}`
+}
 function slugify(value: string) {
     const alphabet: Record<string, string> = {
         а: 'a',
@@ -67,13 +84,60 @@ export function PostEditor({
     const [uploading, setUploading] = useState(false)
     const state = usePostEditor(post, uploading)
     const router = useRouter()
+    const [tab, setTab] = useState(0)
     const [slugTouched, setSlugTouched] = useState(!!post?.slug)
     const [coverError, setCoverError] = useState('')
+    const [publicationMode, setPublicationMode] = useState<'now' | 'schedule'>(
+        post?.scheduled_at ? 'schedule' : 'now',
+    )
+    const [scheduledTime, setScheduledTime] = useState(
+        post?.scheduled_at ? localPublicationTime(post.scheduled_at) : '',
+    )
+    const [scheduleError, setScheduleError] = useState('')
     const [confirmation, setConfirmation] = useState<
-        'hide' | 'restore' | 'delete' | null
+        'hide' | 'restore' | 'delete' | 'publish' | 'cancelSchedule' | null
     >(null)
     const { values, record, dirty, busy, ready, recovery } = state
     const disabled = busy || uploading || !ready || !!recovery
+    const addressLocked = !!(record?.published_at || record?.scheduled_at)
+    useEffect(() => {
+        const first = Object.keys(state.errors)[0]
+            ?.replace(/^document\./, '')
+            .split('.')[0]
+        if (!first) return
+        const tabForField: Record<string, number> = {
+            title: 0,
+            author: 0,
+            tags: 0,
+            slug: 0,
+            excerpt: 1,
+            cover: 1,
+            coverAlt: 1,
+            content: 2,
+            seoTitle: 3,
+            seoDescription: 3,
+            scheduledAt: 4,
+        }
+        let active = true
+        const frame = requestAnimationFrame(() => {
+            if (!active) return
+            setTab(tabForField[first] ?? 4)
+            requestAnimationFrame(() => {
+                if (active)
+                    document
+                        .getElementById(
+                            first === 'scheduledAt'
+                                ? 'post-scheduledAt'
+                                : 'post-' + first,
+                        )
+                        ?.focus()
+            })
+        })
+        return () => {
+            active = false
+            cancelAnimationFrame(frame)
+        }
+    }, [state.errors])
     function update<K extends keyof PostDocument>(
         key: K,
         value: PostDocument[K],
@@ -110,27 +174,6 @@ export function PostEditor({
             setUploading(false)
         }
     }
-    const title = values.document.seoTitle || values.document.title
-    const description =
-        values.document.seoDescription || values.document.excerpt
-    const text = documentText(values.document.content)
-    const warnings = [
-        title.length < 30 || title.length > 70
-            ? 'Для поискового заголовка обычно удобно 30–70 символов.'
-            : '',
-        description.length < 80 || description.length > 180
-            ? 'Описание для поиска: ориентир 80–180 символов.'
-            : '',
-        !JSON.stringify(values.document.content).includes('"heading"')
-            ? 'Разделите длинный текст заголовками H2 и H3.'
-            : '',
-        !/"href":"\/(?!\/)/.test(JSON.stringify(values.document.content))
-            ? 'Добавьте полезную внутреннюю ссылку на каталог или услугу.'
-            : '',
-        /"alt":""/.test(JSON.stringify(values.document.content))
-            ? 'У некоторых фотографий не заполнено описание alt.'
-            : '',
-    ].filter(Boolean)
     function textField(
         key:
             | 'title'
@@ -142,19 +185,25 @@ export function PostEditor({
         label: string,
         max: number,
         textarea = false,
+        hint?: string,
     ) {
-        const input = {
+        const props = {
             id: 'post-' + key,
             value: values.document[key],
             maxLength: max,
             'aria-invalid': !!fieldError(key),
+            'aria-describedby': fieldError(key)
+                ? 'post-' + key + '-error'
+                : hint
+                  ? 'post-' + key + '-hint'
+                  : undefined,
             onChange: (
                 event: React.ChangeEvent<
                     HTMLInputElement | HTMLTextAreaElement
                 >,
             ) => {
                 update(key, event.target.value)
-                if (key === 'title' && !slugTouched && !record?.published_at)
+                if (key === 'title' && !slugTouched && !addressLocked)
                     state.setValues((current) => ({
                         ...current,
                         slug: slugify(event.target.value),
@@ -162,18 +211,72 @@ export function PostEditor({
             },
         }
         return (
-            <Field name={'post-' + key} label={label} error={fieldError(key)}>
+            <Field
+                name={'post-' + key}
+                label={label}
+                error={fieldError(key)}
+                hint={hint}
+            >
                 {textarea ? (
-                    <textarea {...input} rows={3} />
+                    <textarea {...props} rows={4} />
                 ) : (
-                    <input {...input} />
+                    <input {...props} />
                 )}
             </Field>
         )
     }
+    async function publish() {
+        if (publicationMode === 'schedule') {
+            const date = new Date(scheduledTime + ':00+10:00')
+            if (
+                !scheduledTime ||
+                !Number.isFinite(date.getTime()) ||
+                date.getTime() < Date.now() + 60000
+            ) {
+                setScheduleError(
+                    'Выберите время не менее чем через одну минуту по Владивостоку.',
+                )
+                setTab(4)
+                requestAnimationFrame(() =>
+                    document.getElementById('post-scheduledAt')?.focus(),
+                )
+                return
+            }
+            setScheduleError('')
+            await state.action('schedule', date.toISOString())
+        } else if (record?.scheduled_at) setConfirmation('publish')
+        else await state.action('publish')
+    }
+    const title = values.document.seoTitle || values.document.title
+    const description =
+        values.document.seoDescription || values.document.excerpt
+    const text = documentText(values.document.content)
+    const warnings = [
+        title.length < 30 || title.length > 70
+            ? 'Заголовок для поиска: ориентир 30–70 символов.'
+            : '',
+        description.length < 80 || description.length > 180
+            ? 'Описание для поиска: ориентир 80–180 символов.'
+            : '',
+        /"alt":""/.test(JSON.stringify(values.document.content))
+            ? 'Добавьте описание фотографий — оно помогает читателям и поиску.'
+            : '',
+        !JSON.stringify(values.document.content).includes('"heading"')
+            ? 'Разделите длинный текст заголовками разделов и подзаголовками.'
+            : '',
+        !/"href":"\/(?!\/)/.test(JSON.stringify(values.document.content))
+            ? 'Добавьте полезную ссылку на каталог или услугу.'
+            : '',
+    ].filter(Boolean)
+    const statusLabel =
+        record?.status === 'published'
+            ? 'Опубликована'
+            : record?.status === 'hidden'
+              ? 'Скрыта'
+              : 'Черновик'
     return (
         <>
-            <div className="admin-titlebar">
+            <div className="admin-titlebar post-page-heading">
                 <div>
                     <Link
                         href={returnTo}
@@ -184,38 +287,45 @@ export function PostEditor({
                     >
                         ← К статьям
                     </Link>
-                    <h1>{record ? 'Редактирование статьи' : 'Новая статья'}</h1>
+                    <h1>
+                        {record
+                            ? values.document.title || 'Редактирование статьи'
+                            : 'Новая статья'}
+                    </h1>
                     <p className="admin-muted">
-                        Подготовьте материал, проверьте предпросмотр и
-                        опубликуйте отдельным действием.
+                        Заполните карточку, подготовьте текст и выберите время
+                        публикации.
                     </p>
                 </div>
-                <span className="admin-badge">
-                    {record?.status === 'published'
-                        ? 'Опубликована'
-                        : record?.status === 'hidden'
-                          ? 'Скрыта'
-                          : 'Черновик'}
-                </span>
+                <div className="post-heading-status">
+                    <span className="admin-badge">{statusLabel}</span>
+                    {record?.scheduled_at && (
+                        <span className="admin-badge admin-badge-warning">
+                            Публикация по расписанию
+                        </span>
+                    )}
+                </div>
             </div>
             {recovery && (
                 <section
-                    className="admin-panel"
+                    className="admin-panel post-recovery"
                     aria-label="Восстановление статьи"
                 >
                     <h2>Есть несохранённый текст</h2>
                     <p>
-                        Восстановить локальную копию из этой вкладки? Публикация
-                        на сайте от этого не изменится.
+                        Восстановить локальную копию из этой вкладки?
+                        Опубликованная статья от этого не изменится.
                     </p>
                     <div className="post-toolbar">
                         <button
+                            type="button"
                             className="admin-button admin-button-primary"
                             onClick={state.restoreRecovery}
                         >
                             Восстановить
                         </button>
                         <button
+                            type="button"
                             className="admin-button"
                             onClick={state.discardRecovery}
                         >
@@ -226,7 +336,7 @@ export function PostEditor({
             )}
             {state.problem && (
                 <div
-                    className="admin-panel"
+                    className="admin-panel post-problem"
                     role="alert"
                     id="post-problem"
                     tabIndex={-1}
@@ -253,7 +363,7 @@ export function PostEditor({
                 </div>
             )}
             {state.notice && (
-                <p role="status" className="admin-notice">
+                <p role="status" className="post-notice">
                     {state.notice}
                 </p>
             )}
@@ -262,203 +372,476 @@ export function PostEditor({
                     event.preventDefault()
                     void state.save()
                 }}
+                className="post-workspace"
             >
-                <fieldset disabled={disabled} className="post-editor-layout">
-                    <div className="post-editor-main">
-                        <section className="admin-panel post-editor-section">
-                            <h2>Основное</h2>
-                            {textField('title', 'Заголовок статьи', 200)}
-                            {textField(
-                                'excerpt',
-                                'Краткое описание',
-                                500,
-                                true,
-                            )}
-                            <div className="post-metadata-grid">
-                                {textField('author', 'Автор', 150)}
+                <TabGroup selectedIndex={tab} onChange={setTab}>
+                    <TabList className="post-tabs" aria-label="Разделы статьи">
+                        {tabs.map((label) => (
+                            <Tab key={label} type="button">
+                                {label}
+                            </Tab>
+                        ))}
+                    </TabList>
+                    <TabPanels className="admin-panel post-tab-panels">
+                        <TabPanel unmount={false}>
+                            <fieldset
+                                disabled={disabled}
+                                className="post-tab-form"
+                            >
+                                <div className="post-section-heading">
+                                    <h2>Основная информация</h2>
+                                    <p>
+                                        Название статьи и постоянный адрес на
+                                        сайте.
+                                    </p>
+                                </div>
+                                {textField(
+                                    'title',
+                                    'Заголовок статьи',
+                                    200,
+                                    false,
+                                    'Это основной заголовок, который увидит читатель.',
+                                )}
+                                <div className="post-metadata-grid">
+                                    {textField('author', 'Автор', 150)}
+                                    <Field
+                                        name="post-tags"
+                                        label="Теги через запятую"
+                                        hint="До 10 тегов: например, Changan, сравнение, доставка."
+                                        error={fieldError('tags')}
+                                    >
+                                        <input
+                                            id="post-tags"
+                                            key={
+                                                record?.version ||
+                                                String(!!recovery)
+                                            }
+                                            defaultValue={values.document.tags.join(
+                                                ', ',
+                                            )}
+                                            maxLength={500}
+                                            onChange={(event) =>
+                                                update(
+                                                    'tags',
+                                                    event.target.value
+                                                        .split(',')
+                                                        .map((tag) =>
+                                                            tag.trim(),
+                                                        )
+                                                        .filter(Boolean),
+                                                )
+                                            }
+                                        />
+                                    </Field>
+                                </div>
                                 <Field
-                                    name="post-tags"
-                                    label="Теги через запятую"
+                                    name="post-slug"
+                                    label="Адрес страницы"
+                                    hint={
+                                        addressLocked
+                                            ? 'Адрес закреплён после публикации или постановки в расписание.'
+                                            : 'Предлагается по заголовку. Латинские буквы, цифры и дефисы.'
+                                    }
+                                    error={fieldError('slug')}
                                 >
-                                    <input
-                                        id="post-tags"
-                                        key={
-                                            record?.version ||
-                                            String(!!recovery)
-                                        }
-                                        defaultValue={values.document.tags.join(
-                                            ', ',
+                                    <div className="post-slug-input">
+                                        <span>asiamotors.su/blog/</span>
+                                        <input
+                                            id="post-slug"
+                                            value={values.slug}
+                                            maxLength={120}
+                                            readOnly={addressLocked}
+                                            onChange={(event) => {
+                                                setSlugTouched(true)
+                                                state.setValues((current) => ({
+                                                    ...current,
+                                                    slug: event.target.value,
+                                                }))
+                                            }}
+                                        />
+                                    </div>
+                                </Field>
+                                <button
+                                    type="button"
+                                    className="admin-button post-next-section"
+                                    onClick={() => setTab(1)}
+                                >
+                                    Далее: анонс и обложка →
+                                </button>
+                            </fieldset>
+                        </TabPanel>
+                        <TabPanel unmount={false}>
+                            <fieldset
+                                disabled={disabled}
+                                className="post-tab-form"
+                            >
+                                <div className="post-section-heading">
+                                    <h2>Анонс и обложка</h2>
+                                    <p>
+                                        Эта карточка появится в списке статей и
+                                        в блоке новостей.
+                                    </p>
+                                </div>
+                                <div className="post-announcement-layout">
+                                    <div className="post-field-stack">
+                                        {textField(
+                                            'excerpt',
+                                            'Краткое описание',
+                                            500,
+                                            true,
+                                            'Коротко объясните читателю, чем полезна статья.',
                                         )}
-                                        maxLength={500}
+                                        <Field
+                                            name="post-cover"
+                                            label="Файл обложки"
+                                            hint="JPG, PNG или WebP, до 10 МБ."
+                                            error={
+                                                coverError ||
+                                                fieldError('cover')
+                                            }
+                                        >
+                                            <input
+                                                id="post-cover"
+                                                type="file"
+                                                accept="image/jpeg,image/png,image/webp"
+                                                onChange={(event) => {
+                                                    void uploadCover(
+                                                        event.target.files?.[0],
+                                                    )
+                                                    event.target.value = ''
+                                                }}
+                                            />
+                                        </Field>
+                                        {textField(
+                                            'coverAlt',
+                                            'Что изображено на обложке (alt)',
+                                            300,
+                                        )}
+                                        {values.document.cover && (
+                                            <button
+                                                type="button"
+                                                className="admin-button"
+                                                onClick={() =>
+                                                    update('cover', '')
+                                                }
+                                            >
+                                                Убрать обложку
+                                            </button>
+                                        )}
+                                    </div>
+                                    <div
+                                        className="post-announcement-preview"
+                                        aria-label="Предпросмотр анонса"
+                                    >
+                                        {values.document.cover ? (
+                                            <div className="post-cover-preview">
+                                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                <img
+                                                    src={values.document.cover}
+                                                    alt={
+                                                        values.document
+                                                            .coverAlt ||
+                                                        'Обложка статьи'
+                                                    }
+                                                />
+                                            </div>
+                                        ) : (
+                                            <div className="post-cover-placeholder">
+                                                Здесь появится обложка
+                                            </div>
+                                        )}
+                                        <div>
+                                            <strong>
+                                                {values.document.title ||
+                                                    'Заголовок статьи'}
+                                            </strong>
+                                            <p>
+                                                {values.document.excerpt ||
+                                                    'Краткое описание статьи'}
+                                            </p>
+                                            <small>
+                                                {values.document.author ||
+                                                    'Автор'}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button
+                                    type="button"
+                                    className="admin-button post-next-section"
+                                    onClick={() => setTab(2)}
+                                >
+                                    Далее: текст статьи →
+                                </button>
+                            </fieldset>
+                        </TabPanel>
+                        <TabPanel unmount={false}>
+                            <fieldset
+                                disabled={disabled}
+                                className="post-text-panel"
+                            >
+                                <div className="post-section-heading">
+                                    <h2>Текст статьи</h2>
+                                    <p>
+                                        Пишите и оформляйте текст, как в обычном
+                                        текстовом редакторе. Заголовок статьи
+                                        уже задан отдельно.
+                                    </p>
+                                </div>
+                                <PostContentEditor
+                                    value={values.document.content}
+                                    onChange={(value) =>
+                                        update('content', value)
+                                    }
+                                    disabled={disabled}
+                                    onUploading={setUploading}
+                                />
+                                {fieldError('content') && (
+                                    <p className="admin-field-error">
+                                        {fieldError('content')}
+                                    </p>
+                                )}
+                                <div className="post-article-count">
+                                    <span>{text.length} символов</span>
+                                    <span>
+                                        Примерно{' '}
+                                        {Math.max(
+                                            1,
+                                            Math.ceil(
+                                                text.split(/\s+/).length / 180,
+                                            ),
+                                        )}{' '}
+                                        мин чтения
+                                    </span>
+                                </div>
+                            </fieldset>
+                        </TabPanel>
+                        <TabPanel unmount={false}>
+                            <fieldset
+                                disabled={disabled}
+                                className="post-tab-form"
+                            >
+                                <div className="post-section-heading">
+                                    <h2>Отображение в поиске</h2>
+                                    <p>
+                                        SEO-поля помогают описать статью для
+                                        поисковых систем и социальных сетей.
+                                    </p>
+                                </div>
+                                <div className="post-seo-layout">
+                                    <div className="post-field-stack">
+                                        {textField(
+                                            'seoTitle',
+                                            'Заголовок для поиска',
+                                            200,
+                                            false,
+                                            'Если оставить пустым, используем заголовок статьи.',
+                                        )}
+                                        {textField(
+                                            'seoDescription',
+                                            'Описание для поиска',
+                                            500,
+                                            true,
+                                            'Если оставить пустым, используем краткое описание.',
+                                        )}
+                                    </div>
+                                    <div>
+                                        <p className="post-preview-label">
+                                            Пример поискового результата
+                                        </p>
+                                        <div
+                                            className="post-search-preview"
+                                            aria-label="Пример поискового результата"
+                                        >
+                                            <small>
+                                                asiamotors.su › blog ›{' '}
+                                                {values.slug || 'adres-stati'}
+                                            </small>
+                                            <strong>
+                                                {title || 'Заголовок статьи'}
+                                            </strong>
+                                            <p>
+                                                {description ||
+                                                    'Краткое описание появится здесь.'}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                {warnings.length > 0 && (
+                                    <div className="post-seo-hints">
+                                        <h3>Рекомендации</h3>
+                                        <ul>
+                                            {warnings.map((warning) => (
+                                                <li key={warning}>{warning}</li>
+                                            ))}
+                                        </ul>
+                                        <p className="admin-muted">
+                                            Это рекомендации по оформлению. Они
+                                            не гарантируют позиции в поиске.
+                                        </p>
+                                    </div>
+                                )}
+                            </fieldset>
+                        </TabPanel>
+                        <TabPanel unmount={false}>
+                            <fieldset
+                                disabled={disabled}
+                                className="post-tab-form"
+                            >
+                                <div className="post-section-heading">
+                                    <h2>Публикация</h2>
+                                    <p>
+                                        Сначала сохраните черновик и проверьте
+                                        предпросмотр. Затем опубликуйте сейчас
+                                        или выберите время.
+                                    </p>
+                                </div>
+                                <div className="post-publication-summary">
+                                    <strong>{statusLabel}</strong>
+                                    {record?.published_at && (
+                                        <p>
+                                            Первая публикация:{' '}
+                                            {adminDate(record.published_at)}
+                                        </p>
+                                    )}
+                                    {record?.hasChanges && (
+                                        <p>Есть неопубликованные изменения</p>
+                                    )}
+                                    {record?.scheduled_at && (
+                                        <div className="post-scheduled-info">
+                                            <strong>
+                                                Запланировано:{' '}
+                                                {adminDate(record.scheduled_at)}
+                                            </strong>
+                                            <p>
+                                                В это время выйдет версия,
+                                                сохранённая при постановке в
+                                                расписание. Более поздние правки
+                                                останутся в черновике.
+                                            </p>
+                                            <button
+                                                type="button"
+                                                className="admin-button"
+                                                disabled={disabled || dirty}
+                                                onClick={() =>
+                                                    setConfirmation(
+                                                        'cancelSchedule',
+                                                    )
+                                                }
+                                            >
+                                                Отменить расписание
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                                <fieldset className="post-publication-mode">
+                                    <legend>Когда опубликовать</legend>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="publication-mode"
+                                            checked={publicationMode === 'now'}
+                                            onChange={() =>
+                                                setPublicationMode('now')
+                                            }
+                                        />
+                                        Сейчас, после нажатия кнопки публикации
+                                    </label>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="publication-mode"
+                                            checked={
+                                                publicationMode === 'schedule'
+                                            }
+                                            onChange={() =>
+                                                setPublicationMode('schedule')
+                                            }
+                                        />
+                                        В указанное время
+                                    </label>
+                                </fieldset>
+                                {publicationMode === 'schedule' && (
+                                    <Field
+                                        name="post-scheduledAt"
+                                        label="Дата и время (Владивосток, UTC+10)"
+                                        hint="Время не зависит от часового пояса вашего устройства."
+                                        error={
+                                            scheduleError ||
+                                            fieldError('scheduledAt')
+                                        }
+                                    >
+                                        <input
+                                            id="post-scheduledAt"
+                                            type="datetime-local"
+                                            value={scheduledTime}
+                                            onChange={(event) => {
+                                                setScheduledTime(
+                                                    event.target.value,
+                                                )
+                                                setScheduleError('')
+                                            }}
+                                        />
+                                    </Field>
+                                )}
+                                <label className="post-checkbox">
+                                    <input
+                                        type="checkbox"
+                                        checked={values.document.showCta}
                                         onChange={(event) =>
                                             update(
-                                                'tags',
-                                                event.target.value
-                                                    .split(',')
-                                                    .map((tag) => tag.trim())
-                                                    .filter(Boolean),
+                                                'showCta',
+                                                event.target.checked,
                                             )
                                         }
                                     />
-                                </Field>
-                            </div>
-                        </section>
-                        <section className="admin-panel post-editor-section">
-                            <h2>Текст статьи</h2>
-                            <PostContentEditor
-                                value={values.document.content}
-                                onChange={(value) => update('content', value)}
-                                disabled={disabled}
-                                onUploading={setUploading}
-                            />
-                            {fieldError('content') && (
-                                <p className="admin-field-error">
-                                    {fieldError('content')}
-                                </p>
-                            )}
-                            <p className="admin-muted">
-                                {text.length} символов · примерно{' '}
-                                {Math.max(
-                                    1,
-                                    Math.ceil(text.split(/\s+/).length / 180),
-                                )}{' '}
-                                мин чтения
-                            </p>
-                        </section>
-                    </div>
-                    <aside className="post-editor-sidebar">
-                        <section className="admin-panel post-editor-section">
-                            <h2>Обложка</h2>
-                            {values.document.cover && (
-                                <div className="post-cover-preview">
-                                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                                    <img
-                                        src={values.document.cover}
-                                        alt={
-                                            values.document.coverAlt ||
-                                            'Обложка статьи'
-                                        }
-                                    />
-                                    <button
-                                        type="button"
-                                        className="admin-button"
-                                        onClick={() => update('cover', '')}
-                                    >
-                                        Убрать обложку
-                                    </button>
+                                    Показывать блок «Рассчитать стоимость» и
+                                    ссылку на каталог после текста
+                                </label>
+                                <div className="post-secondary-actions">
+                                    {record?.status === 'published' && (
+                                        <button
+                                            type="button"
+                                            className="admin-button"
+                                            disabled={disabled || dirty}
+                                            onClick={() =>
+                                                setConfirmation('hide')
+                                            }
+                                        >
+                                            Скрыть с сайта
+                                        </button>
+                                    )}
+                                    {record?.status === 'hidden' && (
+                                        <button
+                                            type="button"
+                                            className="admin-button"
+                                            disabled={disabled || dirty}
+                                            onClick={() =>
+                                                setConfirmation('restore')
+                                            }
+                                        >
+                                            Вернуть на сайт
+                                        </button>
+                                    )}
+                                    {record && !record.published_at && (
+                                        <button
+                                            type="button"
+                                            className="admin-button admin-button-danger"
+                                            disabled={disabled || dirty}
+                                            onClick={() =>
+                                                setConfirmation('delete')
+                                            }
+                                        >
+                                            Удалить черновик
+                                        </button>
+                                    )}
                                 </div>
-                            )}
-                            <Field
-                                name="post-cover"
-                                label="Файл обложки"
-                                hint="JPG, PNG или WebP, до 10 МБ"
-                                error={coverError || fieldError('cover')}
-                            >
-                                <input
-                                    id="post-cover"
-                                    type="file"
-                                    accept="image/jpeg,image/png,image/webp"
-                                    onChange={(event) => {
-                                        void uploadCover(
-                                            event.target.files?.[0],
-                                        )
-                                        event.target.value = ''
-                                    }}
-                                />
-                            </Field>
-                            {textField(
-                                'coverAlt',
-                                'Что изображено на обложке (alt)',
-                                300,
-                            )}
-                        </section>
-                        <section className="admin-panel post-editor-section">
-                            <h2>SEO и адрес</h2>
-                            <Field
-                                name="post-slug"
-                                label="Адрес страницы"
-                                hint={
-                                    record?.published_at
-                                        ? 'После первой публикации адрес закреплён.'
-                                        : 'Латинские буквы, цифры и дефисы. Проверьте до публикации.'
-                                }
-                                error={fieldError('slug')}
-                            >
-                                <input
-                                    id="post-slug"
-                                    value={values.slug}
-                                    maxLength={120}
-                                    readOnly={!!record?.published_at}
-                                    onChange={(event) => {
-                                        setSlugTouched(true)
-                                        state.setValues((current) => ({
-                                            ...current,
-                                            slug: event.target.value,
-                                        }))
-                                    }}
-                                />
-                            </Field>
-                            {textField('seoTitle', 'Заголовок для поиска', 200)}
-                            {textField(
-                                'seoDescription',
-                                'Описание для поиска',
-                                500,
-                                true,
-                            )}
-                            <p className="admin-muted">
-                                Пустые SEO-поля используют заголовок и краткое
-                                описание статьи.
-                            </p>
-                            <div
-                                className="post-search-preview"
-                                aria-label="Пример поискового результата"
-                            >
-                                <small>
-                                    asiamotors.su › blog ›{' '}
-                                    {values.slug || 'adres-stati'}
-                                </small>
-                                <strong>{title || 'Заголовок статьи'}</strong>
-                                <p>
-                                    {description ||
-                                        'Краткое описание появится здесь.'}
-                                </p>
-                            </div>
-                            {warnings.length > 0 && (
-                                <details>
-                                    <summary>
-                                        Подсказки перед публикацией (
-                                        {warnings.length})
-                                    </summary>
-                                    <ul>
-                                        {warnings.map((warning) => (
-                                            <li key={warning}>{warning}</li>
-                                        ))}
-                                    </ul>
-                                </details>
-                            )}
-                        </section>
-                        <section className="admin-panel post-editor-section">
-                            <h2>Блок заявки</h2>
-                            <label className="post-checkbox">
-                                <input
-                                    type="checkbox"
-                                    checked={values.document.showCta}
-                                    onChange={(event) =>
-                                        update('showCta', event.target.checked)
-                                    }
-                                />
-                                Показывать «Рассчитать стоимость» и ссылку на
-                                каталог
-                            </label>
-                            <p className="admin-muted">
-                                Блок размещается после текста и использует
-                                существующую форму заявок.
-                            </p>
-                        </section>
-                    </aside>
-                </fieldset>
-                <div className="admin-panel post-savebar">
-                    <div>
+                            </fieldset>
+                        </TabPanel>
+                    </TabPanels>
+                </TabGroup>
+                <div className="post-savebar">
+                    <div className="post-save-status">
                         <strong>
                             {uploading
                                 ? 'Загрузка фотографии…'
@@ -468,21 +851,19 @@ export function PostEditor({
                                     ? 'Все изменения сохранены'
                                     : 'Новая статья'}
                         </strong>
-                        {record && (
-                            <p className="admin-muted">
-                                Сохранено:{' '}
-                                {new Intl.DateTimeFormat('ru-RU', {
-                                    dateStyle: 'short',
-                                    timeStyle: 'short',
-                                    timeZone: 'Asia/Vladivostok',
-                                }).format(new Date(record.updated_at))}
-                            </p>
-                        )}
-                        {record?.hasChanges && (
-                            <p>Есть неопубликованные изменения</p>
+                        <small>
+                            {record
+                                ? 'Сохранено: ' + adminDate(record.updated_at)
+                                : 'Для первого сохранения достаточно заголовка.'}
+                        </small>
+                        {dirty && (
+                            <small>
+                                Сохраните черновик перед предпросмотром и
+                                публикацией.
+                            </small>
                         )}
                     </div>
-                    <div className="post-toolbar">
+                    <div className="post-save-actions">
                         <button
                             type="submit"
                             className="admin-button"
@@ -504,50 +885,17 @@ export function PostEditor({
                             type="button"
                             className="admin-button admin-button-primary"
                             disabled={disabled || dirty || !record}
-                            onClick={() => void state.action('publish')}
+                            onClick={() => void publish()}
                         >
-                            {record?.published_at
-                                ? 'Опубликовать изменения'
-                                : 'Опубликовать'}
+                            {publicationMode === 'schedule'
+                                ? record?.scheduled_at
+                                    ? 'Изменить расписание'
+                                    : 'Запланировать публикацию'
+                                : record?.published_at
+                                  ? 'Опубликовать изменения'
+                                  : 'Опубликовать'}
                         </button>
-                        {record?.status === 'published' && (
-                            <button
-                                type="button"
-                                className="admin-button"
-                                disabled={disabled || dirty}
-                                onClick={() => setConfirmation('hide')}
-                            >
-                                Скрыть с сайта
-                            </button>
-                        )}
-                        {record?.status === 'hidden' && (
-                            <button
-                                type="button"
-                                className="admin-button"
-                                disabled={disabled || dirty}
-                                onClick={() => setConfirmation('restore')}
-                            >
-                                Вернуть на сайт
-                            </button>
-                        )}
-                        {record && !record.published_at && (
-                            <button
-                                type="button"
-                                className="admin-button admin-button-danger"
-                                disabled={disabled || dirty}
-                                onClick={() => setConfirmation('delete')}
-                            >
-                                Удалить черновик
-                            </button>
-                        )}
                     </div>
-                    {dirty && (
-                        <p className="admin-muted">
-                            Перед предпросмотром и публикацией сохраните
-                            черновик. Посетители пока видят прежнюю
-                            опубликованную версию.
-                        </p>
-                    )}
                 </div>
             </form>
             <ConfirmDialog
@@ -557,19 +905,31 @@ export function PostEditor({
                         ? 'Удалить черновик?'
                         : confirmation === 'hide'
                           ? 'Скрыть статью с сайта?'
-                          : 'Вернуть статью на сайт?'
+                          : confirmation === 'restore'
+                            ? 'Вернуть статью на сайт?'
+                            : confirmation === 'publish'
+                              ? 'Опубликовать сейчас?'
+                              : 'Отменить публикацию по расписанию?'
                 }
                 description={
                     confirmation === 'restore'
                         ? 'Будет показана последняя опубликованная версия. Новые правки останутся в черновике.'
-                        : values.document.title
+                        : confirmation === 'publish'
+                          ? 'Статья будет опубликована сейчас. Запланированная публикация отменится.'
+                          : record?.scheduled_at && confirmation === 'hide'
+                            ? 'Статья будет скрыта. Запланированная публикация также отменится.'
+                            : values.document.title
                 }
                 confirmLabel={
                     confirmation === 'delete'
                         ? 'Удалить'
                         : confirmation === 'hide'
                           ? 'Скрыть'
-                          : 'Вернуть'
+                          : confirmation === 'restore'
+                            ? 'Вернуть'
+                            : confirmation === 'publish'
+                              ? 'Опубликовать сейчас'
+                              : 'Отменить расписание'
                 }
                 pending={busy}
                 onClose={() => setConfirmation(null)}

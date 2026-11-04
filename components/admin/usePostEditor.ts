@@ -227,7 +227,16 @@ export function usePostEditor(initial?: AdminPost, uploading = false) {
             })
         }
     }
-    async function action(action: 'publish' | 'hide' | 'restore' | 'delete') {
+    async function action(
+        action:
+            | 'publish'
+            | 'hide'
+            | 'restore'
+            | 'delete'
+            | 'schedule'
+            | 'cancelSchedule',
+        scheduledAt?: string,
+    ) {
         if (!record || locked.current || dirty) return false
         locked.current = true
         setBusy(true)
@@ -243,17 +252,22 @@ export function usePostEditor(initial?: AdminPost, uploading = false) {
                     body: JSON.stringify({
                         version: record.version,
                         ...(action === 'delete' ? {} : { action }),
+                        ...(action === 'schedule' ? { scheduledAt } : {}),
                     }),
                 },
             )
             if (action !== 'delete')
                 accept(
                     result,
-                    action === 'publish'
-                        ? 'Статья опубликована'
-                        : action === 'hide'
-                          ? 'Статья скрыта с сайта'
-                          : 'Статья возвращена на сайт',
+                    action === 'schedule'
+                        ? 'Публикация запланирована'
+                        : action === 'cancelSchedule'
+                          ? 'Публикация по расписанию отменена'
+                          : action === 'publish'
+                            ? 'Статья опубликована'
+                            : action === 'hide'
+                              ? 'Статья скрыта с сайта'
+                              : 'Статья возвращена на сайт',
                 )
             return true
         } catch (error) {

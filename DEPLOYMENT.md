@@ -155,3 +155,22 @@ sudo sh -c 'sh scripts/backup.sh && sh scripts/deploy.sh --with-mail'
 
 Use `--without-mail` only when deliberately disabling delivery. It persists that
 mode, so the choice must be explicit on every release.
+
+## Manager workspace, scheduling and PWA
+
+Migration `005` adds scheduled publication snapshots. The new worker must start
+before the new web (the deployment helper enforces this). Publication scheduling
+works independently of SMTP delivery mode. Current production releases still use
+`--with-mail`. Existing database/media backups are required before activation.
+
+Application rollback uses `sh scripts/rollback.sh <saved rollback.compose.json>`
+with the same Docker privileges as deployment. It stops web writers, refuses to
+activate an older editor while publications are pending, and restarts the current
+web on refusal. Cancel schedules through the current UI before rollback. Do not
+apply the rollback Compose file directly. The mail worker is retained.
+
+The manager overview is `/admin/dashboard`. Installation instructions and offline
+cache policy: [docs/pwa.md](docs/pwa.md). The two manifests have distinct IDs and
+share origin scope so sign-in remains available inside the manager application;
+server authentication remains authoritative. No separate PWA or analytics service
+is required for this overview.

@@ -200,3 +200,6 @@ sudo sh scripts/deploy.sh --without-mail
 
 На действующем сервере почта включена: для выпуска используйте `--with-mail`
 по [DEPLOYMENT.md](DEPLOYMENT.md). `--without-mail` явно отключает отправку.
+
+Рабочее место менеджера: [редактор и расписание](docs/blog-editor.md),
+[установка приложений](docs/pwa.md). Обзор работы доступен в `/admin/dashboard`.

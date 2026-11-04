@@ -8,10 +8,21 @@ import './workspace.css'
 
 export const metadata: Metadata = {
     title: 'Управление сайтом | AsiaMotors',
+    manifest: '/pwa/manager.webmanifest',
+    appleWebApp: {
+        capable: true,
+        title: 'AM Менеджер',
+        statusBarStyle: 'default',
+    },
+    icons: { apple: [{ url: '/pwa/manager-180.png', sizes: '180x180' }] },
     robots: { index: false, follow: false },
 }
 
-export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+export default async function AdminLayout({
+    children,
+}: {
+    children: React.ReactNode
+}) {
     const session = await getServerSession(authOptions)
     if (!session?.user?.isAdmin) redirect('/auth/signin')
     return <AdminShell email={session.user.email || ''}>{children}</AdminShell>

@@ -53,3 +53,7 @@ backups/
 /test-results/
 /playwright-report/
 /.test-uploads/
+
+# Python test bytecode
+__pycache__/
+*.pyc

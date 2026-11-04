@@ -10,12 +10,23 @@ export async function cleanOrphanMedia(db, directory) {
             WHERE created_at < now() - interval '24 hours'
               AND NOT EXISTS (SELECT 1 FROM cars c WHERE c.images @> ARRAY['/media/' || m.filename])
               AND NOT EXISTS (SELECT 1 FROM post_media p WHERE p.filename=m.filename)
+              -- A rollback web may know only draft/published and rebuild post_media
+              -- without the scheduled snapshot. Protect that snapshot independently.
+              AND NOT EXISTS (SELECT 1 FROM posts p WHERE p.scheduled_at IS NOT NULL AND (
+                p.scheduled_document->>'cover'='/media/' || m.filename OR
+                jsonb_path_exists(p.scheduled_document, '$.content.** ? (@.type == "image" && @.attrs.src == $url)',
+                  jsonb_build_object('url','/media/' || m.filename))))
             FOR UPDATE OF m SKIP LOCKED`)
         for (const { filename } of rows) {
             if (!/^[0-9a-f-]{36}\.webp$/.test(filename)) continue
             // A save may have committed after the candidate query took its snapshot.
             const referenced = await client.query(
-                'SELECT 1 FROM cars WHERE images @> ARRAY[$1] UNION ALL SELECT 1 FROM post_media WHERE filename=$2 LIMIT 1',
+                `SELECT 1 FROM cars WHERE images @> ARRAY[$1]
+                 UNION ALL SELECT 1 FROM post_media WHERE filename=$2
+                 UNION ALL SELECT 1 FROM posts p WHERE p.scheduled_at IS NOT NULL AND (
+                   p.scheduled_document->>'cover'=$1 OR
+                   jsonb_path_exists(p.scheduled_document, '$.content.** ? (@.type == "image" && @.attrs.src == $url)',
+                     jsonb_build_object('url',$1::text))) LIMIT 1`,
                 ['/media/' + filename, filename]
             )
             if (referenced.rowCount) continue

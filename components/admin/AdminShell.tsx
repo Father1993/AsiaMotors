@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import PwaExperience from '@/components/pwa/PwaExperience'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
@@ -49,6 +50,7 @@ export function AdminShell({ children, email }: { children: React.ReactNode; ema
                     </Link>
                     <nav aria-label="Администрирование" className="admin-nav">
                         {[
+                            ['/admin/dashboard', 'Обзор'],
                             ['/admin', 'Автомобили'],
                             ['/admin/requests', 'Заявки'],
                             ['/admin/blog', 'Блог'],
@@ -91,6 +93,7 @@ export function AdminShell({ children, email }: { children: React.ReactNode; ema
                     </div>
                 </header>
                 <main id="admin-content" className="admin-main">
+                    <PwaExperience kind="manager" dirty={dirty} />
                     {children}
                 </main>
             </div>

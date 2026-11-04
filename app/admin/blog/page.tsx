@@ -10,6 +10,7 @@ const statusNames = {
     draft: 'Черновик',
     published: 'Опубликована',
     hidden: 'Скрыта',
+    scheduled: 'Запланирована',
 }
 export default async function BlogAdmin({
     searchParams,
@@ -197,6 +198,11 @@ export default async function BlogAdmin({
                                             <span key={tag}>{tag}</span>
                                         ))}
                                     </div>
+                                    {post.scheduledAt && (
+                                        <p className="admin-badge admin-badge-warning">
+                                            Публикация: {adminDate(post.scheduledAt)} · Владивосток
+                                        </p>
+                                    )}
                                     {post.missingImages.length > 0 && (
                                         <span className="admin-badge admin-badge-warning">
                                             Недоступно изображений:{' '}

@@ -58,7 +58,7 @@ for service, image in [('web', sys.argv[2]), ('mail-worker', sys.argv[3])]:
 p.write_text(json.dumps(config))
 p.chmod(0o600)
 PYROLLBACK
-  printf 'Application rollback (keeps article-aware worker): docker compose -f %s/rollback.compose.json up -d --no-build --no-deps --wait web mail-worker\n' "$release_dir"
+  printf 'Application rollback (keeps article-aware worker): sh scripts/rollback.sh %s/rollback.compose.json\n' "$release_dir"
   else
     rm -f "$release_dir/rollback.compose.json"
     printf 'Worker rollback image could not be pinned; continuing activation.\n' >&2

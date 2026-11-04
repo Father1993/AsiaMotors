@@ -57,3 +57,7 @@ uploads/
 .test-uploads/
 test-results/
 playwright-report/
+
+# Python test bytecode
+__pycache__/
+*.pyc

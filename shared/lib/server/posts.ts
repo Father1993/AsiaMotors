@@ -22,6 +22,8 @@ export type AdminPost = {
   updated_at: string;
   published_at: string | null;
   publication_updated_at: string | null;
+  scheduled_at: string | null;
+  scheduled_document: PostDocument | null;
   hasChanges: boolean;
 };
 function serialize(row: Record<string, unknown>): AdminPost {
@@ -50,12 +52,12 @@ export async function listAdminPosts(params: URLSearchParams) {
   const p = z
     .object({
       q: z.string().trim().max(150).default(""),
-      status: z.enum(["draft", "published", "hidden"]).optional(),
+      status: z.enum(["draft", "published", "hidden", "scheduled"]).optional(),
       page: z.coerce.number().int().min(1).max(1000000).default(1),
     })
     .parse(Object.fromEntries(params));
   const { rows } = await database().query(
-    `WITH filtered AS (SELECT * FROM posts WHERE ($1='' OR draft->>'title' ILIKE $2) AND ($3::text IS NULL OR status=$3)) SELECT (SELECT count(*)::int FROM filtered) total,COALESCE((SELECT jsonb_agg(p) FROM (SELECT * FROM filtered ORDER BY updated_at DESC,id DESC LIMIT 20 OFFSET $4)p),'[]'::jsonb) posts`,
+    `WITH filtered AS (SELECT * FROM posts WHERE ($1='' OR draft->>'title' ILIKE $2) AND ($3::text IS NULL OR ($3='scheduled' AND scheduled_at IS NOT NULL) OR ($3<>'scheduled' AND status=$3))) SELECT (SELECT count(*)::int FROM filtered) total,COALESCE((SELECT jsonb_agg(p) FROM (SELECT * FROM filtered ORDER BY updated_at DESC,id DESC LIMIT 20 OFFSET $4)p),'[]'::jsonb) posts`,
     [
       p.q,
       "%" + p.q.replace(/[\\%_]/g, "\\$&") + "%",
@@ -89,11 +91,13 @@ async function references(
   id: string,
   draft: PostDocument,
   published: PostDocument | null,
+  scheduled: PostDocument | null = null,
 ) {
   const files = [
     ...new Set([
       ...mediaFilenames(draft),
       ...(published ? mediaFilenames(published) : []),
+      ...(scheduled ? mediaFilenames(scheduled) : []),
     ]),
   ].sort();
   const found = await c.query(
@@ -148,7 +152,7 @@ export async function savePost(
     }
     if (id && !old) throw new HttpError(404, "Статья не найдена");
     if (id && old.version !== data.version) throw conflict();
-    if (old?.published_at && data.slug !== old.slug)
+    if ((old?.published_at || old?.scheduled_at) && data.slug !== old.slug)
       throw new HttpError(409, "Адрес после публикации изменить нельзя", {
         slug: ["Адрес зафиксирован"],
       });
@@ -165,7 +169,13 @@ export async function savePost(
             [identifier, data.slug, JSON.stringify(data.document)],
           )
         ).rows[0];
-    await references(c, identifier, data.document, row.published);
+    await references(
+      c,
+      identifier,
+      data.document,
+      row.published,
+      row.scheduled_document,
+    );
     await c.query("COMMIT");
     return serialize(row);
   } catch (e) {
@@ -184,13 +194,24 @@ export async function changePostStatus(
   input: unknown,
 ): Promise<AdminPost> {
   z.uuid().parse(id);
-  const { version, action } = z
-    .object({
-      version: versionSchema,
-      action: z.enum(["publish", "hide", "restore"]),
-    })
-    .strict()
+  const parsed = z
+    .discriminatedUnion("action", [
+      z
+        .object({
+          version: versionSchema,
+          action: z.literal("schedule"),
+          scheduledAt: z.iso.datetime({ offset: true }),
+        })
+        .strict(),
+      z
+        .object({
+          version: versionSchema,
+          action: z.enum(["publish", "hide", "restore", "cancelSchedule"]),
+        })
+        .strict(),
+    ])
     .parse(input);
+  const { version, action } = parsed;
   const c = await database().connect();
   try {
     await c.query("BEGIN");
@@ -199,7 +220,35 @@ export async function changePostStatus(
     ).rows[0];
     if (!row) throw new HttpError(404, "Статья не найдена");
     if (row.version !== version) throw conflict();
-    if (action === "publish") {
+    if (action === "schedule") {
+      const scheduledAt = Date.parse(parsed.scheduledAt);
+      const dbTime = (
+        await c.query("SELECT now() AS time")
+      ).rows[0].time.getTime();
+      if (!Number.isFinite(scheduledAt) || scheduledAt < dbTime + 60000)
+        throw new HttpError(400, "Выберите время минимум через одну минуту", {
+          scheduledAt: ["Укажите будущее время публикации"],
+        });
+      if (!row.slug)
+        throw new HttpError(400, "Укажите адрес статьи", {
+          slug: ["Заполните адрес"],
+        });
+      await checkSlug(row.slug);
+      validatePublication(row.draft);
+      await references(c, id, row.draft, row.published, row.draft);
+      await c.query(
+        "UPDATE posts SET scheduled_at=$2,scheduled_document=draft,version=version+1,updated_at=now() WHERE id=$1",
+        [id, new Date(scheduledAt)],
+      );
+    } else if (action === "cancelSchedule") {
+      if (!row.scheduled_at)
+        throw new HttpError(409, "Публикация не запланирована");
+      await references(c, id, row.draft, row.published);
+      await c.query(
+        "UPDATE posts SET scheduled_at=NULL,scheduled_document=NULL,version=version+1,updated_at=now() WHERE id=$1",
+        [id],
+      );
+    } else if (action === "publish") {
       if (!row.slug)
         throw new HttpError(400, "Укажите адрес статьи", {
           slug: ["Заполните адрес"],
@@ -208,7 +257,7 @@ export async function changePostStatus(
       validatePublication(row.draft);
       await references(c, id, row.draft, row.draft);
       await c.query(
-        "UPDATE posts SET status='published',published=draft,published_at=COALESCE(published_at,now()),publication_updated_at=now(),version=version+1,updated_at=now() WHERE id=$1",
+        "UPDATE posts SET status='published',scheduled_at=NULL,scheduled_document=NULL,published=draft,published_at=COALESCE(published_at,now()),publication_updated_at=now(),version=version+1,updated_at=now() WHERE id=$1",
         [id],
       );
     } else {
@@ -218,8 +267,9 @@ export async function changePostStatus(
         (action === "restore" && row.status !== "hidden")
       )
         throw new HttpError(409, "Действие недоступно для состояния статьи");
+      await references(c, id, row.draft, row.published);
       await c.query(
-        "UPDATE posts SET status=$2,version=version+1,updated_at=now() WHERE id=$1",
+        "UPDATE posts SET status=$2,scheduled_at=NULL,scheduled_document=NULL,version=version+1,updated_at=now() WHERE id=$1",
         [id, action === "hide" ? "hidden" : "published"],
       );
     }
@@ -253,7 +303,7 @@ export async function deletePost(id: string, input: unknown) {
   return { ok: true };
 }
 const publicSelection =
-  "id,slug,status,version,published AS draft,published,created_at,publication_updated_at AS updated_at,published_at,publication_updated_at";
+  "id,slug,status,version,published AS draft,published,created_at,publication_updated_at AS updated_at,published_at,publication_updated_at,NULL::timestamptz AS scheduled_at,NULL::jsonb AS scheduled_document";
 export async function getPublishedPosts(): Promise<AdminPost[]> {
   const { rows } = await database().query(
     `SELECT ${publicSelection} FROM posts WHERE status='published' ORDER BY published_at DESC,id DESC`,
@@ -282,13 +332,14 @@ export type BlogAdminItem = {
   status: "draft" | "published" | "hidden";
   hasChanges: boolean;
   source: "new" | "archive";
+  scheduledAt: string | null;
   missingImages: string[];
 };
 export async function listBlogAdminItems(params: URLSearchParams) {
   const filters = z
     .object({
       q: z.string().trim().max(150).default(""),
-      status: z.enum(["draft", "published", "hidden"]).optional(),
+      status: z.enum(["draft", "published", "hidden", "scheduled"]).optional(),
       source: z.enum(["all", "new", "archive"]).default("all"),
       page: z.coerce.number().int().min(1).max(1000000).default(1),
     })
@@ -312,6 +363,7 @@ export async function listBlogAdminItems(params: URLSearchParams) {
     status: "published",
     hasChanges: false,
     source: "archive",
+    scheduledAt: null,
     missingImages: post.missingImages,
   }));
   const { rows } = await database().query(
@@ -320,13 +372,13 @@ export async function listBlogAdminItems(params: URLSearchParams) {
       SELECT jsonb_build_object('id',id,'slug',slug,'title',draft->>'title',
         'excerpt',draft->>'excerpt','image',draft->>'cover','date',updated_at,
         'author',draft->>'author','tags',draft->'tags','status',status,
-        'hasChanges',draft IS DISTINCT FROM published,'source','new','missingImages','[]'::jsonb) item,
+        'hasChanges',draft IS DISTINCT FROM published,'scheduledAt',scheduled_at,'source','new','missingImages','[]'::jsonb) item,
         updated_at sort_date FROM posts
       UNION ALL SELECT item,(item->>'date')::timestamptz sort_date
         FROM jsonb_array_elements($1::jsonb) item
     ), filtered AS (
       SELECT * FROM items WHERE ($2='' OR concat_ws(' ',item->>'title',item->>'excerpt',item->>'author',item->>'tags') ILIKE $3)
-        AND ($4::text IS NULL OR item->>'status'=$4)
+        AND ($4::text IS NULL OR ($4='scheduled' AND item->>'scheduledAt' IS NOT NULL) OR ($4<>'scheduled' AND item->>'status'=$4))
         AND ($5='all' OR item->>'source'=$5)
     ) SELECT (SELECT count(*)::int FROM filtered) total,
       COALESCE((SELECT jsonb_agg(item) FROM (SELECT item FROM filtered

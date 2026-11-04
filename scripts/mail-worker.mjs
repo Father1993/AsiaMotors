@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer'
 import { pool } from './runtime.mjs'
 import { readFileSync } from 'node:fs'
+import { publishScheduledPosts } from './post-scheduler.mjs'
 import { cleanOrphanMedia } from './media-cleanup.mjs'
 const db = pool()
 const deliveryEnabled = process.env.MAIL_DELIVERY_ENABLED === 'true'
@@ -141,6 +142,7 @@ if (verifyOnly) {
     }
     while (!stop) {
         try {
+            await publishScheduledPosts(db)
             if (deliveryEnabled) await tick()
             if (Date.now() > maintenanceAt) {
                 await maintenance()
