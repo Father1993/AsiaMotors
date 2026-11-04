@@ -11,6 +11,12 @@ COPY . .
 # Builds require neither database connectivity nor production secrets.
 RUN npm run build \
     && test -f .next/server/app/api/uploads/route.js \
+    && test -f public/pwa/worker.js \
+    && test -f public/pwa/offline.html \
+    && test -f public/pwa/manager-offline.html \
+    && test -f public/pwa/manager-192.png \
+    && test -f public/pwa/manager-512.png \
+    && test -f public/pwa/manager-180.png \
     && rm -f .next/standalone/.env*
 
 FROM node:24-alpine AS worker
