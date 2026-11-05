@@ -4,12 +4,22 @@ import { useState, ChangeEvent, FormEvent } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { IMaskInput } from 'react-imask'
-import Image from 'next/image'
+import Image, { getImageProps } from 'next/image'
 import { FaWhatsapp, FaTelegramPlane } from 'react-icons/fa'
 import { HiOutlineUser, HiOutlinePhone } from 'react-icons/hi'
 import LeadHoneypot from '@/components/features/LeadHoneypot'
 import { useLeadForm } from '@/shared/hooks/useLeadForm'
 
+// Match the tall desktop panel before Next.js generates responsive sizes.
+// A wide source resized to the column width loses detail when object-cover enlarges it.
+const desktopPhoto = getImageProps({
+    src: '/img/showroom-square-9f57fd559f.webp',
+    alt: 'Автомобили у салона Asia Motors',
+    width: 887,
+    height: 887,
+    quality: 90,
+    sizes: '(min-width: 1280px) 800px, 100vw',
+}).props
 
 const ContactsBlock = () => {
     const [name, setName] = useState('')
@@ -255,14 +265,18 @@ const ContactsBlock = () => {
                         </motion.div>
 
                         <div className="relative aspect-[4/3] sm:aspect-video lg:aspect-auto">
-                            <Image
-                                src="/img/asiamotors-showroom.webp"
-                                alt="Автомобили у салона Asia Motors"
-                                fill
-                                sizes="(min-width: 1280px) 640px, (min-width: 1024px) 50vw, 100vw"
-                                className="object-cover object-[75%_center]"
-                                loading="lazy"
-                            />
+                            <picture>
+                                <source media="(min-width: 1024px)" srcSet={desktopPhoto.srcSet} sizes={desktopPhoto.sizes} />
+                                <Image
+                                    src="/img/showroom-wide-6ba847978f.webp"
+                                    alt="Автомобили у салона Asia Motors"
+                                    fill
+                                    sizes="100vw"
+                                    quality={90}
+                                    className="object-cover object-[75%_center]"
+                                    loading="lazy"
+                                />
+                            </picture>
                         </div>
                     </div>
                 </div>
