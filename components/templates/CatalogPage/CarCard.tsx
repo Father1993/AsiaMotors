@@ -3,7 +3,7 @@
 import { CarAvailability } from '@/components/common/CarAvailability'
 
 import { useRef, useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { useSwipeable } from 'react-swipeable'
@@ -36,7 +36,7 @@ export const CarCard = ({ car, viewMode }: CarCardProps) => {
     const [isCopied, setIsCopied] = useState(false)
     const [isOrderModalOpen, setIsOrderModalOpen] = useState(false)
     const carSlug = generateCarSlug(car)
-    const router = useRouter()
+    const lastSwipe = useRef(0)
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
     const [imageLoading, setImageLoading] = useState(false)
     const [currentImage, setCurrentImage] = useState(
@@ -67,8 +67,14 @@ export const CarCard = ({ car, viewMode }: CarCardProps) => {
 
     // Конфигурация свайпов
     const swipeHandlers = useSwipeable({
-        onSwipedLeft: () => handleNextImage(),
-        onSwipedRight: () => handlePrevImage(),
+        onSwipedLeft: () => {
+            lastSwipe.current = Date.now()
+            handleNextImage()
+        },
+        onSwipedRight: () => {
+            lastSwipe.current = Date.now()
+            handlePrevImage()
+        },
         trackMouse: false, // Отключаем на десктопе
         preventScrollOnSwipe: true, // Предотвращаем скролл при свайпе
         swipeDuration: 500, // Максимальная длительность свайпа
@@ -111,11 +117,17 @@ export const CarCard = ({ car, viewMode }: CarCardProps) => {
             document.removeEventListener('mousedown', handleClickOutside)
     }, [])
 
-    const handleCardClick = () => {
-        router.push(`/catalog/${carSlug}`)
-    }
+    const detailLink = (
+        <Link href={`/catalog/${carSlug}`} prefetch={false}
+            className="absolute inset-0 z-10 rounded-3xl focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-red-600"
+            onClick={(event) => {
+                if (Date.now() - lastSwipe.current < 400) event.preventDefault()
+            }}>
+            <span className="sr-only">{car.brand} {car.model}, {car.year} — подробнее</span>
+        </Link>
+    )
 
-    const LoadingOverlay = () => (
+    const loadingOverlay = (
         <div className="absolute inset-0 bg-black/20 backdrop-blur-sm z-10 flex items-center justify-center">
             <div className="relative">
                 {/* Внешний круг (тень) */}
@@ -132,13 +144,13 @@ export const CarCard = ({ car, viewMode }: CarCardProps) => {
             initial="hidden"
             animate="visible"
             whileHover={{ y: -5 }}
-            onClick={handleCardClick}
-            className="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300"
+            {...swipeHandlers}
+            className="relative isolate group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300"
         >
+            {detailLink}
             {/* Секция с изображением */}
             <div
                 className="relative aspect-[16/9] group touch-pan-y"
-                {...swipeHandlers}
             >
                 {/* Текущее изображение */}
                 <Image
@@ -160,7 +172,7 @@ export const CarCard = ({ car, viewMode }: CarCardProps) => {
                 />
 
                 {/* Оверлей загрузки */}
-                {imageLoading && <LoadingOverlay />}
+                {imageLoading && loadingOverlay}
 
                 {/* Индикатор свайпа на мобильных устройствах */}
                 <div className="absolute inset-x-0 bottom-4 flex justify-center gap-1 md:hidden">
@@ -177,16 +189,18 @@ export const CarCard = ({ car, viewMode }: CarCardProps) => {
                 </div>
 
                 {/* Кнопки навигации (видимы только на десктопе) */}
-                <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden md:flex">
+                <div className="pointer-events-none absolute z-20 inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden md:flex">
                     <button
+                        aria-label="Предыдущее фото"
                         onClick={handlePrevImage}
-                        className="p-2 rounded-full bg-white/80 hover:bg-white text-gray-800 transition-colors"
+                        className="pointer-events-auto p-2 rounded-full bg-white/80 hover:bg-white text-gray-800 transition-colors"
                     >
                         <FiChevronLeft className="w-5 h-5" />
                     </button>
                     <button
+                        aria-label="Следующее фото"
                         onClick={handleNextImage}
-                        className="p-2 rounded-full bg-white/80 hover:bg-white text-gray-800 transition-colors"
+                        className="pointer-events-auto p-2 rounded-full bg-white/80 hover:bg-white text-gray-800 transition-colors"
                     >
                         <FiChevronRight className="w-5 h-5" />
                     </button>
@@ -207,7 +221,7 @@ export const CarCard = ({ car, viewMode }: CarCardProps) => {
                 </div>
 
                 {/* Кнопки действий */}
-                <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="absolute z-20 top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     {/* TODO в будущем можем сохранить понравившейся авто в localStorage */}
                     {/* <motion.button
                         whileTap={{ scale: 0.9 }}
@@ -359,19 +373,14 @@ export const CarCard = ({ car, viewMode }: CarCardProps) => {
                             e.stopPropagation()
                             setIsOrderModalOpen(true)
                         }}
-                        className="flex-1 bg-red-500 text-white py-3 rounded-xl hover:bg-red-600 transition-colors"
+                        className="relative z-20 flex-1 bg-red-500 text-white py-3 rounded-xl hover:bg-red-600 transition-colors"
                     >
                         Заказать
                     </button>
-                    <button
-                        onClick={(e) => {
-                            e.stopPropagation()
-                            router.push(`/catalog/${carSlug}`)
-                        }}
-                        className="px-4 py-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
-                    >
+                    <Link href={`/catalog/${carSlug}`} aria-label={`Подробнее о ${car.brand} ${car.model}`}
+                        className="relative z-20 px-4 py-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
                         <FiInfo />
-                    </button>
+                    </Link>
                 </div>
             </div>
         </motion.div>
@@ -382,8 +391,10 @@ export const CarCard = ({ car, viewMode }: CarCardProps) => {
             variants={cardVariants}
             initial="hidden"
             animate="visible"
-            className="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 flex"
+            {...swipeHandlers}
+            className="relative isolate group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 flex"
         >
+            {detailLink}
             {/* Изображение */}
             <div className="relative w-1/3 group">
                 <Image
@@ -405,19 +416,21 @@ export const CarCard = ({ car, viewMode }: CarCardProps) => {
                 />
 
                 {/* Оверлей загрузки */}
-                {imageLoading && <LoadingOverlay />}
+                {imageLoading && loadingOverlay}
 
                 {/* Кнопки навигации */}
-                <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="pointer-events-none absolute z-20 inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <button
+                        aria-label="Предыдущее фото"
                         onClick={handlePrevImage}
-                        className="p-2 rounded-full bg-white/80 hover:bg-white text-gray-800 transition-colors"
+                        className="pointer-events-auto p-2 rounded-full bg-white/80 hover:bg-white text-gray-800 transition-colors"
                     >
                         <FiChevronLeft className="w-5 h-5" />
                     </button>
                     <button
+                        aria-label="Следующее фото"
                         onClick={handleNextImage}
-                        className="p-2 rounded-full bg-white/80 hover:bg-white text-gray-800 transition-colors"
+                        className="pointer-events-auto p-2 rounded-full bg-white/80 hover:bg-white text-gray-800 transition-colors"
                     >
                         <FiChevronRight className="w-5 h-5" />
                     </button>
@@ -524,7 +537,7 @@ export const CarCard = ({ car, viewMode }: CarCardProps) => {
                             e.stopPropagation()
                             setIsOrderModalOpen(true)
                         }}
-                        className="flex-1 bg-red-500 text-white py-3 rounded-xl hover:bg-red-600 transition-colors"
+                        className="relative z-20 flex-1 bg-red-500 text-white py-3 rounded-xl hover:bg-red-600 transition-colors"
                     >
                         Заказать
                     </button>
@@ -541,7 +554,7 @@ export const CarCard = ({ car, viewMode }: CarCardProps) => {
                     >
                         <FiHeart className={isLiked ? 'fill-current' : ''} />
                     </button> */}
-                    <button className="px-4 py-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
+                    <button className="relative z-20 px-4 py-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
                         <FiShare2 />
                     </button>
                 </div>
