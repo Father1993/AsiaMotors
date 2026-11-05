@@ -18,12 +18,12 @@ const Header = () => {
     return (
         <>
             {/* Убираем header на мобильной версии */}
-            <header className="hidden lg:block lg:mb-36">
+            <header className="hidden lg:block sticky top-0 z-40">
                 <div
-                    className={`fixed w-full z-40 transition-all duration-300 backdrop-blur-md bg-white/70 ${
+                    className={`w-full py-4 transition-colors duration-300 backdrop-blur-md bg-white/70 ${
                         isScrolled
-                            ? 'bg-white shadow-md py-0.5 lg:py-2'
-                            : 'bg-transparent py-0 lg:py-4'
+                            ? 'bg-white shadow-md'
+                            : 'bg-transparent'
                     }`}
                 >
                     <div className="container max-w-6xl mx-auto px-4">
