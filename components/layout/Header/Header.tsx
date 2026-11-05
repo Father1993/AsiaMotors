@@ -9,6 +9,7 @@ import ScrollToTop from '@/components/features/ScrollToTop/ScrollToTop'
 import { useScroll } from '@/shared/hooks/useScroll'
 import { NAVIGATION } from '@/shared/constants/menuLinks'
 import { useModalStore } from '@/components/provider/ModalProvider'
+import { BRAND_LOGO } from '@/shared/constants/branding'
 
 const Header = () => {
     const isScrolled = useScroll({ threshold: 20 })
@@ -28,7 +29,7 @@ const Header = () => {
                     <div className="container max-w-6xl mx-auto px-4">
                         <nav className="flex items-center justify-between">
                             <div className="w-[100px] lg:w-auto">
-                                <Logo className="scale-75 lg:scale-100 origin-left" />
+                                <Logo className="scale-75 lg:scale-100 origin-left" preload />
                             </div>
 
                             {/* Мобильная кнопка звонка */}
@@ -108,13 +109,14 @@ const Header = () => {
             {/* Мобильное меню */}
             <div className="lg:hidden">
                 <MobileMenu />
-                <Link href="/">
+                <Link href="/" aria-label="AsiaMotors — на главную" className="fixed top-3 right-3 z-50">
                     <Image
-                        className="fixed top-3 right-3 w-[40px] z-50"
-                        src="/img/asia-motors-logo.png"
-                        width={40}
-                        height={40}
-                        alt="Азия Моторс"
+                        {...BRAND_LOGO}
+                        alt={BRAND_LOGO.alt}
+                        className="h-auto w-[72px] object-contain"
+                        width={72}
+                        height={48}
+                        loading="eager"
                     />
                 </Link>
             </div>

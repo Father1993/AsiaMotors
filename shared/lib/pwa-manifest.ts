@@ -1,3 +1,4 @@
+import { BRAND_ICONS } from '@/shared/constants/branding'
 import type { MetadataRoute } from 'next'
 export default function manifest(): MetadataRoute.Manifest {
     return {
@@ -13,13 +14,13 @@ export default function manifest(): MetadataRoute.Manifest {
         theme_color: '#ffffff',
         icons: [
             {
-                src: '/img/android-chrome-192x192.png',
+                src: BRAND_ICONS.icon192,
                 sizes: '192x192',
                 type: 'image/png',
                 purpose: 'any',
             },
             {
-                src: '/img/android-chrome-512x512.png',
+                src: BRAND_ICONS.icon512,
                 sizes: '512x512',
                 type: 'image/png',
                 purpose: 'any',

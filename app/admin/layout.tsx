@@ -1,3 +1,4 @@
+import { BRAND_ICONS, BRAND_FAVICONS } from '@/shared/constants/branding'
 import type { Metadata } from 'next'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
         title: 'AM Менеджер',
         statusBarStyle: 'default',
     },
-    icons: { apple: [{ url: '/pwa/manager-180.png', sizes: '180x180' }] },
+    icons: { icon: BRAND_FAVICONS, apple: [{ url: BRAND_ICONS.managerApple, sizes: '180x180' }] },
     robots: { index: false, follow: false },
 }
 

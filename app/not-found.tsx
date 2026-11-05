@@ -1,3 +1,4 @@
+import { BRAND_ICONS } from '@/shared/constants/branding'
 /* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable max-len */
 import { Suspense } from 'react'
@@ -33,7 +34,7 @@ export const metadata: Metadata = {
         title: '404 - Страница не найдена | AsiaMotors',
         description:
             'Упс! Страница, которую вы ищете, не существует. Вернитесь на главную AsiaMotors',
-        images: '/img/android-chrome-192x192.png',
+        images: BRAND_ICONS.icon192,
     },
 }
 

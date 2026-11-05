@@ -1,3 +1,4 @@
+import { BRAND_ICONS } from '@/shared/constants/branding'
 export function GET() {
     return Response.json(
         {
@@ -13,13 +14,13 @@ export function GET() {
             theme_color: '#111827',
             icons: [
                 {
-                    src: '/pwa/manager-192.png',
+                    src: BRAND_ICONS.manager192,
                     sizes: '192x192',
                     type: 'image/png',
                     purpose: 'any',
                 },
                 {
-                    src: '/pwa/manager-512.png',
+                    src: BRAND_ICONS.manager512,
                     sizes: '512x512',
                     type: 'image/png',
                     purpose: 'any',

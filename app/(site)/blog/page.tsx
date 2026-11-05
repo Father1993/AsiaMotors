@@ -1,3 +1,4 @@
+import { BRAND_ICONS } from '@/shared/constants/branding'
 import type { Metadata } from 'next'
 import BlogPage from '@/components/templates/BlogPage/BlogPage'
 import {
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
         url: 'https://asiamotors.su/blog',
         images: [
             {
-                url: '/img/android-chrome-192x192.png',
+                url: BRAND_ICONS.icon192,
                 width: 192,
                 height: 192,
                 alt: 'Логотип Asiamotors',

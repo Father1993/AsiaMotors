@@ -1,3 +1,4 @@
+import { BRAND_ICONS, BRAND_FAVICONS } from '@/shared/constants/branding'
 /* eslint-disable max-len */
 import { Metadata } from 'next'
 import MarketingConsentPage from '@/components/templates/MarketingConsentPage/MarketingConsentPage'
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
         url: 'https://asiamotors.su/marketing-consent',
         images: [
             {
-                url: '/img/android-chrome-192x192.png',
+                url: BRAND_ICONS.icon192,
                 width: 192,
                 height: 192,
                 alt: 'Логотип Asiamotors',
@@ -26,11 +27,11 @@ export const metadata: Metadata = {
         title: 'Согласие на получение рекламной рассылки | Asiamotors',
         description:
             'Информация о рекламной рассылке от Asiamotors: содержание, частота, способы отписки и другие важные условия',
-        images: '/img/android-chrome-192x192.png',
+        images: BRAND_ICONS.icon192,
     },
     icons: {
-        icon: '/img/android-chrome-192x192.png',
-        apple: '/img/apple-touch-icon.png',
+        icon: BRAND_FAVICONS,
+        apple: BRAND_ICONS.apple,
     },
     alternates: {
         canonical: 'https://asiamotors.su/marketing-consent',

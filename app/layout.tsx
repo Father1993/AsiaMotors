@@ -1,3 +1,4 @@
+import { BRAND_ICONS, BRAND_FAVICONS } from '@/shared/constants/branding'
 import type { Metadata, Viewport } from 'next'
 import { Providers } from './providers'
 import './globalStyles/normalize.css'
@@ -23,21 +24,8 @@ export const metadata: Metadata = {
         email: true,
     },
     icons: {
-        icon: [
-            { url: '/img/favicon.ico', sizes: 'any' },
-            {
-                url: '/img/favicon-16x16.png',
-                sizes: '16x16',
-                type: 'image/png',
-            },
-            {
-                url: '/img/favicon-32x32.png',
-                sizes: '32x32',
-                type: 'image/png',
-            },
-        ],
-        apple: [{ url: '/img/apple-touch-icon.png', sizes: '180x180' }],
-        other: [{ rel: 'mask-icon', url: '/img/logo-s.svg', color: '#5bbad5' }],
+        icon: BRAND_FAVICONS,
+        apple: [{ url: BRAND_ICONS.apple, sizes: '180x180' }],
     },
     openGraph: {
         type: 'website',
@@ -49,7 +37,7 @@ export const metadata: Metadata = {
             'Продажа и доставка новых и подержанных автомобилей из Китая. Официальная гарантия, выгодные цены, полное сопровождение сделки.',
         images: [
             {
-                url: 'https://asiamotors.su/img/android-chrome-512x512.png',
+                url: BRAND_ICONS.icon512,
                 width: 512,
                 height: 512,
                 alt: 'AsiaMotors Logo',
@@ -61,7 +49,7 @@ export const metadata: Metadata = {
         title: 'AsiaMotors -  ваш надежный выбор для покупки новых и подержанных автомобилей',
         description:
             'AsiaMotors — ваш надежный выбор для покупки новых и подержанных автомобилей из Китая. Мы предлагаем широкий ассортимент авто по доступным ценам, от популярных моделей до премиум-класса. Полное сопровождение сделки, выгодные условия и прямые поставки. Откройте для себя лучшие авто из Китая с AsiaMotors и получите качественный сервис на каждом этапе покупки. Узнайте больше!',
-        images: ['/img/android-chrome-192x192.png'],
+        images: [BRAND_ICONS.icon192],
         creator: '@AsiaMotors',
     },
     alternates: {

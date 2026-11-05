@@ -1,3 +1,4 @@
+import { BRAND_ICONS, BRAND_FAVICONS } from '@/shared/constants/branding'
 /* eslint-disable max-len */
 import { Metadata } from 'next'
 import ContactsPage from '@/components/templates/ContactsPage/ContactsPage'
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
         url: 'https://asiamotors.su/blog',
         images: [
             {
-                url: '/img/android-chrome-192x192.png',
+                url: BRAND_ICONS.icon192,
                 width: 192,
                 height: 192,
                 alt: 'Логотип Asiamotors',
@@ -23,11 +24,11 @@ export const metadata: Metadata = {
         card: 'summary',
         title: 'Блог об автомобилях | Asiamotors',
         description: 'Новости и обзоры автомобилей из Китая от AsiaMotors',
-        images: '/img/android-chrome-192x192.png',
+        images: BRAND_ICONS.icon192,
     },
     icons: {
-        icon: '/img/android-chrome-192x192.png',
-        apple: '/img/apple-touch-icon.png',
+        icon: BRAND_FAVICONS,
+        apple: BRAND_ICONS.apple,
     },
 }
 

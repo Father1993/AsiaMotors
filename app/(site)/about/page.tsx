@@ -1,3 +1,4 @@
+import { BRAND_ICONS } from '@/shared/constants/branding'
 import { companyExperience } from '@/shared/constants/company'
 
 export const dynamic = 'force-dynamic'
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
         type: 'website',
         images: [
             {
-                url: '/img/android-chrome-192x192.png',
+                url: BRAND_ICONS.icon192,
                 width: 1200,
                 height: 630,
             },

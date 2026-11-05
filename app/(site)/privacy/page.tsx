@@ -1,3 +1,4 @@
+import { BRAND_ICONS, BRAND_FAVICONS } from '@/shared/constants/branding'
 /* eslint-disable max-len */
 import { Metadata } from 'next'
 import PrivacyPage from '@/components/templates/PrivacyPage/PrivacyPage'
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
         url: 'https://asiamotors.su/privacy-policy',
         images: [
             {
-                url: '/img/android-chrome-192x192.png',
+                url: BRAND_ICONS.icon192,
                 width: 192,
                 height: 192,
                 alt: 'Логотип Asiamotors',
@@ -26,11 +27,11 @@ export const metadata: Metadata = {
         title: 'Политика конфиденциальности Asiamotors | Ваши данные под защитой',
         description:
             'Asiamotors гарантирует безопасность ваших персональных данных. Ознакомьтесь с нашей политикой конфиденциальности для полной информации',
-        images: '/img/android-chrome-192x192.png',
+        images: BRAND_ICONS.icon192,
     },
     icons: {
-        icon: '/img/android-chrome-192x192.png',
-        apple: '/img/apple-touch-icon.png',
+        icon: BRAND_FAVICONS,
+        apple: BRAND_ICONS.apple,
     },
     alternates: {
         canonical: 'https://asiamotors.su/privacy-policy',

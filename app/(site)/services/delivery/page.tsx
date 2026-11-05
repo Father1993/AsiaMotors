@@ -1,3 +1,4 @@
+import { BRAND_ICONS } from '@/shared/constants/branding'
 import DeliveryPage from '@/components/templates/ServicesPage/DeliveryPage/DeliveryPage'
 import { Metadata } from 'next'
 
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
         url: 'https://asiamotors.su/services/delivery',
         images: [
             {
-                url: '/img/android-chrome-192x192.png',
+                url: BRAND_ICONS.icon192,
                 width: 1200,
                 height: 630,
                 alt: 'Заказать автомобилей из Китая Азиямоторс',

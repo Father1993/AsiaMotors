@@ -1,3 +1,4 @@
+import { BRAND_ICONS, BRAND_FAVICONS } from '@/shared/constants/branding'
 /* eslint-disable max-len */
 import { Metadata } from 'next'
 import SparesPage from '@/components/templates/SparesPage/SparesPage'
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
         locale: 'ru_RU',
         images: [
             {
-                url: '/img/android-chrome-192x192.png',
+                url: BRAND_ICONS.icon192,
                 width: 192,
                 height: 192,
                 alt: 'Запчасти для китайских автомобилей Asiamotors',
@@ -33,14 +34,14 @@ export const metadata: Metadata = {
         title: 'Запчасти для китайских авто | Asiamotors',
         description:
             'Оригинальные запчасти для китайских автомобилей с доставкой по России. Большой выбор автозапчастей для Chery, Haval, Geely, Tank, Exeed, FAW, GWM.',
-        images: '/img/android-chrome-192x192.png',
+        images: BRAND_ICONS.icon192,
         site: '@asiamotors_su',
         creator: '@asiamotors_su',
     },
     category: 'auto parts',
     icons: {
-        icon: '/img/android-chrome-192x192.png',
-        apple: '/img/apple-touch-icon.png',
+        icon: BRAND_FAVICONS,
+        apple: BRAND_ICONS.apple,
     },
 }
 

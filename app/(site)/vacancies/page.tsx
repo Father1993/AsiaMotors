@@ -1,3 +1,4 @@
+import { BRAND_ICONS, BRAND_FAVICONS } from '@/shared/constants/branding'
 /* eslint-disable max-len */
 import { Metadata } from 'next'
 import VacanciesPage from '@/components/templates/VacanciesPage/VacanciesPage'
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
         url: 'https://asiamotors.su/vacancies',
         images: [
             {
-                url: '/img/android-chrome-192x192.png',
+                url: BRAND_ICONS.icon192,
                 width: 192,
                 height: 192,
                 alt: 'Карьера в AsiaMotors - официальном дилере китайских автомобилей',
@@ -28,11 +29,11 @@ export const metadata: Metadata = {
         title: 'Вакансии AsiaMotors | Построй карьеру в автобизнесе',
         description:
             'Открытые вакансии в компании AsiaMotors. Работа в динамично развивающейся компании по продаже и обслуживанию китайских автомобилей.',
-        images: '/img/android-chrome-192x192.png',
+        images: BRAND_ICONS.icon192,
     },
     icons: {
-        icon: '/img/android-chrome-192x192.png',
-        apple: '/img/apple-touch-icon.png',
+        icon: BRAND_FAVICONS,
+        apple: BRAND_ICONS.apple,
     },
     alternates: {
         canonical: 'https://asiamotors.su/vacancies',

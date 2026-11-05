@@ -7,6 +7,7 @@ export interface ButtonProps
 
 export interface LogoProps {
     className?: string
+    preload?: boolean
 }
 
 export interface MobileMenuProps {

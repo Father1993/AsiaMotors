@@ -1,3 +1,4 @@
+import { BRAND_ICONS } from '@/shared/constants/branding'
 import InsurancePage from '@/components/templates/ServicesPage/InsurancePage/InsurancePage'
 import { Metadata } from 'next'
 
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
         url: 'https://asiamotors.su/services/insurance',
         images: [
             {
-                url: '/img/android-chrome-192x192.png',
+                url: BRAND_ICONS.icon192,
                 width: 1200,
                 height: 630,
                 alt: 'Процесс импорта автомобилей из Китая',

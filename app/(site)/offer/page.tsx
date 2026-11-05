@@ -1,3 +1,4 @@
+import { BRAND_ICONS, BRAND_FAVICONS } from '@/shared/constants/branding'
 /* eslint-disable max-len */
 import { Metadata } from 'next'
 import OfferPage from '@/components/templates/OfferPage/OfferPage'
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
         url: 'https://asiamotors.su/offer',
         images: [
             {
-                url: '/img/android-chrome-192x192.png',
+                url: BRAND_ICONS.icon192,
                 width: 192,
                 height: 192,
                 alt: 'Логотип Asiamotors',
@@ -26,11 +27,11 @@ export const metadata: Metadata = {
         title: 'Публичная оферта | Asiamotors',
         description:
             'Юридическая информация и условия оказания услуг ООО "Азия Моторс". Права и обязанности сторон при приобретении автомобилей и сопутствующих услуг',
-        images: '/img/android-chrome-192x192.png',
+        images: BRAND_ICONS.icon192,
     },
     icons: {
-        icon: '/img/android-chrome-192x192.png',
-        apple: '/img/apple-touch-icon.png',
+        icon: BRAND_FAVICONS,
+        apple: BRAND_ICONS.apple,
     },
     alternates: {
         canonical: 'https://asiamotors.su/offer',

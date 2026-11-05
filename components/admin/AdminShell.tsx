@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
 import { createContext, useContext, useState } from 'react'
+import { BRAND_LOGO } from '@/shared/constants/branding'
 
 const NavigationContext = createContext<{ dirty: boolean; setDirty: (value: boolean) => void }>({
     dirty: false,
@@ -39,12 +40,12 @@ export function AdminShell({ children, email }: { children: React.ReactNode; ema
                         }}
                     >
                         <Image
-                            src="/img/asia-motors-logo.png"
-                            alt="AsiaMotors"
-                            width={48}
+                            {...BRAND_LOGO}
+                            alt={BRAND_LOGO.alt}
+                            width={72}
                             height={48}
                             loading="eager"
-                            className="object-contain shrink-0"
+                            className="h-auto w-[72px] object-contain shrink-0"
                         />
                         <span>Управление сайтом</span>
                     </Link>

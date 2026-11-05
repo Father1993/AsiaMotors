@@ -1,17 +1,18 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { LogoProps } from '@/shared/types/common'
+import { BRAND_LOGO } from '@/shared/constants/branding'
 
-const Logo = ({ className = '' }: LogoProps) => {
+const Logo = ({ className = '', preload = false }: LogoProps) => {
     return (
-        <Link href="/" className={`flex items-center space-x-2 ${className}`}>
+        <Link href="/" aria-label="AsiaMotors — на главную" className={`flex items-center space-x-2 ${className}`}>
             <Image
-                src="/img/asia-motors-logo.png"
-                alt="Asia Motors логотип"
-                width={120} // Укажите реальную ширину вашего логотипа
-                height={30} // Укажите реальную высоту вашего логотипа
-                priority // Приоритетная загрузка для логотипа
-                className="h-auto w-auto" // Позволяет изображению быть отзывчивым
+                {...BRAND_LOGO}
+                alt={BRAND_LOGO.alt}
+                width={120}
+                height={80}
+                preload={preload}
+                className="h-auto w-[120px] max-w-full object-contain"
             />
         </Link>
     )

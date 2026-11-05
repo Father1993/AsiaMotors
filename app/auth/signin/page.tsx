@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { toast } from 'react-hot-toast'
+import { BRAND_LOGO } from '@/shared/constants/branding'
 
 export default function SignIn() {
     const { data: session, status } = useSession()
@@ -60,11 +61,12 @@ export default function SignIn() {
             <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-lg">
                 <div className="flex flex-col items-center">
                     <Image
-                        src="/img/asia-motors-logo.png"
-                        alt="Asia Motors Logo"
-                        width={150}
-                        height={150}
-                        className="mb-4"
+                        {...BRAND_LOGO}
+                        alt={BRAND_LOGO.alt}
+                        width={180}
+                        height={120}
+                        loading="eager"
+                        className="mb-4 h-auto w-[180px] max-w-full object-contain"
                     />
                     <h2 className="text-2xl font-bold text-gray-900">
                         Вход в админ-панель

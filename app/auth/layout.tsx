@@ -1,3 +1,4 @@
+import { BRAND_ICONS, BRAND_FAVICONS } from '@/shared/constants/branding'
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import PwaExperience from '@/components/pwa/PwaExperience'
@@ -5,7 +6,7 @@ import '../admin/admin.css'
 export const metadata: Metadata = {
     manifest: '/pwa/manager.webmanifest',
     appleWebApp: { capable: true, title: 'AM Менеджер' },
-    icons: { apple: [{ url: '/pwa/manager-180.png', sizes: '180x180' }] },
+    icons: { icon: BRAND_FAVICONS, apple: [{ url: BRAND_ICONS.managerApple, sizes: '180x180' }] },
     robots: { index: false, follow: false },
 }
 export default function AuthLayout({
