@@ -22,9 +22,7 @@ test('posts: manager creates, previews and publishes an article while draft edit
     let id = ''
     try {
         await page.goto('/admin/blog/new')
-        await page
-            .getByRole('tab', { name: 'Текст статьи', exact: true })
-            .click()
+        await page.getByRole('tab', { name: 'Статья', exact: true }).click()
         await expect(
             page.getByRole('textbox', { name: 'Текст статьи', exact: true }),
         ).toBeEditable()
@@ -32,7 +30,7 @@ test('posts: manager creates, previews and publishes an article while draft edit
             path: '/tmp/asiamotors-editor-ready.png',
             fullPage: false,
         })
-        await page.getByRole('tab', { name: 'Основное', exact: true }).click()
+        await page.getByRole('tab', { name: 'Статья', exact: true }).click()
         await page.getByLabel('Заголовок статьи', { exact: true }).fill(title)
         await expect
             .poll(() =>
@@ -59,11 +57,9 @@ test('posts: manager creates, previews and publishes an article while draft edit
             .click()
         await expect(page.getByRole('status')).toContainText('сохранён')
         id = new URL(page.url()).pathname.split('/').pop()!
-        const slug = await page
-            .getByLabel('Адрес страницы', { exact: true })
-            .inputValue()
+        const slug = await page.locator('#post-slug').inputValue()
         expect((await context.request.get('/blog/' + slug)).status()).toBe(404)
-        await page.getByRole('tab', { name: 'Анонс', exact: true }).click()
+        await page.getByRole('tab', { name: 'Статья', exact: true }).click()
         await page
             .getByLabel('Краткое описание', { exact: true })
             .fill(
@@ -78,9 +74,7 @@ test('posts: manager creates, previews and publishes an article while draft edit
             buffer: readFileSync('public/img/android-chrome-192x192.png'),
         })
         await expect(page.locator('.post-cover-preview img')).toBeVisible()
-        await page
-            .getByRole('tab', { name: 'Текст статьи', exact: true })
-            .click()
+        await page.getByRole('tab', { name: 'Статья', exact: true }).click()
         await page
             .getByRole('textbox', { name: 'Текст статьи', exact: true })
             .fill(
@@ -183,9 +177,7 @@ test('posts: empty-title recovery and stale local edits cannot overwrite a newer
     let id = ''
     try {
         await page.goto('/admin/blog/new')
-        await page
-            .getByRole('tab', { name: 'Текст статьи', exact: true })
-            .click()
+        await page.getByRole('tab', { name: 'Статья', exact: true }).click()
         const text =
             'Текст сначала, а заголовок менеджер добавит после подготовки материала об автомобиле.'
         await page
@@ -208,13 +200,11 @@ test('posts: empty-title recovery and stale local edits cannot overwrite a newer
         await expect(
             page.getByLabel('Заголовок статьи', { exact: true }),
         ).toHaveValue('')
-        await page
-            .getByRole('tab', { name: 'Текст статьи', exact: true })
-            .click()
+        await page.getByRole('tab', { name: 'Статья', exact: true }).click()
         await expect(
             page.getByRole('textbox', { name: 'Текст статьи', exact: true }),
         ).toHaveText(text)
-        await page.getByRole('tab', { name: 'Основное', exact: true }).click()
+        await page.getByRole('tab', { name: 'Статья', exact: true }).click()
         const title = 'Черновик восстановления ' + randomUUID().slice(0, 8)
         await page.getByLabel('Заголовок статьи', { exact: true }).fill(title)
         await page
@@ -345,7 +335,7 @@ test('posts: accessible tabs, Word paste, retained link/image selections and tab
     try {
         await page.goto('/admin/blog/new')
         const firstTab = page.getByRole('tab', {
-            name: 'Основное',
+            name: 'Статья',
             exact: true,
         })
         await firstTab.focus()
@@ -365,20 +355,18 @@ test('posts: accessible tabs, Word paste, retained link/image selections and tab
             page.getByText('Все изменения сохранены', { exact: true }),
         ).toBeVisible()
         id = new URL(page.url()).pathname.split('/').pop()!
-        // Publication errors open the announcement tab and put focus on the first invalid field.
+        // Publication errors open the article tab and put focus on the first invalid field.
         await page.getByRole('tab', { name: 'SEO', exact: true }).click()
         await page
             .getByRole('button', { name: 'Опубликовать', exact: true })
             .click()
         await expect(
-            page.getByRole('tab', { name: 'Анонс', exact: true }),
+            page.getByRole('tab', { name: 'Статья', exact: true }),
         ).toHaveAttribute('aria-selected', 'true')
         await expect(
             page.getByLabel('Краткое описание', { exact: true }),
         ).toBeFocused()
-        await page
-            .getByRole('tab', { name: 'Текст статьи', exact: true })
-            .click()
+        await page.getByRole('tab', { name: 'Статья', exact: true }).click()
         const body = page.getByRole('textbox', {
             name: 'Текст статьи',
             exact: true,
@@ -457,6 +445,7 @@ test('posts: accessible tabs, Word paste, retained link/image selections and tab
             .getByRole('button', { name: 'Вставить фотографию', exact: true })
             .click()
         await expect(body.locator('img')).toHaveCount(1)
+        await expect(body.locator('figcaption')).toHaveText('Исходная подпись')
         await body.locator('img').click()
         await page
             .getByRole('button', { name: 'Изменить фотографию', exact: true })
@@ -473,6 +462,9 @@ test('posts: accessible tabs, Word paste, retained link/image selections and tab
         await dialog
             .getByRole('button', { name: 'Сохранить фотографию' })
             .click()
+        await expect(body.locator('figcaption')).toHaveText(
+            'Обновлённая подпись',
+        )
         await expect(body.locator('img')).toHaveAttribute(
             'data-caption',
             'Обновлённая подпись',
@@ -487,10 +479,40 @@ test('posts: accessible tabs, Word paste, retained link/image selections and tab
         await page
             .getByRole('button', { name: 'Повторить действие', exact: true })
             .click()
+        await expect(body.locator('figcaption')).toHaveText(
+            'Обновлённая подпись',
+        )
         await expect(body.locator('img')).toHaveAttribute(
             'data-caption',
             'Обновлённая подпись',
         )
+        await body.focus()
+        await page.keyboard.press('Control+End')
+        await page.keyboard.press('ArrowDown')
+        // Copying our own image must keep one caption inside each image node.
+        const figureHtml = await body
+            .locator('figure')
+            .first()
+            .evaluate((el) => el.outerHTML)
+        await body.evaluate((element, html) => {
+            const data = new DataTransfer()
+            data.setData('text/html', html)
+            element.dispatchEvent(
+                new ClipboardEvent('paste', {
+                    bubbles: true,
+                    cancelable: true,
+                    clipboardData: data,
+                }),
+            )
+        }, figureHtml)
+        await expect(body.locator('figure')).toHaveCount(2)
+        await expect(body.locator('figcaption')).toHaveText([
+            'Обновлённая подпись',
+            'Обновлённая подпись',
+        ])
+        await expect(
+            body.locator('p').filter({ hasText: 'Обновлённая подпись' }),
+        ).toHaveCount(0)
         await body.focus()
         await page.keyboard.press('Control+End')
         await page.keyboard.press('ArrowDown')
@@ -515,7 +537,7 @@ test('posts: accessible tabs, Word paste, retained link/image selections and tab
             )
         })
         await expect(body).toContainText('Текст из Word')
-        await expect(body.locator('img')).toHaveCount(1)
+        await expect(body.locator('img')).toHaveCount(2)
         expect(
             await page.evaluate(() => Reflect.has(window, '__unsafeRan')),
         ).toBe(false)
@@ -626,12 +648,11 @@ test.describe('scheduled publication in manager time zone', () => {
             expect(
                 (await context.request.get('/blog/' + saved.slug)).status(),
             ).toBe(404)
-            await page
-                .getByRole('tab', { name: 'Основное', exact: true })
-                .click()
-            await expect(
-                page.getByLabel('Адрес страницы', { exact: true }),
-            ).toHaveAttribute('readonly', '')
+            await page.getByRole('tab', { name: 'Статья', exact: true }).click()
+            await expect(page.locator('#post-slug')).toHaveAttribute(
+                'readonly',
+                '',
+            )
             await page
                 .getByLabel('Заголовок статьи', { exact: true })
                 .fill(title + ' следующие правки')
@@ -676,4 +697,132 @@ test.describe('scheduled publication in manager time zone', () => {
             await db.query('DELETE FROM posts WHERE id=$1', [id])
         }
     })
+})
+
+test('posts: writing-first workspace keeps input while focusing and guides preparation on all screen sizes', async ({
+    page,
+    context,
+}) => {
+    await login(context)
+    let id = ''
+    const title = 'Geely Monjaro из Китая: что проверить перед заказом'
+    try {
+        await page.setViewportSize({ width: 1440, height: 1000 })
+        await page.goto('/admin/blog/new')
+        const body = page.getByRole('textbox', {
+            name: 'Текст статьи',
+            exact: true,
+        })
+        await expect(body).toBeEditable()
+        await expect(
+            page.getByLabel('Заголовок статьи', { exact: true }),
+        ).toBeVisible()
+        await expect(
+            page.getByText('Начните с короткого вступления…', { exact: true }),
+        ).toBeVisible()
+        await page.getByLabel('Заголовок статьи', { exact: true }).fill(title)
+        await body.pressSequentially(
+            'Перед заказом автомобиля сравните комплектации и проверьте полную стоимость поставки. В этой статье разберём, какие вопросы задать продавцу и какие документы подготовить.',
+        )
+        await expect(page.locator('.post-writing-placeholder')).toHaveCount(0)
+        await body.press('Enter')
+        await page
+            .getByLabel('Стиль текста', { exact: true })
+            .selectOption('h2')
+        await page.keyboard.type('Что проверить до оплаты')
+        await page.keyboard.press('Enter')
+        await page.keyboard.type(
+            'Уточните год выпуска, состав комплектации и условия гарантии. Цены, сроки и характеристики проверяйте перед подписанием договора.',
+        )
+        const original = await body.innerHTML()
+        await page
+            .getByRole('button', { name: 'Развернуть редактор', exact: true })
+            .click()
+        await expect(
+            page.getByRole('complementary', { name: 'Настройки статьи' }),
+        ).toBeHidden()
+        await expect.poll(() => body.innerHTML()).toBe(original)
+        await page.getByRole('tab', { name: 'Публикация', exact: true }).click()
+        await page
+            .getByRole('region', { name: 'Подготовка к публикации' })
+            .getByRole('button', {
+                name: 'Краткое описание: нужно заполнить',
+                exact: true,
+            })
+            .click()
+        await expect(
+            page.getByLabel('Краткое описание', { exact: true }),
+        ).toBeFocused()
+        await expect(
+            page.getByRole('complementary', { name: 'Настройки статьи' }),
+        ).toBeVisible()
+        await expect.poll(() => body.innerHTML()).toBe(original)
+        await page
+            .getByLabel('Краткое описание', { exact: true })
+            .fill(
+                'Комплектации, документы и условия поставки: разбираемся, как подготовиться к заказу Geely Monjaro из Китая.',
+            )
+        await page.getByLabel('Файл обложки', { exact: true }).setInputFiles({
+            name: 'cover.webp',
+            mimeType: 'image/webp',
+            buffer: readFileSync('public/img/new-cars-bg.webp'),
+        })
+        await expect(page.locator('.post-cover-preview img')).toBeVisible()
+        await page
+            .getByLabel('Что изображено на обложке (alt)', { exact: true })
+            .fill('Новые автомобили в салоне')
+        await page
+            .getByLabel('Теги через запятую', { exact: true })
+            .fill('Geely, доставка')
+        await page
+            .getByRole('button', { name: 'Сохранить черновик', exact: true })
+            .click()
+        await expect(
+            page.getByText('Все изменения сохранены', { exact: true }),
+        ).toBeVisible()
+        id = new URL(page.url()).pathname.split('/').pop()!
+        // Recovery restores the raw tags control as well as the document, including an existing record.
+        await page
+            .getByLabel('Теги через запятую', { exact: true })
+            .fill('Geely, сравнение')
+        page.once('dialog', (dialog) => dialog.accept())
+        await page.reload()
+        await page
+            .getByRole('button', { name: 'Восстановить', exact: true })
+            .click()
+        await expect(
+            page.getByLabel('Теги через запятую', { exact: true }),
+        ).toHaveValue('Geely, сравнение')
+        await expect.poll(() => body.innerHTML()).toBe(original)
+        for (const width of [390, 768, 1440]) {
+            await page.setViewportSize({ width, height: 1000 })
+            await page.evaluate(() => window.scrollTo(0, 0))
+            expect(
+                await page
+                    .locator('html')
+                    .evaluate((el) => el.scrollWidth <= innerWidth),
+            ).toBe(true)
+            await expect(
+                page.getByRole('button', {
+                    name: 'Вставить фотографию',
+                    exact: true,
+                }),
+            ).toBeVisible()
+            await page.screenshot({
+                path: `/tmp/asiamotors-writing-first-${width}.png`,
+                fullPage: false,
+            })
+        }
+        await page.getByRole('tab', { name: 'SEO', exact: true }).click()
+        await expect(
+            page.getByRole('region', { name: 'Пример поискового результата' }),
+        ).toContainText(title)
+        await expect(
+            page.getByLabel('Адрес страницы', { exact: true }),
+        ).toHaveValue('geely-monjaro-iz-kitaya-chto-proverit-pered-zakazom')
+        await page.getByRole('tab', { name: 'Статья', exact: true }).click()
+        await expect.poll(() => body.innerHTML()).toBe(original)
+    } finally {
+        if (id) await db.query('DELETE FROM posts WHERE id=$1', [id])
+    }
 })

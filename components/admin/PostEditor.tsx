@@ -14,7 +14,7 @@ import { PostContentEditor } from './PostContentEditor'
 import { usePostEditor } from './usePostEditor'
 import './post-editor.css'
 
-const tabs = ['Основное', 'Анонс', 'Текст статьи', 'SEO', 'Публикация']
+const tabs = ['Статья', 'SEO', 'Публикация']
 function localPublicationTime(value: string) {
     const parts = new Intl.DateTimeFormat('sv-SE', {
         timeZone: 'Asia/Vladivostok',
@@ -85,6 +85,7 @@ export function PostEditor({
     const state = usePostEditor(post, uploading)
     const router = useRouter()
     const [tab, setTab] = useState(0)
+    const [focused, setFocused] = useState(false)
     const [slugTouched, setSlugTouched] = useState(!!post?.slug)
     const [coverError, setCoverError] = useState('')
     const [publicationMode, setPublicationMode] = useState<'now' | 'schedule'>(
@@ -109,19 +110,20 @@ export function PostEditor({
             title: 0,
             author: 0,
             tags: 0,
-            slug: 0,
-            excerpt: 1,
-            cover: 1,
-            coverAlt: 1,
-            content: 2,
-            seoTitle: 3,
-            seoDescription: 3,
-            scheduledAt: 4,
+            slug: 1,
+            excerpt: 0,
+            cover: 0,
+            coverAlt: 0,
+            content: 0,
+            seoTitle: 1,
+            seoDescription: 1,
+            scheduledAt: 2,
         }
         let active = true
         const frame = requestAnimationFrame(() => {
             if (!active) return
-            setTab(tabForField[first] ?? 4)
+            setTab(tabForField[first] ?? 2)
+            setFocused(false)
             requestAnimationFrame(() => {
                 if (active)
                     document
@@ -189,6 +191,12 @@ export function PostEditor({
     ) {
         const props = {
             id: 'post-' + key,
+            name: key,
+            autoComplete: 'off',
+            placeholder:
+                key === 'title'
+                    ? 'Например, Geely Monjaro: комплектации и стоимость…'
+                    : undefined,
             value: values.document[key],
             maxLength: max,
             'aria-invalid': !!fieldError(key),
@@ -218,7 +226,7 @@ export function PostEditor({
                 hint={hint}
             >
                 {textarea ? (
-                    <textarea {...props} rows={4} />
+                    <textarea {...props} rows={key === 'title' ? 2 : 4} />
                 ) : (
                     <input {...props} />
                 )}
@@ -236,7 +244,7 @@ export function PostEditor({
                 setScheduleError(
                     'Выберите время не менее чем через одну минуту по Владивостоку.',
                 )
-                setTab(4)
+                setTab(2)
                 requestAnimationFrame(() =>
                     document.getElementById('post-scheduledAt')?.focus(),
                 )
@@ -287,14 +295,11 @@ export function PostEditor({
                     >
                         ← К статьям
                     </Link>
-                    <h1>
-                        {record
-                            ? values.document.title || 'Редактирование статьи'
-                            : 'Новая статья'}
-                    </h1>
+                    <h1>{record ? 'Редактор статьи' : 'Новая статья'}</h1>
                     <p className="admin-muted">
-                        Заполните карточку, подготовьте текст и выберите время
-                        публикации.
+                        Подготовьте текст, проверьте оформление и выпустите
+                        статью. Сохранение черновика не меняет публикацию на
+                        сайте.
                     </p>
                 </div>
                 <div className="post-heading-status">
@@ -386,114 +391,118 @@ export function PostEditor({
                         <TabPanel unmount={false}>
                             <fieldset
                                 disabled={disabled}
-                                className="post-tab-form"
+                                className="post-article-layout"
+                                data-focused={focused}
                             >
-                                <div className="post-section-heading">
-                                    <h2>Основная информация</h2>
-                                    <p>
-                                        Название статьи и постоянный адрес на
-                                        сайте.
-                                    </p>
-                                </div>
-                                {textField(
-                                    'title',
-                                    'Заголовок статьи',
-                                    200,
-                                    false,
-                                    'Это основной заголовок, который увидит читатель.',
-                                )}
-                                <div className="post-metadata-grid">
-                                    {textField('author', 'Автор', 150)}
-                                    <Field
-                                        name="post-tags"
-                                        label="Теги через запятую"
-                                        hint="До 10 тегов: например, Changan, сравнение, доставка."
-                                        error={fieldError('tags')}
-                                    >
-                                        <input
-                                            id="post-tags"
-                                            key={
-                                                record?.version ||
-                                                String(!!recovery)
-                                            }
-                                            defaultValue={values.document.tags.join(
-                                                ', ',
-                                            )}
-                                            maxLength={500}
-                                            onChange={(event) =>
-                                                update(
-                                                    'tags',
-                                                    event.target.value
-                                                        .split(',')
-                                                        .map((tag) =>
-                                                            tag.trim(),
-                                                        )
-                                                        .filter(Boolean),
-                                                )
-                                            }
-                                        />
-                                    </Field>
-                                </div>
-                                <Field
-                                    name="post-slug"
-                                    label="Адрес страницы"
-                                    hint={
-                                        addressLocked
-                                            ? 'Адрес закреплён после публикации или постановки в расписание.'
-                                            : 'Предлагается по заголовку. Латинские буквы, цифры и дефисы.'
-                                    }
-                                    error={fieldError('slug')}
-                                >
-                                    <div className="post-slug-input">
-                                        <span>asiamotors.su/blog/</span>
-                                        <input
-                                            id="post-slug"
-                                            value={values.slug}
-                                            maxLength={120}
-                                            readOnly={addressLocked}
-                                            onChange={(event) => {
-                                                setSlugTouched(true)
-                                                state.setValues((current) => ({
-                                                    ...current,
-                                                    slug: event.target.value,
-                                                }))
-                                            }}
-                                        />
-                                    </div>
-                                </Field>
-                                <button
-                                    type="button"
-                                    className="admin-button post-next-section"
-                                    onClick={() => setTab(1)}
-                                >
-                                    Далее: анонс и обложка →
-                                </button>
-                            </fieldset>
-                        </TabPanel>
-                        <TabPanel unmount={false}>
-                            <fieldset
-                                disabled={disabled}
-                                className="post-tab-form"
-                            >
-                                <div className="post-section-heading">
-                                    <h2>Анонс и обложка</h2>
-                                    <p>
-                                        Эта карточка появится в списке статей и
-                                        в блоке новостей.
-                                    </p>
-                                </div>
-                                <div className="post-announcement-layout">
-                                    <div className="post-field-stack">
+                                <div className="post-writing-sheet">
+                                    <div className="post-document-title">
                                         {textField(
-                                            'excerpt',
-                                            'Краткое описание',
-                                            500,
+                                            'title',
+                                            'Заголовок статьи',
+                                            200,
                                             true,
-                                            'Коротко объясните читателю, чем полезна статья.',
                                         )}
+                                    </div>
+                                    <div className="post-writing-heading">
+                                        <h2>Текст статьи</h2>
+                                        <button
+                                            type="button"
+                                            className="admin-button"
+                                            aria-pressed={focused}
+                                            onClick={() => setFocused(!focused)}
+                                        >
+                                            {focused
+                                                ? 'Показать настройки'
+                                                : 'Развернуть редактор'}
+                                        </button>
+                                    </div>
+                                    <PostContentEditor
+                                        value={values.document.content}
+                                        onChange={(value) =>
+                                            update('content', value)
+                                        }
+                                        disabled={disabled}
+                                        onUploading={setUploading}
+                                    />
+                                    {fieldError('content') && (
+                                        <p
+                                            id="post-content-error"
+                                            role="alert"
+                                            className="admin-field-error"
+                                        >
+                                            {fieldError('content')}
+                                        </p>
+                                    )}
+                                    <div className="post-article-count">
+                                        <span>
+                                            {text.trim().length} символов
+                                        </span>
+                                        <span>
+                                            Примерно{' '}
+                                            {Math.max(
+                                                1,
+                                                Math.ceil(
+                                                    text.trim().split(/\s+/)
+                                                        .length / 180,
+                                                ),
+                                            )}{' '}
+                                            мин чтения
+                                        </span>
+                                    </div>
+                                </div>
+                                <aside
+                                    className="post-inspector"
+                                    aria-label="Настройки статьи"
+                                    hidden={focused}
+                                >
+                                    <section className="post-inspector-section">
+                                        <h2>Анонс и обложка</h2>
+                                        <p className="admin-muted">
+                                            Так читатель увидит статью в блоге и
+                                            новостях.
+                                        </p>
+                                        <div
+                                            className="post-announcement-preview"
+                                            aria-label="Предпросмотр анонса"
+                                        >
+                                            {values.document.cover ? (
+                                                <div className="post-cover-preview">
+                                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                    <img
+                                                        src={
+                                                            values.document
+                                                                .cover
+                                                        }
+                                                        alt={
+                                                            values.document
+                                                                .coverAlt ||
+                                                            'Обложка статьи'
+                                                        }
+                                                    />
+                                                </div>
+                                            ) : (
+                                                <div className="post-cover-placeholder">
+                                                    Добавьте обложку статьи
+                                                </div>
+                                            )}
+                                            <div>
+                                                <strong>
+                                                    {values.document.title ||
+                                                        'Заголовок статьи'}
+                                                </strong>
+                                                <p>
+                                                    {values.document.excerpt ||
+                                                        'Короткий анонс для читателя'}
+                                                </p>
+                                            </div>
+                                        </div>
                                         <Field
                                             name="post-cover"
-                                            label="Файл обложки"
+                                            label={
+                                                values.document.cover
+                                                    ? 'Заменить обложку'
+                                                    : 'Файл обложки'
+                                            }
                                             hint="JPG, PNG или WebP, до 10 МБ."
                                             error={
                                                 coverError ||
@@ -516,6 +525,8 @@ export function PostEditor({
                                             'coverAlt',
                                             'Что изображено на обложке (alt)',
                                             300,
+                                            false,
+                                            'Опишите автомобиль и ракурс. Это помогает поиску и людям, которые не видят изображение.',
                                         )}
                                         {values.document.cover && (
                                             <button
@@ -528,92 +539,46 @@ export function PostEditor({
                                                 Убрать обложку
                                             </button>
                                         )}
-                                    </div>
-                                    <div
-                                        className="post-announcement-preview"
-                                        aria-label="Предпросмотр анонса"
-                                    >
-                                        {values.document.cover ? (
-                                            <div className="post-cover-preview">
-                                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                                <img
-                                                    src={values.document.cover}
-                                                    alt={
-                                                        values.document
-                                                            .coverAlt ||
-                                                        'Обложка статьи'
-                                                    }
-                                                />
-                                            </div>
-                                        ) : (
-                                            <div className="post-cover-placeholder">
-                                                Здесь появится обложка
-                                            </div>
+                                        {textField(
+                                            'excerpt',
+                                            'Краткое описание',
+                                            500,
+                                            true,
+                                            'В 1–2 предложениях: что читатель узнает из статьи.',
                                         )}
-                                        <div>
-                                            <strong>
-                                                {values.document.title ||
-                                                    'Заголовок статьи'}
-                                            </strong>
-                                            <p>
-                                                {values.document.excerpt ||
-                                                    'Краткое описание статьи'}
-                                            </p>
-                                            <small>
-                                                {values.document.author ||
-                                                    'Автор'}
-                                            </small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button
-                                    type="button"
-                                    className="admin-button post-next-section"
-                                    onClick={() => setTab(2)}
-                                >
-                                    Далее: текст статьи →
-                                </button>
-                            </fieldset>
-                        </TabPanel>
-                        <TabPanel unmount={false}>
-                            <fieldset
-                                disabled={disabled}
-                                className="post-text-panel"
-                            >
-                                <div className="post-section-heading">
-                                    <h2>Текст статьи</h2>
-                                    <p>
-                                        Пишите и оформляйте текст, как в обычном
-                                        текстовом редакторе. Заголовок статьи
-                                        уже задан отдельно.
-                                    </p>
-                                </div>
-                                <PostContentEditor
-                                    value={values.document.content}
-                                    onChange={(value) =>
-                                        update('content', value)
-                                    }
-                                    disabled={disabled}
-                                    onUploading={setUploading}
-                                />
-                                {fieldError('content') && (
-                                    <p className="admin-field-error">
-                                        {fieldError('content')}
-                                    </p>
-                                )}
-                                <div className="post-article-count">
-                                    <span>{text.length} символов</span>
-                                    <span>
-                                        Примерно{' '}
-                                        {Math.max(
-                                            1,
-                                            Math.ceil(
-                                                text.split(/\s+/).length / 180,
-                                            ),
-                                        )}{' '}
-                                        мин чтения
-                                    </span>
-                                </div>
+                                    </section>
+                                    <section className="post-inspector-section">
+                                        <h2>Сведения о статье</h2>
+                                        {textField('author', 'Автор', 150)}
+                                        <Field
+                                            name="post-tags"
+                                            label="Теги через запятую"
+                                            hint="Например: Geely, комплектации, доставка. До 10 тегов."
+                                            error={fieldError('tags')}
+                                        >
+                                            <input
+                                                id="post-tags"
+                                                name="tags"
+                                                key={`${record?.version || 0}:${!!recovery}`}
+                                                defaultValue={values.document.tags.join(
+                                                    ', ',
+                                                )}
+                                                maxLength={500}
+                                                onChange={(event) =>
+                                                    update(
+                                                        'tags',
+                                                        event.target.value
+                                                            .split(',')
+                                                            .map((tag) =>
+                                                                tag.trim(),
+                                                            )
+                                                            .filter(Boolean),
+                                                    )
+                                                }
+                                            />
+                                        </Field>
+                                    </section>
+                                </aside>
                             </fieldset>
                         </TabPanel>
                         <TabPanel unmount={false}>
@@ -628,6 +593,36 @@ export function PostEditor({
                                         поисковых систем и социальных сетей.
                                     </p>
                                 </div>
+                                <Field
+                                    name="post-slug"
+                                    label="Адрес страницы"
+                                    hint={
+                                        addressLocked
+                                            ? 'Адрес закреплён после публикации или постановки в расписание.'
+                                            : 'Предлагается по заголовку. Латинские буквы, цифры и дефисы.'
+                                    }
+                                    error={fieldError('slug')}
+                                >
+                                    <div className="post-slug-input">
+                                        <span>asiamotors.su/blog/</span>
+                                        <input
+                                            id="post-slug"
+                                            name="slug"
+                                            spellCheck={false}
+                                            autoComplete="off"
+                                            value={values.slug}
+                                            maxLength={120}
+                                            readOnly={addressLocked}
+                                            onChange={(event) => {
+                                                setSlugTouched(true)
+                                                state.setValues((current) => ({
+                                                    ...current,
+                                                    slug: event.target.value,
+                                                }))
+                                            }}
+                                        />
+                                    </div>
+                                </Field>
                                 <div className="post-seo-layout">
                                     <div className="post-field-stack">
                                         {textField(
@@ -651,6 +646,7 @@ export function PostEditor({
                                         </p>
                                         <div
                                             className="post-search-preview"
+                                            role="region"
                                             aria-label="Пример поискового результата"
                                         >
                                             <small>
@@ -667,6 +663,12 @@ export function PostEditor({
                                         </div>
                                     </div>
                                 </div>
+                                <p className="admin-muted">
+                                    Заголовок для поиска: {title.length}{' '}
+                                    символов · Описание: {description.length}{' '}
+                                    символов. Поисковая система может показать
+                                    собственный фрагмент текста.
+                                </p>
                                 {warnings.length > 0 && (
                                     <div className="post-seo-hints">
                                         <h3>Рекомендации</h3>
@@ -696,6 +698,96 @@ export function PostEditor({
                                         или выберите время.
                                     </p>
                                 </div>
+                                <section
+                                    className="post-publication-checklist"
+                                    role="region"
+                                    aria-label="Подготовка к публикации"
+                                >
+                                    <h3>Перед публикацией</h3>
+                                    <ul>
+                                        {[
+                                            {
+                                                field: 'title',
+                                                label: 'Заголовок статьи',
+                                                done: !!values.document.title.trim(),
+                                            },
+                                            {
+                                                field: 'content',
+                                                label: 'Текст статьи: не менее 50 символов',
+                                                done: text.trim().length >= 50,
+                                            },
+                                            {
+                                                field: 'excerpt',
+                                                label: 'Краткое описание',
+                                                done: !!values.document.excerpt.trim(),
+                                            },
+                                            {
+                                                field: 'cover',
+                                                label: 'Обложка',
+                                                done: !!values.document.cover,
+                                            },
+                                            {
+                                                field: 'coverAlt',
+                                                label: 'Описание обложки',
+                                                done: !!values.document.coverAlt.trim(),
+                                            },
+                                            {
+                                                field: 'author',
+                                                label: 'Автор',
+                                                done: !!values.document.author.trim(),
+                                            },
+                                            {
+                                                field: 'slug',
+                                                label: 'Адрес страницы',
+                                                done: /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(
+                                                    values.slug,
+                                                ),
+                                            },
+                                        ].map(({ field, label, done }) => (
+                                            <li
+                                                key={field}
+                                                data-complete={done}
+                                            >
+                                                <span aria-hidden="true">
+                                                    {done ? '✓' : '○'}
+                                                </span>
+                                                <button
+                                                    type="button"
+                                                    aria-label={`${label}: ${done ? 'заполнено' : 'нужно заполнить'}`}
+                                                    onClick={() => {
+                                                        setTab(
+                                                            field === 'slug'
+                                                                ? 1
+                                                                : 0,
+                                                        )
+                                                        setFocused(false)
+                                                        requestAnimationFrame(
+                                                            () =>
+                                                                document
+                                                                    .getElementById(
+                                                                        'post-' +
+                                                                            field,
+                                                                    )
+                                                                    ?.focus(),
+                                                        )
+                                                    }}
+                                                >
+                                                    {label}
+                                                    <span className="sr-only">
+                                                        {done
+                                                            ? ': заполнено'
+                                                            : ': нужно заполнить'}
+                                                    </span>
+                                                </button>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                    <p className="admin-muted">
+                                        Нажмите на пункт, чтобы перейти к полю.
+                                        Перед выпуском проверьте факты, цены и
+                                        условия поставки.
+                                    </p>
+                                </section>
                                 <div className="post-publication-summary">
                                     <strong>{statusLabel}</strong>
                                     {record?.published_at && (
@@ -867,9 +959,23 @@ export function PostEditor({
                         <button
                             type="submit"
                             className="admin-button"
+                            aria-label={
+                                busy ? 'Подождите…' : 'Сохранить черновик'
+                            }
                             disabled={disabled}
                         >
-                            {busy ? 'Подождите…' : 'Сохранить черновик'}
+                            {busy ? (
+                                'Подождите…'
+                            ) : (
+                                <>
+                                    <span className="post-action-full">
+                                        Сохранить черновик
+                                    </span>
+                                    <span className="post-action-short">
+                                        Сохранить
+                                    </span>
+                                </>
+                            )}
                         </button>
                         {record && (
                             <a
@@ -877,8 +983,14 @@ export function PostEditor({
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="admin-button"
+                                aria-label="Предпросмотр сохранённого"
                             >
-                                Предпросмотр сохранённого
+                                <span className="post-action-full">
+                                    Предпросмотр сохранённого
+                                </span>
+                                <span className="post-action-short">
+                                    Предпросмотр
+                                </span>
                             </a>
                         )}
                         <button

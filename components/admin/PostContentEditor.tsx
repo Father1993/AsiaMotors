@@ -37,8 +37,40 @@ import { apiRequest } from '@/shared/lib/catalog-client'
 import { safePostLink, type DocumentNode } from '@/shared/lib/post-schema'
 
 const ArticleImage = Image.extend({
+    renderHTML({ HTMLAttributes }) {
+        return [
+            'figure',
+            {
+                'data-article-image': '',
+                title: 'Выберите фотографию и нажмите «Изменить фото» в панели редактора',
+            },
+            ['img', HTMLAttributes],
+            ...(HTMLAttributes['data-caption']
+                ? [['figcaption', {}, String(HTMLAttributes['data-caption'])]]
+                : []),
+        ]
+    },
     parseHTML() {
         return [
+            {
+                tag: 'figure[data-article-image]',
+                getAttrs: (element) => {
+                    const image = element.querySelector('img')
+                    if (
+                        !image ||
+                        !/^\/media\/[0-9a-f-]{36}\.webp$/.test(
+                            image.getAttribute('src') || '',
+                        )
+                    )
+                        return false
+                    return {
+                        src: image.getAttribute('src'),
+                        alt: image.getAttribute('alt') || '',
+                        title: image.getAttribute('title'),
+                        caption: image.getAttribute('data-caption') || '',
+                    }
+                },
+            },
             {
                 tag: 'img[src]',
                 getAttrs: (element) =>
@@ -96,6 +128,7 @@ function cleanNode(node: JSONContent): DocumentNode {
 function toolbarState(editor: Editor | null) {
     return editor
         ? {
+              empty: editor.isEmpty,
               style: editor.isActive('heading', { level: 2 })
                   ? 'h2'
                   : editor.isActive('heading', { level: 3 })
@@ -163,6 +196,8 @@ export function PostContentEditor({
                 role: 'textbox',
                 'aria-label': 'Текст статьи',
                 'aria-multiline': 'true',
+                'aria-describedby': 'post-writing-help',
+                lang: 'ru',
                 id: 'post-content',
             },
             transformPastedHTML(html) {
@@ -465,7 +500,8 @@ export function PostContentEditor({
                             editor.chain().focus().toggleBold().run()
                         }
                     >
-                        <strong>Ж</strong>
+                        <strong aria-hidden="true">Ж</strong>
+                        <span>Жирный</span>
                     </button>
                     <button
                         type="button"
@@ -478,7 +514,8 @@ export function PostContentEditor({
                             editor.chain().focus().toggleItalic().run()
                         }
                     >
-                        <em>К</em>
+                        <em aria-hidden="true">К</em>
+                        <span>Курсив</span>
                     </button>
                 </div>
                 <div
@@ -497,7 +534,8 @@ export function PostContentEditor({
                             editor.chain().focus().toggleBulletList().run()
                         }
                     >
-                        <ListBulletIcon />
+                        <ListBulletIcon aria-hidden="true" />
+                        <span>Список</span>
                     </button>
                     <button
                         type="button"
@@ -510,7 +548,8 @@ export function PostContentEditor({
                             editor.chain().focus().toggleOrderedList().run()
                         }
                     >
-                        <NumberedListIcon />
+                        <NumberedListIcon aria-hidden="true" />
+                        <span>Нумерация</span>
                     </button>
                     <button
                         type="button"
@@ -523,7 +562,7 @@ export function PostContentEditor({
                             editor.chain().focus().toggleBlockquote().run()
                         }
                     >
-                        « »
+                        <span>Цитата</span>
                     </button>
                 </div>
                 <div
@@ -537,11 +576,15 @@ export function PostContentEditor({
                         aria-label={
                             current.link ? 'Изменить ссылку' : 'Вставить ссылку'
                         }
-                        title="Ссылка"
+                        title={
+                            current.link ? 'Изменить ссылку' : 'Добавить ссылку'
+                        }
                         onClick={openLink}
                     >
-                        <LinkIcon />
-                        <span>Ссылка</span>
+                        <LinkIcon aria-hidden="true" />
+                        <span>
+                            {current.link ? 'Изменить ссылку' : 'Ссылка'}
+                        </span>
                     </button>
                     <button
                         type="button"
@@ -551,11 +594,15 @@ export function PostContentEditor({
                                 ? 'Изменить фотографию'
                                 : 'Вставить фотографию'
                         }
-                        title="Фотография"
+                        title={
+                            current.image
+                                ? 'Изменить фотографию'
+                                : 'Добавить фотографию'
+                        }
                         onClick={openImage}
                     >
-                        <PhotoIcon />
-                        <span>Фото</span>
+                        <PhotoIcon aria-hidden="true" />
+                        <span>{current.image ? 'Изменить фото' : 'Фото'}</span>
                     </button>
                     <Menu>
                         <MenuButton
@@ -575,7 +622,7 @@ export function PostContentEditor({
                             }}
                             title="Таблица"
                         >
-                            <TableCellsIcon />
+                            <TableCellsIcon aria-hidden="true" />
                             <span>Таблица</span>
                         </MenuButton>
                         <MenuItems
@@ -606,6 +653,29 @@ export function PostContentEditor({
                 <div
                     className="post-tool-group"
                     role="group"
+                    aria-label="Очистка оформления"
+                >
+                    <button
+                        type="button"
+                        title="Убрать оформление выделенного текста"
+                        aria-label="Очистить оформление"
+                        disabled={disabled}
+                        onMouseDown={(event) => event.preventDefault()}
+                        onClick={() =>
+                            editor
+                                .chain()
+                                .focus()
+                                .unsetAllMarks()
+                                .clearNodes()
+                                .run()
+                        }
+                    >
+                        <span>Без стилей</span>
+                    </button>
+                </div>
+                <div
+                    className="post-tool-group"
+                    role="group"
                     aria-label="История изменений"
                 >
                     <button
@@ -616,7 +686,7 @@ export function PostContentEditor({
                         onMouseDown={(event) => event.preventDefault()}
                         onClick={() => editor.chain().focus().undo().run()}
                     >
-                        <ArrowUturnLeftIcon />
+                        <ArrowUturnLeftIcon aria-hidden="true" />
                     </button>
                     <button
                         type="button"
@@ -626,15 +696,34 @@ export function PostContentEditor({
                         onMouseDown={(event) => event.preventDefault()}
                         onClick={() => editor.chain().focus().redo().run()}
                     >
-                        <ArrowUturnRightIcon />
+                        <ArrowUturnRightIcon aria-hidden="true" />
                     </button>
                 </div>
             </div>
-            <EditorContent editor={editor} />
-            <div className="post-content-status">
+            <div className="post-editor-surface" data-empty={current.empty}>
+                {current.empty && (
+                    <div
+                        className="post-writing-placeholder"
+                        aria-hidden="true"
+                    >
+                        <strong>Начните с короткого вступления…</strong>
+                        <p>
+                            Напишите, какую задачу решит статья: выбрать
+                            автомобиль, сравнить комплектации или разобраться в
+                            доставке.
+                        </p>
+                        <p>
+                            Можно вставить готовый текст из Word, а затем
+                            добавить заголовки, фотографии и таблицы.
+                        </p>
+                    </div>
+                )}
+                <EditorContent editor={editor} />
+            </div>
+            <div className="post-content-status" id="post-writing-help">
                 <span>
                     Выделите текст, чтобы изменить оформление или добавить
-                    ссылку.
+                    ссылку. Для фото и таблицы поставьте курсор в нужное место.
                 </span>
                 <span>Ctrl+B · Ctrl+I · Ctrl+Z</span>
             </div>

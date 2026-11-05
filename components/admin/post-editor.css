@@ -46,8 +46,7 @@
 .post-tab-panels > [role='tabpanel']:focus {
     outline: none;
 }
-.post-tab-form,
-.post-text-panel {
+.post-tab-form {
     border: 0;
     min-width: 0;
     padding: 28px;
@@ -65,8 +64,6 @@
     color: var(--admin-muted);
     max-width: 850px;
 }
-.post-metadata-grid,
-.post-announcement-layout,
 .post-seo-layout {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -93,9 +90,6 @@
 .admin-shell .post-slug-input input {
     border: 0;
     min-width: 0;
-}
-.post-next-section {
-    justify-self: start;
 }
 .post-announcement-preview {
     border: 1px solid var(--admin-line);
@@ -167,7 +161,7 @@
     padding: 12px 16px;
     border: 1px solid var(--admin-line);
     border-radius: 8px 8px 0 0;
-    background: #f8f9fa;
+    background: var(--admin-canvas);
     position: sticky;
     top: 57px;
     z-index: 12;
@@ -247,10 +241,10 @@
     color: #9299a2;
 }
 .post-rich-content {
-    min-height: 560px;
+    min-height: 420px;
     border: 1px solid var(--admin-line);
     border-top: 0;
-    padding: 32px 40px;
+    padding: 28px 32px;
     overflow-wrap: anywhere;
     outline: 0;
     background: white;
@@ -473,14 +467,198 @@
         gap: 6px;
     }
 }
+
+/* Writing first: a document canvas and the article's settings, like a CMS editor. */
+.post-article-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 304px;
+    align-items: start;
+    min-width: 0;
+    border: 0;
+}
+.post-article-layout[data-focused='true'] {
+    grid-template-columns: minmax(0, 1fr);
+}
+.post-writing-sheet {
+    min-width: 0;
+    padding: 28px;
+}
+.post-document-title {
+    display: grid;
+    gap: 16px;
+    margin-bottom: 28px;
+}
+.admin-shell .post-document-title :is(input, textarea) {
+    padding: 12px 0;
+    border: 0;
+    border-bottom: 1px solid var(--admin-line);
+    border-radius: 0;
+    background: var(--admin-paper);
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+}
+.post-writing-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+.post-writing-heading .admin-button {
+    font-weight: 500;
+    font-size: 13px;
+    padding: 8px 12px;
+}
+.post-inspector {
+    min-width: 0;
+    border-left: 1px solid var(--admin-line);
+    background: var(--admin-canvas);
+    border-radius: 0 0 12px 0;
+}
+.post-inspector[hidden] {
+    display: none;
+}
+.post-inspector-section {
+    display: grid;
+    gap: 16px;
+    padding: 24px;
+}
+.post-inspector-section + .post-inspector-section {
+    border-top: 1px solid var(--admin-line);
+}
+.admin-shell .post-inspector h2 {
+    font-size: 16px;
+}
+.post-inspector .admin-field > p {
+    font-size: 12px;
+}
+.post-inspector .post-announcement-preview {
+    background: var(--admin-paper);
+}
+.post-inspector .post-announcement-preview > div:last-child {
+    padding: 12px;
+}
+.post-inspector .post-announcement-preview strong {
+    font-size: 16px;
+}
+.post-inspector .post-announcement-preview p {
+    font-size: 13px;
+    margin: 8px 0 0;
+}
+.post-inspector .post-cover-placeholder {
+    min-height: 132px;
+    font-size: 13px;
+}
+.post-tool-group[aria-label='Вставить в статью'] {
+    order: 2;
+    flex-basis: calc(100% - 100px);
+    flex-grow: 1;
+    border-right: 0;
+    border-top: 1px solid var(--admin-line);
+    padding: 8px 0 0;
+    gap: 8px;
+}
+.post-tool-group[aria-label='Вставить в статью'] button {
+    background: var(--admin-paper);
+    border-color: var(--admin-line);
+}
+.post-editor-surface {
+    position: relative;
+}
+.post-writing-placeholder {
+    position: absolute;
+    inset: 28px 32px auto;
+    pointer-events: none;
+    color: var(--admin-muted);
+    max-width: 550px;
+    font-size: 15px;
+    line-height: 1.65;
+}
+.post-writing-placeholder strong {
+    color: var(--admin-ink);
+    font-size: 18px;
+    font-weight: 500;
+}
+.post-writing-placeholder p {
+    margin-top: 16px;
+}
+.post-rich-content figure {
+    margin: 24px 0;
+}
+.post-rich-content figure img {
+    margin: 0 auto;
+}
+.post-rich-content figcaption {
+    text-align: center;
+    font-size: 14px;
+    color: var(--admin-muted);
+    padding-top: 12px;
+}
+.post-publication-checklist {
+    padding: 20px;
+    border: 1px solid var(--admin-line);
+    border-radius: 8px;
+}
+.post-publication-checklist ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px 24px;
+    margin: 12px 0;
+}
+.post-publication-checklist li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.post-publication-checklist li > span {
+    color: var(--admin-muted);
+}
+.post-publication-checklist li[data-complete='true'] > span {
+    color: var(--admin-success);
+}
+.post-publication-checklist button {
+    min-height: 44px;
+    text-align: left;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.admin-shell :is(#post-content, [id^='post-']) {
+    scroll-margin-block: 200px;
+}
+@media (max-width: 1100px) {
+    .post-article-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .post-inspector {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        border-left: 0;
+        border-top: 1px solid var(--admin-line);
+    }
+    .post-inspector-section + .post-inspector-section {
+        border-top: 0;
+        border-left: 1px solid var(--admin-line);
+    }
+}
+
+.admin-shell .post-tab-panels {
+    padding: 0;
+}
+.post-action-short {
+    display: none;
+}
+.post-tool-group[aria-label='История изменений'] {
+    order: 3;
+    padding-top: 8px;
+    border-top: 1px solid var(--admin-line);
+}
 @media (max-width: 600px) {
-    .post-tab-form,
-    .post-text-panel {
+    .post-tab-form {
         padding: 16px;
         gap: 20px;
     }
-    .post-metadata-grid,
-    .post-announcement-layout,
     .post-seo-layout {
         grid-template-columns: minmax(0, 1fr);
     }
@@ -492,21 +670,20 @@
     }
     .post-rich-content {
         padding: 20px 16px;
-        min-height: 440px;
+        min-height: 360px;
         font-size: 16px;
     }
     .post-format-toolbar {
         padding: 8px;
+        position: static;
     }
     .post-tool-group {
-        padding-right: 4px;
+        border-right: 0;
+        padding-right: 0;
     }
     .post-tool-group button,
     .post-tool-group select {
         min-height: 44px;
-    }
-    .post-tool-group button > span {
-        display: none;
     }
     .post-tool-group select {
         max-width: 180px;
@@ -524,14 +701,12 @@
     }
     .post-save-actions {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-    }
-    .post-save-actions > :last-child {
-        grid-column: 1/-1;
+        grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+        gap: 6px;
     }
     .post-save-actions .admin-button {
-        padding: 10px;
-        font-size: 13px;
+        padding: 8px 6px;
+        font-size: 12px;
         text-align: center;
     }
     .post-slug-input {
@@ -544,5 +719,79 @@
     }
     .post-edit-dialog {
         padding: 20px 16px;
+    }
+    .post-writing-sheet {
+        padding: 16px;
+    }
+    .admin-shell .post-document-title :is(input, textarea) {
+        font-size: 22px;
+    }
+    .post-inspector {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .post-inspector-section {
+        padding: 20px 16px;
+    }
+    .post-inspector-section + .post-inspector-section {
+        border-left: 0;
+        border-top: 1px solid var(--admin-line);
+    }
+    .post-tool-group button {
+        padding: 8px;
+        padding-inline: 6px;
+        font-size: 12px;
+    }
+    .post-tool-group[aria-label='Списки и цитата'] button > svg {
+        display: none;
+    }
+    .post-writing-placeholder {
+        inset: 20px 16px auto;
+        font-size: 14px;
+    }
+    .post-publication-checklist ul {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .post-page-heading {
+        gap: 8px;
+        margin-bottom: 12px;
+    }
+    .admin-shell .post-page-heading h1 {
+        font-size: 20px;
+    }
+    .post-page-heading p {
+        display: none;
+    }
+    .post-document-title {
+        margin-bottom: 16px;
+    }
+    .post-document-title textarea {
+        min-height: 88px;
+    }
+    .post-action-full {
+        display: none;
+    }
+    .post-action-short {
+        display: inline;
+    }
+    .post-save-status strong {
+        font-size: 12px;
+    }
+    .post-tool-group[aria-label='Начертание'] button > span {
+        display: none;
+    }
+    .post-tool-group[aria-label='Начертание'] button {
+        min-width: 36px;
+    }
+    .post-tool-group svg {
+        width: 16px;
+        height: 16px;
+    }
+    .post-tool-group[aria-label='История изменений'] button {
+        min-width: 32px;
+        padding-inline: 6px;
+    }
+    .post-tool-group[aria-label='Вставить в статью'] {
+        gap: 6px;
+        flex-basis: calc(100% - 76px);
     }
 }
