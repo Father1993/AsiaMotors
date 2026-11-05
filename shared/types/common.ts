@@ -18,9 +18,8 @@ export interface CookieAlertProps {
 }
 
 export interface AnimatedCounterProps {
-    startValue: number
-    maxValue: number
-    interval?: number
+    value: number
+    duration?: number
     className?: string
 }
 

@@ -96,7 +96,7 @@ const SmartSearch = () => {
                             onClick={handleGoCatalog}
                             className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-full text-sm font-medium text-gray-700 transition-colors"
                         >
-                            Новинки 2024
+                            Новинки 2026
                         </button>
                         <button
                             onClick={handleGoCatalog}

@@ -342,7 +342,7 @@ const Footer = () => {
                                     </span>
                                 </div>
                                 <div className="flex items-center justify-center md:justify-end text-gray-400">
-                                    <span>Работаем с 2022 года</span>
+                                    <span>Работаем с января 2022 года</span>
                                 </div>
                             </div>
                         </div>

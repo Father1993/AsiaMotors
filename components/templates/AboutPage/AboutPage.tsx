@@ -1,5 +1,6 @@
 'use client'
 
+import type { CompanyExperience } from '@/shared/constants/company'
 import { motion } from 'framer-motion'
 import TestimonialsBlock from './TestimonialsBlock'
 import Questions from './Questions'
@@ -16,7 +17,7 @@ import { ABOUT_BREADCRUMBS } from '@/shared/constants/breadcrumbs'
 import FAQAbout from '@/components/features/Faq/FAQAbout'
 import CompanyCard from '@/components/common/CompanyCard/CompanyCard'
 
-const AboutPage = () => {
+const AboutPage = ({ experience }: { experience: CompanyExperience }) => {
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -27,7 +28,7 @@ const AboutPage = () => {
             <div className="container mx-auto px-4 py-16">
                 <Breadcrumbs items={ABOUT_BREADCRUMBS} />
                 <HeroBlock />
-                <Statistics />
+                <Statistics experience={experience} />
                 <Team />
                 <CompanyCard />
                 <AdvantagesBlock />

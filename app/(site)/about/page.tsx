@@ -1,3 +1,7 @@
+import { companyExperience } from '@/shared/constants/company'
+
+export const dynamic = 'force-dynamic'
+
 import { Metadata } from 'next'
 import AboutPages from '@/components/templates/AboutPage/AboutPage'
 
@@ -23,5 +27,5 @@ export const metadata: Metadata = {
 }
 
 export default function AboutPage() {
-    return <AboutPages />
+    return <AboutPages experience={companyExperience()} />
 }
