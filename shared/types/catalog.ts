@@ -57,7 +57,7 @@ export const fuelTypes = ['Бензин', 'Дизель', 'Гибрид', 'Эл�
 
 export const driveTypes = ['Передний', 'Задний', 'Полный'] as const
 
-export const transmissionTypes = ['МКПП', 'АКПП', 'Робот', 'Вариатор'] as const
+export const transmissionTypes = ['МКПП', 'АКПП', 'Робот', 'Вариатор', 'Редуктор'] as const
 
 export const categories = [
     'Все',
