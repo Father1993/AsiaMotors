@@ -254,10 +254,15 @@ const ContactsBlock = () => {
                             </div>
                         </motion.div>
 
-                        <div className="self-center">
-                            <Image src="/img/asiamotors-showroom.webp" alt="Автомобили у салона Asia Motors"
-                                width={1774} height={887} sizes="(min-width: 1024px) 50vw, 100vw"
-                                className="w-full h-auto" loading="lazy" />
+                        <div className="relative aspect-[4/3] sm:aspect-video lg:aspect-auto">
+                            <Image
+                                src="/img/asiamotors-showroom.webp"
+                                alt="Автомобили у салона Asia Motors"
+                                fill
+                                sizes="(min-width: 1280px) 640px, (min-width: 1024px) 50vw, 100vw"
+                                className="object-cover object-[75%_center]"
+                                loading="lazy"
+                            />
                         </div>
                     </div>
                 </div>
