@@ -5,9 +5,10 @@ import { ZodError } from 'zod'
 import { ApiError, apiRequest } from '@/shared/lib/catalog-client'
 import { parseCarInput, type CarData } from '@/shared/lib/car-schema'
 import type { AdminCarRecord, CarStatus } from '@/shared/types/database.types'
+import { withCarAvailability } from '@/shared/constants/carAvailability'
 import { useAdminNavigation } from './AdminShell'
 
-export type EditorValues = Omit<Extract<CarData, { status: 'draft' }>, 'status'>
+export type EditorValues = Omit<Extract<CarData, { status: 'draft' }>, 'status' | 'available'>
 export function editorValues(car?: CarData): EditorValues {
     return {
         brand: car?.brand || '',
@@ -18,7 +19,7 @@ export function editorValues(car?: CarData): EditorValues {
         category: car?.category || '',
         equipment: car?.equipment || '',
         images: car?.images || [],
-        available: car?.available ?? true,
+        availability: withCarAvailability(car || {}).availability,
         specs: {
             mileage: car?.specs.mileage,
             engineVolume: car?.specs.engineVolume,
@@ -84,14 +85,25 @@ export function useCarEditor(initial: AdminCarRecord | undefined, uploading: boo
         // Restore browser-only external state after hydration; never change server HTML.
         function readRecovery() {
             try {
-                const cached = JSON.parse(sessionStorage.getItem(cacheKey) || 'null') as Recovery | null
+                const cached = JSON.parse(
+                    sessionStorage.getItem(cacheKey) || 'null',
+                ) as Recovery | null
                 if (
                     cached &&
                     /^[0-9a-f-]{36}$/.test(cached.id) &&
                     cached.values?.specs &&
                     Array.isArray(cached.values.images)
                 ) {
-                    setRecovery(cached)
+                    setRecovery({
+                        ...cached,
+                        values: withCarAvailability(cached.values),
+                        pending: cached.pending
+                            ? {
+                                  ...cached.pending,
+                                  data: withCarAvailability(cached.pending.data),
+                              }
+                            : null,
+                    })
                 }
             } catch {
                 /* Storage may be unavailable or contain an obsolete draft. */
@@ -104,7 +116,10 @@ export function useCarEditor(initial: AdminCarRecord | undefined, uploading: boo
         if (!ready || recovery) return
         try {
             if (dirty || pending)
-                sessionStorage.setItem(cacheKey, JSON.stringify({ id, values, version, status, pending }))
+                sessionStorage.setItem(
+                    cacheKey,
+                    JSON.stringify({ id, values, version, status, pending }),
+                )
             else sessionStorage.removeItem(cacheKey)
         } catch {
             /* Saving to PostgreSQL remains available when browser storage is full. */
@@ -129,7 +144,13 @@ export function useCarEditor(initial: AdminCarRecord | undefined, uploading: boo
         setId(recovery.id)
         setVersion(recovery.version)
         setStatus(recovery.status)
-        setValues(recovery.values)
+        setValues(
+            editorValues({
+                ...recovery.values,
+                status: 'draft',
+                available: recovery.values.availability !== 'on_order',
+            }),
+        )
         setPending(recovery.pending)
         setRecovery(null)
         setNotice('Несохранённые данные восстановлены. Проверьте их перед сохранением.')
@@ -171,14 +192,17 @@ export function useCarEditor(initial: AdminCarRecord | undefined, uploading: boo
             )
         setProblem(null)
         setNotice(
-            record.status === 'published' ? 'Изменения сохранены и опубликованы.' : 'Изменения сохранены.',
+            record.status === 'published'
+                ? 'Изменения сохранены и опубликованы.'
+                : 'Изменения сохранены.',
         )
     }
     function showError(error: unknown) {
         if (!mounted.current) return
         if (error instanceof ZodError) {
             const fields: Record<string, string[]> = {}
-            for (const issue of error.issues) (fields[issue.path.join('.')] ??= []).push(issue.message)
+            for (const issue of error.issues)
+                (fields[issue.path.join('.')] ??= []).push(issue.message)
             const controls = controlErrors(fields)
             setErrors(controls)
             setNotice('Проверьте отмеченные поля. Введённые данные сохранены в форме.')
@@ -245,7 +269,9 @@ export function useCarEditor(initial: AdminCarRecord | undefined, uploading: boo
                 status: target,
                 specs: {
                     ...values.specs,
-                    features: values.specs.features?.map((feature) => feature.trim()).filter(Boolean),
+                    features: values.specs.features
+                        ?.map((feature) => feature.trim())
+                        .filter(Boolean),
                 },
             })
             // Also handles a restored new form whose successful POST response was lost.
@@ -267,7 +293,11 @@ export function useCarEditor(initial: AdminCarRecord | undefined, uploading: boo
                 {
                     method: version === null ? 'POST' : 'PUT',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ ...data, id, ...(version === null ? {} : { version }) }),
+                    body: JSON.stringify({
+                        ...data,
+                        id,
+                        ...(version === null ? {} : { version }),
+                    }),
                 },
             )
             accept(record, true)

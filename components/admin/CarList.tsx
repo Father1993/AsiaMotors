@@ -1,5 +1,7 @@
 'use client'
 
+import { CAR_AVAILABILITY } from '@/shared/constants/carAvailability'
+
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -11,7 +13,12 @@ import { CarStatusBadge, carStatusLabels as statusNames } from './CarStatus'
 import { ConfirmDialog } from './ConfirmDialog'
 import './car-list.css'
 
-type Result = { cars: AdminCarRecord[]; total: number; page: number; pageSize: number }
+type Result = {
+    cars: AdminCarRecord[]
+    total: number
+    page: number
+    pageSize: number
+}
 
 export function CarList({ countries }: { countries: CountryRecord[] }) {
     const router = useRouter()
@@ -34,7 +41,9 @@ export function CarList({ countries }: { countries: CountryRecord[] }) {
     useEffect(() => {
         currentQuery.current = query
         const controller = new AbortController()
-        apiRequest<Result>('/api/cars' + (query ? '?' + query : ''), { signal: controller.signal })
+        apiRequest<Result>('/api/cars' + (query ? '?' + query : ''), {
+            signal: controller.signal,
+        })
             .then((data) => {
                 if (!controller.signal.aborted) {
                     setResult(data)
@@ -47,7 +56,10 @@ export function CarList({ countries }: { countries: CountryRecord[] }) {
                     setError(
                         cause instanceof ApiError
                             ? cause
-                            : new ApiError('Не удалось загрузить автомобили. Проверьте соединение.', 0),
+                            : new ApiError(
+                                  'Не удалось загрузить автомобили. Проверьте соединение.',
+                                  0,
+                              ),
                     )
                 }
             })
@@ -101,7 +113,10 @@ export function CarList({ countries }: { countries: CountryRecord[] }) {
             const problem =
                 cause instanceof ApiError
                     ? cause
-                    : new ApiError('Не удалось сохранить изменения. Проверьте соединение и повторите.', 0)
+                    : new ApiError(
+                          'Не удалось сохранить изменения. Проверьте соединение и повторите.',
+                          0,
+                      )
             if (problem.status === 409) {
                 setNotice(
                     'Автомобиль изменён в другой вкладке. Список обновлён; проверьте данные и повторите действие.',
@@ -198,7 +213,9 @@ export function CarList({ countries }: { countries: CountryRecord[] }) {
             </div>
         )
     }
-    const filtered = ['q', 'status', 'country', 'available'].some((key) => searchParams.has(key))
+    const filtered = ['q', 'status', 'country', 'available', 'availability'].some((key) =>
+        searchParams.has(key),
+    )
     const pages = Math.max(1, Math.ceil((result?.total || 0) / (result?.pageSize || 25)))
     return (
         <>
@@ -207,7 +224,10 @@ export function CarList({ countries }: { countries: CountryRecord[] }) {
                     <h1>Автомобили</h1>
                     <p className="admin-muted">Каталог, фотографии и публикация на сайте</p>
                 </div>
-                <Link className="admin-button admin-button-primary" href={'/admin/cars/new' + returnQuery}>
+                <Link
+                    className="admin-button admin-button-primary"
+                    href={'/admin/cars/new' + returnQuery}
+                >
                     + Добавить автомобиль
                 </Link>
             </div>
@@ -220,6 +240,10 @@ export function CarList({ countries }: { countries: CountryRecord[] }) {
                         new FormData(event.currentTarget).forEach((value, key) => {
                             if (String(value).trim()) params.set(key, String(value).trim())
                         })
+                        if (params.get('availability') === 'any_stock') {
+                            params.delete('availability')
+                            params.set('available', 'true')
+                        }
                         router.push('/admin' + (params.size ? '?' + params.toString() : ''), {
                             scroll: false,
                         })
@@ -271,12 +295,25 @@ export function CarList({ countries }: { countries: CountryRecord[] }) {
                         <label htmlFor="cars-stock">Наличие</label>
                         <select
                             id="cars-stock"
-                            name="available"
-                            defaultValue={searchParams.get('available') || ''}
+                            name="availability"
+                            defaultValue={
+                                searchParams.get('availability') ||
+                                (searchParams.get('available') === 'true'
+                                    ? 'any_stock'
+                                    : searchParams.get('available') === 'false'
+                                      ? 'on_order'
+                                      : '')
+                            }
                         >
                             <option value="">Все автомобили</option>
-                            <option value="true">В наличии</option>
-                            <option value="false">Под заказ</option>
+                            {searchParams.get('available') === 'true' && (
+                                <option value="any_stock">Любое наличие</option>
+                            )}
+                            {Object.entries(CAR_AVAILABILITY).map(([value, label]) => (
+                                <option key={value} value={value}>
+                                    {label}
+                                </option>
+                            ))}
                         </select>
                     </div>
                     <button type="submit" className="admin-button">
@@ -384,7 +421,7 @@ export function CarList({ countries }: { countries: CountryRecord[] }) {
                                         <td>
                                             <CarStatusBadge status={car.status} />
                                             <p className="car-list-stock">
-                                                {car.available ? 'В наличии' : 'Под заказ'}
+                                                {CAR_AVAILABILITY[car.availability]}
                                             </p>
                                         </td>
                                         <td>{actions(car)}</td>
@@ -398,11 +435,13 @@ export function CarList({ countries }: { countries: CountryRecord[] }) {
                                     {identity(car)}
                                     <div className="car-list-card-details">
                                         <p className="car-list-price">
-                                            {car.price === null ? 'Цена не указана' : formatPrice(car.price)}
+                                            {car.price === null
+                                                ? 'Цена не указана'
+                                                : formatPrice(car.price)}
                                         </p>
                                         <CarStatusBadge status={car.status} />
                                         <p className="admin-muted">
-                                            {car.available ? 'В наличии' : 'Под заказ'}
+                                            {CAR_AVAILABILITY[car.availability]}
                                         </p>
                                     </div>
                                     {actions(car)}
@@ -414,7 +453,11 @@ export function CarList({ countries }: { countries: CountryRecord[] }) {
                 {!loading && result && result.total > 0 && (
                     <nav aria-label="Страницы автомобилей" className="car-list-pagination">
                         {result.page > 1 ? (
-                            <Link href={pageUrl(result.page - 1)} className="admin-button" scroll={false}>
+                            <Link
+                                href={pageUrl(result.page - 1)}
+                                className="admin-button"
+                                scroll={false}
+                            >
                                 ← Назад
                             </Link>
                         ) : (
@@ -424,7 +467,11 @@ export function CarList({ countries }: { countries: CountryRecord[] }) {
                             Страница {result.page} из {pages}
                         </span>
                         {result.page < pages ? (
-                            <Link href={pageUrl(result.page + 1)} className="admin-button" scroll={false}>
+                            <Link
+                                href={pageUrl(result.page + 1)}
+                                className="admin-button"
+                                scroll={false}
+                            >
                                 Далее →
                             </Link>
                         ) : (

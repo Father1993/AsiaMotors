@@ -1,5 +1,7 @@
 'use client'
 
+import { CarAvailability } from '@/components/common/CarAvailability'
+
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
@@ -352,15 +354,15 @@ const CarPageClient = ({ car, allCars, news }: CarPageProps) => {
                                         </span>
                                     </h2>
 
-                                    <span
-                                        className={`px-3 py-1 rounded-full text-sm font-medium w-fit mx-auto mt-2 sm:mt-0 sm:mx-0 bg-green-100 text-green-800`}
-                                    >
-                                        {car.available
-                                            ? 'В наличии'
-                                            : 'Под заказ'}
-                                    </span>
+                                    <CarAvailability value={car.availability} />
                                 </div>
                             </div>
+
+                            {car.availability === 'in_china' && (
+                                <p className="text-sm text-blue-800">
+                                    Автомобиль находится в нашем салоне в Китае
+                                </p>
+                            )}
 
                             {/* Характеристики */}
                             <div className="space-y-4">

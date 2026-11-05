@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
+import { CarAvailability } from '@/components/common/CarAvailability'
+
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -23,7 +25,7 @@ const SimilarCars = ({ currentCar, allCars }: SimilarCarsProps) => {
                 (car) =>
                     car.id !== currentCar.id &&
                     car.category === currentCar.category &&
-                    Math.abs(car.price - currentCar.price) <= 500000 // Диапазон ±500k рублей
+                    Math.abs(car.price - currentCar.price) <= 500000, // Диапазон ±500k рублей
             )
             .slice(0, 4) // Берем только 4 автомобиля
 
@@ -67,6 +69,11 @@ const SimilarCars = ({ currentCar, allCars }: SimilarCarsProps) => {
 
                                     {/* Информация */}
                                     <div className="p-4">
+                                        <div className="mb-3">
+                                            <CarAvailability
+                                                value={car.availability}
+                                            />
+                                        </div>
                                         <h3 className="font-semibold text-lg mb-2 group-hover:text-red-600 transition-colors">
                                             {car.brand} {car.model} {car.year}
                                         </h3>

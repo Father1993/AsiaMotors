@@ -52,13 +52,18 @@ export default async function Dashboard({
                 ],
                 [
                     'В наличии',
-                    data.cars.available,
-                    '/admin?status=published&available=true',
+                    data.cars.inStock,
+                    '/admin?status=published&availability=in_stock',
+                ],
+                [
+                    'В наличии в Китае',
+                    data.cars.inChina,
+                    '/admin?status=published&availability=in_china',
                 ],
                 [
                     'Под заказ',
                     data.cars.onOrder,
-                    '/admin?status=published&available=false',
+                    '/admin?status=published&availability=on_order',
                 ],
                 ['Черновики', data.cars.draft, '/admin?status=draft'],
                 ['Скрытые', data.cars.hidden, '/admin?status=hidden'],

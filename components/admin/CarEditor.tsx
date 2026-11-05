@@ -1,5 +1,7 @@
 'use client'
 
+import { CAR_AVAILABILITY, type CarAvailability } from '@/shared/constants/carAvailability'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
@@ -31,7 +33,10 @@ export function CarEditor({
         editor.clearError(name)
     }
     function spec<K extends keyof EditorValues['specs']>(name: K, value: EditorValues['specs'][K]) {
-        setValues((previous) => ({ ...previous, specs: { ...previous.specs, [name]: value } }))
+        setValues((previous) => ({
+            ...previous,
+            specs: { ...previous.specs, [name]: value },
+        }))
         editor.clearError('specs.' + name)
     }
     function control(name: string, hint = false) {
@@ -41,14 +46,20 @@ export function CarEditor({
             autoComplete: 'off',
             'aria-invalid': !!errors[name],
             'aria-describedby':
-                [hint ? name + '-hint' : '', errors[name] ? name + '-error' : ''].filter(Boolean).join(' ') ||
-                undefined,
+                [hint ? name + '-hint' : '', errors[name] ? name + '-error' : '']
+                    .filter(Boolean)
+                    .join(' ') || undefined,
         }
     }
     const publicLink =
         status === 'published' && editor.version !== null && values.year !== null
             ? '/catalog/' +
-              generateCarSlug({ id: editor.id, brand: values.brand, model: values.model, year: values.year })
+              generateCarSlug({
+                  id: editor.id,
+                  brand: values.brand,
+                  model: values.model,
+                  year: values.year,
+              })
             : null
     return (
         <>
@@ -56,7 +67,8 @@ export function CarEditor({
                 href={returnTo}
                 className="admin-back"
                 onNavigate={(event) => {
-                    if ((editor.dirty || saving || uploading) && !confirmLeave()) event.preventDefault()
+                    if ((editor.dirty || saving || uploading) && !confirmLeave())
+                        event.preventDefault()
                 }}
             >
                 ← К автомобилям
@@ -82,8 +94,8 @@ export function CarEditor({
                     <div>
                         <h2>Есть несохранённые данные</h2>
                         <p className="admin-muted">
-                            В этой вкладке осталась копия формы. Её можно восстановить и проверить перед
-                            сохранением.
+                            В этой вкладке осталась копия формы. Её можно восстановить и проверить
+                            перед сохранением.
                         </p>
                     </div>
                     <div className="admin-action-row">
@@ -116,7 +128,9 @@ export function CarEditor({
                             <div className="admin-section-heading">
                                 <div>
                                     <h2 id="car-main-title">Основное</h2>
-                                    <p className="admin-muted">Марка и модель нужны даже для черновика.</p>
+                                    <p className="admin-muted">
+                                        Марка и модель нужны даже для черновика.
+                                    </p>
                                 </div>
                                 <span className="admin-section-number" aria-hidden="true">
                                     01
@@ -156,7 +170,9 @@ export function CarEditor({
                                         onChange={(e) =>
                                             change(
                                                 'year',
-                                                e.target.value === '' ? null : e.target.valueAsNumber,
+                                                e.target.value === ''
+                                                    ? null
+                                                    : e.target.valueAsNumber,
                                             )
                                         }
                                     />
@@ -170,7 +186,10 @@ export function CarEditor({
                                         {...control('country_id')}
                                         value={values.country_id || ''}
                                         onChange={(e) =>
-                                            change('country_id', (e.target.value || null) as CountryId | null)
+                                            change(
+                                                'country_id',
+                                                (e.target.value || null) as CountryId | null,
+                                            )
                                         }
                                     >
                                         <option value="">Выберите страну</option>
@@ -181,7 +200,11 @@ export function CarEditor({
                                         ))}
                                     </select>
                                 </Field>
-                                <Field name="category" label="Категория" error={errors.category?.[0]}>
+                                <Field
+                                    name="category"
+                                    label="Категория"
+                                    error={errors.category?.[0]}
+                                >
                                     <select
                                         {...control('category')}
                                         value={values.category}
@@ -194,9 +217,9 @@ export function CarEditor({
                                                 <option key={value}>{value}</option>
                                             ))}
                                         {values.category &&
-                                            !categories.some((value) => value === values.category) && (
-                                                <option>{values.category}</option>
-                                            )}
+                                            !categories.some(
+                                                (value) => value === values.category,
+                                            ) && <option>{values.category}</option>}
                                     </select>
                                 </Field>
                             </div>
@@ -225,18 +248,27 @@ export function CarEditor({
                                         inputMode="decimal"
                                         placeholder="Например, 2 500 000…"
                                         onValueChange={({ floatValue }, info) => {
-                                            if (info.source === 'event') change('price', floatValue ?? null)
+                                            if (info.source === 'event')
+                                                change('price', floatValue ?? null)
                                         }}
                                     />
                                 </Field>
-                                <Field name="available" label="Наличие">
+                                <Field name="availability" label="Наличие">
                                     <select
-                                        {...control('available')}
-                                        value={String(values.available)}
-                                        onChange={(e) => change('available', e.target.value === 'true')}
+                                        {...control('availability')}
+                                        value={values.availability}
+                                        onChange={(e) =>
+                                            change(
+                                                'availability',
+                                                e.target.value as CarAvailability,
+                                            )
+                                        }
                                     >
-                                        <option value="true">В наличии</option>
-                                        <option value="false">Под заказ</option>
+                                        {Object.entries(CAR_AVAILABILITY).map(([value, label]) => (
+                                            <option key={value} value={value}>
+                                                {label}
+                                            </option>
+                                        ))}
                                     </select>
                                 </Field>
                             </div>
@@ -246,8 +278,8 @@ export function CarEditor({
                                 <div>
                                     <h2 id="car-specs-title">Характеристики</h2>
                                     <p className="admin-muted">
-                                        Для публикации заполните все поля этого раздела. Нулевой пробег и
-                                        объём допустимы, например для электромобиля.
+                                        Для публикации заполните все поля этого раздела. Нулевой
+                                        пробег и объём допустимы, например для электромобиля.
                                     </p>
                                 </div>
                                 <span className="admin-section-number" aria-hidden="true">
@@ -307,16 +339,18 @@ export function CarEditor({
                                         <select
                                             {...control('specs.' + name)}
                                             value={values.specs[name] || ''}
-                                            onChange={(e) => spec(name, e.target.value || undefined)}
+                                            onChange={(e) =>
+                                                spec(name, e.target.value || undefined)
+                                            }
                                         >
                                             <option value="">Выберите значение</option>
                                             {options.map((option) => (
                                                 <option key={option}>{option}</option>
                                             ))}
                                             {values.specs[name] &&
-                                                !options.some((option) => option === values.specs[name]) && (
-                                                    <option>{values.specs[name]}</option>
-                                                )}
+                                                !options.some(
+                                                    (option) => option === values.specs[name],
+                                                ) && <option>{values.specs[name]}</option>}
                                         </select>
                                     </Field>
                                 ))}
@@ -333,7 +367,11 @@ export function CarEditor({
                                 </span>
                             </div>
                             <div className="admin-fields">
-                                <Field name="specs.color" label="Цвет" error={errors['specs.color']?.[0]}>
+                                <Field
+                                    name="specs.color"
+                                    label="Цвет"
+                                    error={errors['specs.color']?.[0]}
+                                >
                                     <input
                                         {...control('specs.color')}
                                         value={values.specs.color || ''}
@@ -354,7 +392,11 @@ export function CarEditor({
                                     />
                                 </Field>
                             </div>
-                            <Field name="equipment" label="Комплектация" error={errors.equipment?.[0]}>
+                            <Field
+                                name="equipment"
+                                label="Комплектация"
+                                error={errors.equipment?.[0]}
+                            >
                                 <textarea
                                     {...control('equipment')}
                                     rows={4}
@@ -384,7 +426,10 @@ export function CarEditor({
                             onBusy={setUploading}
                             onChange={(images) => change('images', images)}
                             onUploaded={(url) => {
-                                setValues((previous) => ({ ...previous, images: [...previous.images, url] }))
+                                setValues((previous) => ({
+                                    ...previous,
+                                    images: [...previous.images, url],
+                                }))
                                 editor.clearError('images')
                             }}
                         />
@@ -410,10 +455,12 @@ export function CarEditor({
                             </h2>
                             <p className="admin-muted">
                                 {values.year ?? 'Год не указан'} ·{' '}
-                                {values.available ? 'В наличии' : 'Под заказ'}
+                                {CAR_AVAILABILITY[values.availability]}
                             </p>
                             <p className="admin-preview-price">
-                                {values.price === null ? 'Цена не указана' : formatPrice(values.price)}
+                                {values.price === null
+                                    ? 'Цена не указана'
+                                    : formatPrice(values.price)}
                             </p>
                             <CarStatusBadge status={status} />
                             <p className="admin-muted admin-preview-hint">
@@ -441,7 +488,9 @@ export function CarEditor({
                         {editor.notice ? (
                             <p
                                 className={
-                                    editor.problem || Object.keys(errors).length ? 'admin-field-error' : ''
+                                    editor.problem || Object.keys(errors).length
+                                        ? 'admin-field-error'
+                                        : ''
                                 }
                             >
                                 {editor.notice}
@@ -524,7 +573,9 @@ export function CarEditor({
                                     className="admin-button"
                                     disabled={blocked}
                                     onClick={() =>
-                                        void editor.save(status === 'published' ? 'hidden' : 'published')
+                                        void editor.save(
+                                            status === 'published' ? 'hidden' : 'published',
+                                        )
                                     }
                                 >
                                     {status === 'published' ? 'Скрыть с сайта' : 'Вернуть на сайт'}

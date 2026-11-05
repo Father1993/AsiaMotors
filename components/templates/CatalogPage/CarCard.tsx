@@ -1,5 +1,7 @@
 'use client'
 
+import { CarAvailability } from '@/components/common/CarAvailability'
+
 import { useRef, useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
@@ -38,7 +40,7 @@ export const CarCard = ({ car, viewMode }: CarCardProps) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
     const [imageLoading, setImageLoading] = useState(false)
     const [currentImage, setCurrentImage] = useState(
-        car.images[currentImageIndex]
+        car.images[currentImageIndex],
     )
 
     const handlePrevImage = (e?: React.MouseEvent) => {
@@ -304,6 +306,9 @@ export const CarCard = ({ car, viewMode }: CarCardProps) => {
 
             {/* Информация об автомобиле */}
             <div className="p-6">
+                <div className="mb-3">
+                    <CarAvailability value={car.availability} />
+                </div>
                 <div className="flex justify-between items-start mb-4">
                     <div>
                         <h3 className="text-xl font-bold text-gray-900 mb-1">
@@ -426,6 +431,9 @@ export const CarCard = ({ car, viewMode }: CarCardProps) => {
 
             {/* Информация */}
             <div className="flex-1 p-6">
+                <div className="mb-3">
+                    <CarAvailability value={car.availability} />
+                </div>
                 <div className="flex justify-between items-start mb-4">
                     <div>
                         <h3 className="text-2xl font-bold text-gray-900 mb-2">
