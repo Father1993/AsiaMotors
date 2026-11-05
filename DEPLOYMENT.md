@@ -194,3 +194,29 @@ The live query runs with `default_transaction_read_only=on`. Keep current data
 intact; recover a missing car and its media selectively after locating it in a
 verified backup. Do not overwrite newer requests or catalog changes with an old
 whole-database restore.
+
+### Three-state car availability (migration 006)
+
+`availability` is the primary field (`in_stock`, `in_china`, `on_order`). The
+legacy `available` column remains synchronized by a database trigger for the
+previous web image. A rollback keeps China locations in the database, although
+the previous UI displays both stock states as “В наличии”. Do not roll back the
+database or remove migration 006. New API writes from an old form are rejected
+with 409 when they could erase a China location; reopen the editor to continue.
+
+Release with the existing backup/deploy scripts and `--with-mail`. Check the
+three availability labels in the editor, catalog and dashboard after activation.
+Public-page visual acceptance remains a manual check.
+
+The focused regression check uses a disposable database, never `.env`:
+
+```sh
+docker run -d --name asiamotors-availability-test --tmpfs /var/lib/postgresql/data \
+  -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=availability_test \
+  -p 127.0.0.1:35433:5432 postgres:17-alpine
+# Once pg_isready reports ready:
+docker exec asiamotors-availability-test pg_isready -U postgres
+PGHOST=127.0.0.1 PGPORT=35433 POSTGRES_DB=availability_test POSTGRES_USER=postgres \
+  node tests/car-availability.cjs
+docker rm -f asiamotors-availability-test
+```
