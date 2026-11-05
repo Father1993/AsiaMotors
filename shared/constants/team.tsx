@@ -40,29 +40,6 @@ export const teamMembersKhv = [
         description: 'Эксперт с 15-летним опытом международной автологистики',
     },
     {
-        name: 'Михаил Ананьев',
-        role: 'Ведущий эксперт по подбору автомобилей',
-        image: '/img/team/Mihail.webp',
-        description: (
-            <>
-                Автоэксперт на портале{' '}
-                <Link
-                    href="https://www.dvhab.ru/"
-                    className="text-blue-500 hover:text-blue-600 font-bold underline"
-                >
-                    DVHAB.RU
-                </Link>
-            </>
-        ),
-        telephone: (
-            <>
-                <Link href="tel:+79142142500" className="text-red-500">
-                    +7 (914) 214-25-00
-                </Link>
-            </>
-        ),
-    },
-    {
         name: 'Владимир Карпыш',
         role: 'Менеджер отдела продаж',
         image: '/img/team/Vladimir-man.webp',

@@ -10,12 +10,12 @@ import {
 } from '@heroicons/react/24/outline'
 import YoutubeIcon from '@/components/ui/YoutubeIcon'
 import WhatsAppIcon from '@/components/ui/WhatsAppIcon'
-import VkIcon from '@/components/ui/VkIcon'
+import { FaInstagram } from 'react-icons/fa'
+import { instagramAsiaLink, instagramNotice } from '@/shared/constants/socialLinks'
 import TelegramIcon from '@/components/ui/TelegramIcon'
 import Logo from '@/components/common/Logo/Logo'
 import PrivacyPolicyIcon from '@/components/ui/Footer/PrivacyPolicyIcon'
 import ImportIcon from '@/components/ui/Footer/ImportIcon'
-import RutubeIconFooter from '@/components/ui/Footer/RutubeFooterIcon'
 import DzenFooterIcon from '@/components/ui/Footer/DzenFooterIcon'
 import Creator from './Creator'
 
@@ -70,7 +70,7 @@ const Footer = () => {
                             {/* Социальные сети */}
 
                             <a
-                                href="https://t.me/asiamotors_su"
+                                target="_blank" rel="noopener noreferrer" href="https://t.me/asiamotors_su"
                                 className="hover:text-red-500 transition-colors"
                                 aria-label="Наш Telegram канал"
                             >
@@ -78,7 +78,7 @@ const Footer = () => {
                             </a>
 
                             <a
-                                href="https://youtube.com/@AsiaMotors_su"
+                                target="_blank" rel="noopener noreferrer" href="https://youtube.com/@AsiaMotors_su"
                                 className="hover:text-red-500 transition-colors"
                                 aria-label="Наш YouTube канал"
                             >
@@ -86,34 +86,25 @@ const Footer = () => {
                             </a>
 
                             <a
-                                href="https://wa.me/79294156555"
+                                target="_blank" rel="noopener noreferrer" href="https://wa.me/79294156555"
                                 className="hover:text-red-500 transition-colors"
                                 aria-label="Написать в WhatsApp"
                             >
                                 <WhatsAppIcon />
                             </a>
-                            <a
-                                href="https://vk.com/asiamotors_su"
-                                className="hover:text-red-500 transition-colors"
-                                aria-label="Мы ВКонтакте"
-                            >
-                                <VkIcon />
+                            <a href={instagramAsiaLink} target="_blank" rel="noopener noreferrer"
+                                className="hover:text-red-500 transition-colors" aria-label="Instagram*" title="Instagram*">
+                                <FaInstagram className="w-6 h-6" />
                             </a>
                             <a
-                                href="https://rutube.ru/channel/49744487/"
+                                target="_blank" rel="noopener noreferrer" href="https://dzen.ru/asiamotors"
                                 className="hover:text-red-500 transition-colors"
-                                aria-label="Мы ВКонтакте"
-                            >
-                                <RutubeIconFooter />
-                            </a>
-                            <a
-                                href="https://dzen.ru/asiamotors"
-                                className="hover:text-red-500 transition-colors"
-                                aria-label="Мы ВКонтакте"
+                                aria-label="Мы в Дзене"
                             >
                                 <DzenFooterIcon />
                             </a>
                         </div>
+                        <p className="text-xs leading-relaxed text-gray-400">{instagramNotice}</p>
                     </div>
 
                     {/* Колонка с услугами */}

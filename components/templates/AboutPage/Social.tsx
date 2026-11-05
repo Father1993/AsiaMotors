@@ -3,13 +3,11 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import RutubeIcon from '@/components/ui/RutubeIcon'
+import { instagramAsiaLink, instagramNotice } from '@/shared/constants/socialLinks'
 import {
     FaYoutube,
-    FaTiktok,
     FaInstagram,
     FaTelegramPlane,
-    FaVk,
 } from 'react-icons/fa'
 import DzenIcon from '@/components/ui/DzenIcon'
 
@@ -27,29 +25,11 @@ const socialLinks = [
         link: 'https://www.youtube.com/@AsiaMotors_su',
     },
     {
-        name: 'TikTok',
-        icon: <FaTiktok />,
-        color: 'text-black hover:text-gray-800',
-        link: 'https://www.tiktok.com/@asiamotors.su',
-    },
-    {
-        name: 'Instagram',
+        name: 'Instagram*',
 
         icon: <FaInstagram />,
         color: 'text-pink-600 hover:text-pink-700',
-        link: 'https://www.instagram.com/asiamotors_su/#',
-    },
-    {
-        name: 'VK',
-        icon: <FaVk />,
-        color: 'text-blue-800 hover:text-blue-900',
-        link: 'https://vk.com/asiamotors_su',
-    },
-    {
-        name: 'RuTube',
-        icon: <RutubeIcon />,
-        color: 'text-red-800 hover:text-red-900',
-        link: 'https://rutube.ru/channel/49744487/',
+        link: instagramAsiaLink,
     },
     {
         name: 'Дзен',
@@ -88,6 +68,9 @@ const Social = () => {
                                 <Link
                                     href={social.link}
                                     target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label={social.name}
+                                    title={social.name}
                                     className={`
                                         w-16 h-16 rounded-full 
                                         flex items-center justify-center 
@@ -104,6 +87,7 @@ const Social = () => {
                             </motion.div>
                         ))}
                     </div>
+                    <p className="mt-6 text-sm text-gray-600">{instagramNotice}</p>
                 </motion.div>
             </div>
         </section>

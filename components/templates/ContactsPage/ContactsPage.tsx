@@ -9,10 +9,9 @@ import {
     EnvelopeIcon,
     ClockIcon,
 } from '@heroicons/react/24/outline'
-import { FaTelegramPlane, FaWhatsapp, FaVk } from 'react-icons/fa'
+import { FaTelegramPlane, FaWhatsapp } from 'react-icons/fa'
 import {
     telegramAsiaLink,
-    vkAsiaLink,
     whatsAppAsiaLink,
 } from '@/shared/constants/socialLinks'
 import ContactForm from '@/components/templates/AboutPage/ContactsBlock'
@@ -215,16 +214,6 @@ const ContactsPage = () => {
                                                 className="w-12 h-12 bg-blue-500 text-white rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
                                             >
                                                 <FaTelegramPlane className="w-6 h-6" />
-                                            </motion.a>
-                                            <motion.a
-                                                whileHover={{ scale: 1.1 }}
-                                                whileTap={{ scale: 0.9 }}
-                                                href={vkAsiaLink}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="w-12 h-12 bg-blue-800 text-white rounded-full flex items-center justify-center hover:bg-blue-900 transition-colors"
-                                            >
-                                                <FaVk className="w-6 h-6" />
                                             </motion.a>
                                         </div>
                                     </div>

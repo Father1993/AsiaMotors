@@ -1,24 +1,17 @@
 'use client'
 
-import { useState, ChangeEvent, FormEvent, useEffect } from 'react'
+import { useState, ChangeEvent, FormEvent } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { IMaskInput } from 'react-imask'
-import dynamic from 'next/dynamic'
+import Image from 'next/image'
 import { FaWhatsapp, FaTelegramPlane } from 'react-icons/fa'
 import { HiOutlineUser, HiOutlinePhone } from 'react-icons/hi'
 import LeadHoneypot from '@/components/features/LeadHoneypot'
 import { useLeadForm } from '@/shared/hooks/useLeadForm'
 
-const DynamicImage = dynamic(() => import('next/image'), {
-    ssr: false,
-    loading: () => (
-        <div className="w-full h-full bg-gray-200 animate-pulse"></div>
-    ),
-})
 
 const ContactsBlock = () => {
-    const [isClient, setIsClient] = useState(false)
     const [name, setName] = useState('')
     const [phone, setPhone] = useState('')
     const [nameError, setNameError] = useState('')
@@ -30,9 +23,6 @@ const ContactsBlock = () => {
         submitLead,
     } = useLeadForm()
 
-    useEffect(() => {
-        setIsClient(true)
-    }, [])
 
     const [ref, inView] = useInView({
         threshold: 0.2,
@@ -264,31 +254,11 @@ const ContactsBlock = () => {
                             </div>
                         </motion.div>
 
-                        <motion.div className="relative lg:h-auto">
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10"></div>
-                            {isClient && (
-                                <DynamicImage
-                                    src="/img/team/Mihail.webp"
-                                    alt="Михаил Ананьев Азия Моторс"
-                                    width={800}
-                                    height={1000}
-                                    className="w-full h-full object-cover"
-                                    quality={75}
-                                    loading="lazy"
-                                />
-                            )}
-                            <motion.div
-                                variants={itemVariants}
-                                className="absolute bottom-0 left-0 right-0 p-8 z-20"
-                            >
-                                <h3 className="text-3xl font-bold text-white mb-2">
-                                    Михаил Ананьев
-                                </h3>
-                                <p className="text-white/80">
-                                    Ведущий эксперт по подбору автомобилей
-                                </p>
-                            </motion.div>
-                        </motion.div>
+                        <div className="self-center">
+                            <Image src="/img/asiamotors-showroom.webp" alt="Автомобили у салона Asia Motors"
+                                width={1774} height={887} sizes="(min-width: 1024px) 50vw, 100vw"
+                                className="w-full h-auto" loading="lazy" />
+                        </div>
                     </div>
                 </div>
             </motion.div>
