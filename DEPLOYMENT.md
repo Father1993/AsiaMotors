@@ -174,3 +174,23 @@ cache policy: [docs/pwa.md](docs/pwa.md). The two manifests have distinct IDs an
 share origin scope so sign-in remains available inside the manager application;
 server authentication remains authoritative. No separate PWA or analytics service
 is required for this overview.
+
+## Read-only catalog incident audit
+
+If a vehicle disappears, inspect the database, pre-release backups and HTTP DELETE
+requests before changing data:
+
+```sh
+cd /home/ops/asiamotors
+sudo python3 scripts/catalog-audit.py
+```
+
+The report includes the PostgreSQL volume/container dates, current car IDs and
+statuses, migration dates, car IDs in retained backups with dump checksum checks,
+and timestamps/statuses of car deletion requests in rotated Nginx logs. It omits
+credentials, request bodies and client addresses. `pg_restore --file=-` only
+extracts the cars table as SQL text; no backup is executed against a database.
+The live query runs with `default_transaction_read_only=on`. Keep current data
+intact; recover a missing car and its media selectively after locating it in a
+verified backup. Do not overwrite newer requests or catalog changes with an old
+whole-database restore.
