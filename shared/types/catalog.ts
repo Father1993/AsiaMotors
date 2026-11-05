@@ -26,6 +26,7 @@ export interface Car {
     }
     category: string
     images: string[]
+    availability: import('../constants/carAvailability').CarAvailability
     available: boolean
     discount?: boolean
     equipment?: string

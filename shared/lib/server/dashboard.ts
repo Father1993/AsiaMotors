@@ -31,7 +31,10 @@ export async function getDashboard(periodInput?: string) {
           'failed',count(*) FILTER(WHERE o.status='failed')) FROM leads l LEFT JOIN mail_outbox o ON o.lead_id=l.id) backlog,
         (SELECT jsonb_build_object('total',count(*),'published',count(*) FILTER(WHERE status='published'),
           'draft',count(*) FILTER(WHERE status='draft'),'hidden',count(*) FILTER(WHERE status='hidden'),
-          'available',count(*) FILTER(WHERE status='published' AND available),'onOrder',count(*) FILTER(WHERE status='published' AND NOT available)) FROM cars) cars,
+          'available',count(*) FILTER(WHERE status='published' AND available),
+          'inStock',count(*) FILTER(WHERE status='published' AND availability='in_stock'),
+          'inChina',count(*) FILTER(WHERE status='published' AND availability='in_china'),
+          'onOrder',count(*) FILTER(WHERE status='published' AND availability='on_order')) FROM cars) cars,
         (SELECT jsonb_build_object('total',count(*),'draft',count(*) FILTER(WHERE status='draft'),
           'published',count(*) FILTER(WHERE status='published'),'hidden',count(*) FILTER(WHERE status='hidden'),
           'scheduled',count(*) FILTER(WHERE scheduled_at IS NOT NULL)) FROM posts) articles`,
@@ -62,6 +65,8 @@ export async function getDashboard(periodInput?: string) {
       draft: number;
       hidden: number;
       available: number;
+      inStock: number;
+      inChina: number;
       onOrder: number;
     },
     articles: {

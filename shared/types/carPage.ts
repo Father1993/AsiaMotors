@@ -16,6 +16,7 @@ export interface Car {
     price: number
     images: string[]
     specs: CarSpecs
+    availability: import('../constants/carAvailability').CarAvailability
     available: boolean
     createdAt: number
     updatedAt: number

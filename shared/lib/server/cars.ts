@@ -35,19 +35,21 @@ export async function saveCar(input: unknown, id?: string) {
                 return serializeCar(found.rows[0])
             }
         } else {
-            const current = await client.query('SELECT version FROM cars WHERE id=$1 FOR UPDATE', [id])
+            const current = await client.query('SELECT version,availability FROM cars WHERE id=$1 FOR UPDATE', [id])
             if (!current.rowCount) throw new HttpError(404, 'Автомобиль не найден')
             if (current.rows[0].version !== metadata.version) throw conflict()
+            if (Object(input).availability === undefined && current.rows[0].availability === 'in_china')
+                throw new HttpError(409, 'Форма устарела. Откройте актуальную запись: автомобиль находится в Китае.')
         }
         const filenames = [...new Set(data.images.map(path => path.slice('/media/'.length)))]
         const media = await client.query('SELECT filename FROM media WHERE filename=ANY($1::text[]) ORDER BY filename FOR UPDATE', [filenames])
         if (media.rowCount !== filenames.length)
             throw new HttpError(400, 'Фотография не найдена. Загрузите её заново.', { images: ['Фотография не найдена. Загрузите её заново.'] })
         const values = [data.country_id, data.brand, data.model, data.year, data.category,
-            data.price, data.equipment, data.images, JSON.stringify(data.specs), data.available, data.status]
+            data.price, data.equipment, data.images, JSON.stringify(data.specs), data.availability, data.status]
         const result = 'version' in metadata
-            ? await client.query(`UPDATE cars SET country_id=$1,brand=$2,model=$3,year=$4,category=$5,price=$6,equipment=$7,images=$8,specs=$9,available=$10,status=$11,updated_at=now(),version=version+1 WHERE id=$12 AND version=$13 RETURNING *`, [...values, id, metadata.version])
-            : await client.query(`INSERT INTO cars(country_id,brand,model,year,category,price,equipment,images,specs,available,status,id) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) ON CONFLICT(id) DO NOTHING RETURNING *`, [...values, metadata.id])
+            ? await client.query(`UPDATE cars SET country_id=$1,brand=$2,model=$3,year=$4,category=$5,price=$6,equipment=$7,images=$8,specs=$9,availability=$10,status=$11,updated_at=now(),version=version+1 WHERE id=$12 AND version=$13 RETURNING *`, [...values, id, metadata.version])
+            : await client.query(`INSERT INTO cars(country_id,brand,model,year,category,price,equipment,images,specs,availability,status,id) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) ON CONFLICT(id) DO NOTHING RETURNING *`, [...values, metadata.id])
         const row = result.rows[0] || (await client.query('SELECT * FROM cars WHERE id=$1', ['id' in metadata ? metadata.id : id])).rows[0]
         await client.query('COMMIT')
         return serializeCar(row)

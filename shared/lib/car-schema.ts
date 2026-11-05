@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { CAR_AVAILABILITY } from '../constants/carAvailability'
 
 const text = (max: number) => z.string('Заполните поле').trim()
     .max(max, `Не более ${max} символов`)
@@ -8,6 +9,7 @@ const number = (max: number) => z.number('Введите число').finite('В
     .min(0, 'Значение не может быть отрицательным').max(max, `Максимальное значение: ${max}`)
 export const countrySchema = z.enum(['china', 'japan', 'korea', 'europe'], 'Выберите страну')
 export const mediaPath = /^\/media\/[0-9a-f-]{36}\.webp$/
+export const carAvailabilitySchema = z.enum(Object.keys(CAR_AVAILABILITY) as [keyof typeof CAR_AVAILABILITY, ...Array<keyof typeof CAR_AVAILABILITY>], 'Выберите наличие')
 export const carStatusSchema = z.enum(['draft', 'published', 'hidden'])
 export const carVersionSchema = z.number('Отсутствует версия записи').int('Некорректная версия записи').positive('Некорректная версия записи')
 const specs = z.object({
@@ -23,7 +25,7 @@ const fields = {
     category: required,
     price: number(999999999999), equipment: text(3000).default(''),
     images: z.array(z.string().regex(mediaPath, 'Загрузите фотографию заново'), { error: 'Добавьте фотографии' }).max(30, 'Не более 30 фотографий'),
-    available: z.boolean().default(true), specs,
+    availability: carAvailabilitySchema, available: z.boolean().default(true), specs,
 }
 export const publicCarInput = z.object({ ...fields, images: fields.images.min(1, 'Добавьте хотя бы одну фотографию') })
 const draft = z.object({
@@ -40,6 +42,10 @@ export const carInput = z.union([
 ])
 // Select the intended variant directly so field errors do not disappear inside a union issue.
 export function parseCarInput(input: unknown) {
+    const value = Object(input)
+    const availability = value.availability === undefined
+        ? (value.available === false ? 'on_order' : 'in_stock') : value.availability
+    input = { ...value, availability, available: value.availability === undefined ? value.available : availability !== 'on_order' }
     const status = z.object({ status: carStatusSchema.default('draft') }).parse(input).status
     return status === 'draft'
         ? draft.parse({ ...Object(input), status })
