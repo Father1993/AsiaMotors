@@ -50,6 +50,10 @@ const CarPageClient = ({ car, allCars, news }: CarPageProps) => {
     const carSlug = generateCarSlug(car)
     const [isOrderModalOpen, setIsOrderModalOpen] = useState(false)
     const [isLightboxOpen, setIsLightboxOpen] = useState(false)
+    const equipment = car.equipment.trim()
+    const features = car.specs.features?.map((feature) => feature.trim()).filter(Boolean) || []
+    const color = car.specs.color?.trim()
+    const generation = car.specs.generation?.trim()
 
     // Подготавливаем массив изображений для лайтбокса
     const slides = car.images.map((src) => ({ src }))
@@ -61,13 +65,13 @@ const CarPageClient = ({ car, allCars, news }: CarPageProps) => {
 
     const handlePrevImage = () => {
         setCurrentImageIndex((prev) =>
-            prev === 0 ? car.images.length - 1 : prev - 1
+            prev === 0 ? car.images.length - 1 : prev - 1,
         )
     }
 
     const handleNextImage = () => {
         setCurrentImageIndex((prev) =>
-            prev === car.images.length - 1 ? 0 : prev + 1
+            prev === car.images.length - 1 ? 0 : prev + 1,
         )
     }
 
@@ -222,9 +226,7 @@ const CarPageClient = ({ car, allCars, news }: CarPageProps) => {
                                         >
                                             <Image
                                                 src={image}
-                                                alt={`${car.brand} ${
-                                                    car.model
-                                                } ${index + 1}`}
+                                                alt={`${car.brand} ${car.model} ${index + 1}`}
                                                 fill
                                                 className="object-cover"
                                             />
@@ -254,7 +256,7 @@ const CarPageClient = ({ car, allCars, news }: CarPageProps) => {
                                         whileTap={{ scale: 0.9 }}
                                         onClick={() =>
                                             setIsShareModalOpen(
-                                                !isShareModalOpen
+                                                !isShareModalOpen,
                                             )
                                         }
                                         className="p-2 rounded-full bg-white text-gray-700 relative cursor-pointer"
@@ -444,13 +446,42 @@ const CarPageClient = ({ car, allCars, news }: CarPageProps) => {
                                         </div>
                                     </div>
                                 </div>
-                                <hr />
-                                <div>
-                                    <h3 className="mb-2 font-bold">Описание</h3>
-                                    <p className="text-gray-600 group-hover:text-gray-900 transition-colors">
-                                        {car.equipment}
-                                    </p>
-                                </div>
+                                {(color || generation) && (
+                                    <dl className="grid grid-cols-2 gap-4">
+                                        {color && (
+                                            <div className="min-w-0 pl-8">
+                                                <dt className="text-sm text-gray-500">Цвет</dt>
+                                                <dd className="font-medium break-words">{color}</dd>
+                                            </div>
+                                        )}
+                                        {generation && (
+                                            <div className="min-w-0 pl-8">
+                                                <dt className="text-sm text-gray-500">Поколение</dt>
+                                                <dd className="font-medium break-words">{generation}</dd>
+                                            </div>
+                                        )}
+                                    </dl>
+                                )}
+                                {equipment && (
+                                    <div className="border-t pt-4">
+                                        <h3 className="mb-2 font-bold">Комплектация</h3>
+                                        <p className="whitespace-pre-line break-words text-gray-600">
+                                            {equipment}
+                                        </p>
+                                    </div>
+                                )}
+                                {features.length > 0 && (
+                                    <div className="border-t pt-4">
+                                        <h3 className="mb-2 font-bold">Описание и особенности</h3>
+                                        <ul className="list-disc space-y-2 pl-5 text-gray-600">
+                                            {features.map((feature, index) => (
+                                                <li key={index} className="whitespace-pre-line break-words">
+                                                    {feature}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
                             </div>
 
                             {/* Кнопки действий */}
