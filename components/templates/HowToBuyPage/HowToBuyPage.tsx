@@ -119,11 +119,13 @@ const HowToBuyPage = () => {
                     </div>
                     <div className="relative rounded-2xl overflow-hidden shadow-2xl">
                         <Image
-                            src="/img/how-buy/import.jpg"
-                            alt="Импорт автомобилей из Китая"
-                            width={600}
-                            height={400}
-                            className="w-full h-full object-cover"
+                            src="/img/how-buy/tank-road.webp"
+                            alt="Внедорожник TANK на лесной дороге"
+                            width={1671}
+                            height={941}
+                            sizes="(min-width: 1536px) 728px, (min-width: 768px) calc(50vw - 40px), calc(100vw - 32px)"
+                            className="h-auto w-full"
+                            quality={90}
                         />
                     </div>
                 </div>

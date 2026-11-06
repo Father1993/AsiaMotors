@@ -12,6 +12,7 @@ import {
 } from 'react-icons/fa'
 import Breadcrumbs from '@/components/features/Breadcrumbs/Breadcrumbs'
 import { SERVICES } from '@/shared/constants/breadcrumbs'
+import { COMPANY_CLIENTS } from '@/shared/constants/company'
 
 const services = [
     {
@@ -30,7 +31,7 @@ const services = [
         description:
             'Проверенные подержанные автомобили с гарантией технического состояния и юридической чистоты. Видео/Фото отчет до покупки',
         link: '/services/used-cars',
-        stats: '300+ довольных клиентов',
+        stats: `${COMPANY_CLIENTS}+ довольных клиентов`,
     },
     {
         id: 3,

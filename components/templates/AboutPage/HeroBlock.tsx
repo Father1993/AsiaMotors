@@ -23,7 +23,7 @@ const HeroBlock = () => {
             <div className="absolute inset-0 bg-gradient-to-br from-red-50 to-white -z-10" />
 
             <div className="max-w-7xl mx-auto px-4 pt-16 pb-8">
-                <div className="grid lg:grid-cols-2 gap-12 items-center">
+                <div className="grid gap-8 lg:gap-12 xl:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] items-center">
                     <motion.div
                         initial={{ opacity: 0, x: -50 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -74,29 +74,31 @@ const HeroBlock = () => {
                         </div>
                     </motion.div>
 
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.6 }}
-                        className="relative"
-                    >
-                        <div className="relative aspect-square rounded-3xl overflow-hidden shadow-2xl">
+                    <figure>
+                        <div className="overflow-hidden rounded-3xl bg-slate-900 shadow-xl">
                             <Image
-                                src="/img/team/china/all_team.webp"
-                                alt="Команда Asia Motors в офисе в Китае"
-                                fill
-                                className="object-cover"
-                                priority={true}
-                                quality={75}
+                                src="/img/about-delivery-map.webp"
+                                alt="Карта маршрутов Asia Motors из Китая на Дальний Восток России"
+                                width={1672}
+                                height={941}
+                                sizes="(min-width: 1280px) 680px, (min-width: 1024px) 960px, (min-width: 768px) 704px, calc(100vw - 64px)"
+                                className="h-auto w-full"
+                                loading="eager"
+                                fetchPriority="high"
+                                quality={90}
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                            <div className="absolute bottom-6 left-6 right-6 text-white">
-                                <p className="text-sm font-medium">
-                                    офис в г.Харбин, Китай
-                                </p>
-                            </div>
                         </div>
-                    </motion.div>
+                        <figcaption className="mt-3 text-right text-sm">
+                            <a
+                                href="/img/about-delivery-map.webp"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="font-medium text-red-700 underline underline-offset-4 hover:text-red-900"
+                            >
+                                Открыть карту в полном размере
+                            </a>
+                        </figcaption>
+                    </figure>
                 </div>
             </div>
             <PersonalPopup

@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FaStar, FaExternalLinkAlt } from 'react-icons/fa'
+import { COMPANY_CLIENTS } from '@/shared/constants/company'
 
 const testimonials = [
     {
@@ -41,7 +42,7 @@ const TestimonialsBlock = () => {
                         Отзывы наших клиентов
                     </h2>
                     <p className="text-xl text-gray-600">
-                        Более 270 довольных клиентов уже приобрели автомобили с
+                        Уже {COMPANY_CLIENTS}+ довольных клиентов приобрели автомобили с
                         нашей помощью
                     </p>
                 </div>

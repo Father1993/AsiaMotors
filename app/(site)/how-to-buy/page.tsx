@@ -15,10 +15,10 @@ export const metadata: Metadata = {
         url: 'https://asiamotors.su/how-to-buy',
         images: [
             {
-                url: '/img/china-cars-import.jpg',
-                width: 1200,
-                height: 630,
-                alt: 'Процесс импорта автомобилей из Китая',
+                url: '/img/how-buy/tank-road.webp',
+                width: 1671,
+                height: 941,
+                alt: 'Внедорожник TANK на лесной дороге',
             },
         ],
     },

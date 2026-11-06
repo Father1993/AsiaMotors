@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import { StarIcon } from '@heroicons/react/24/solid'
 import { ChatBubbleLeftRightIcon } from '@heroicons/react/24/outline'
 import { TESTIMONIALS } from '@/shared/constants/testimonials'
+import { COMPANY_CLIENTS } from '@/shared/constants/company'
 
 const Testimonials = () => {
     const [, setHoveredId] = useState<number | null>(null)
@@ -18,7 +19,7 @@ const Testimonials = () => {
                         Отзывы наших клиентов
                     </h2>
                     <p className="text-xl text-gray-600">
-                        Более 270 довольных клиентов уже приобрели автомобили с
+                        Уже {COMPANY_CLIENTS}+ довольных клиентов приобрели автомобили с
                         нашей помощью
                     </p>
                 </div>

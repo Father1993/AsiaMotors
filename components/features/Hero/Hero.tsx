@@ -1,13 +1,15 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
+import { motion } from 'framer-motion'
 import Image from 'next/image'
 import ClientIcon from '@/components/ui/ClientIcon'
 import GarantiesIcons from '@/components/ui/GarantiesIcons'
 import OfficialIcon from '@/components/ui/OfficialIcon'
 import ConditionIcon from '@/components/ui/ConditionIcon'
 import { useModalStore } from '@/components/provider/ModalProvider'
+import AnimatedCounter from '@/components/ui/AnimatedCounter/AnimatedCounter'
+import { COMPANY_CLIENTS } from '@/shared/constants/company'
 
 const Hero: React.FC = () => {
     const [currentWord, setCurrentWord] = useState(0)
@@ -15,24 +17,13 @@ const Hero: React.FC = () => {
     const colors = ['text-green-500', 'text-blue-500', 'text-red-500']
     const openPopup = useModalStore((state) => state.openPopup)
 
-    const count = useMotionValue(0)
-    const rounded = useTransform(count, Math.round)
-
     useEffect(() => {
-        const animation = animate(count, 270, {
-            duration: 2,
-            ease: 'easeOut',
-        })
-
         const wordInterval = setInterval(() => {
             setCurrentWord((prev) => (prev + 1) % words.length)
         }, 2000)
 
-        return () => {
-            animation.stop()
-            clearInterval(wordInterval)
-        }
-    }, [count, words.length])
+        return () => clearInterval(wordInterval)
+    }, [words.length])
 
     return (
         <section className="relative min-h-screen pb-10 mt-8">
@@ -115,10 +106,7 @@ const Hero: React.FC = () => {
                                     </div>
                                     <div>
                                         <div className="text-3xl font-bold text-black-900">
-                                            <motion.span className="font-bold">
-                                                {rounded}
-                                            </motion.span>
-                                            +
+                                            <AnimatedCounter value={COMPANY_CLIENTS} duration={2} />
                                         </div>
                                         <div className="text-black-600 text-m font-bold lg:font-normal">
                                             Довольных клиентов

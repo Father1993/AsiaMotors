@@ -1,7 +1,6 @@
 'use client'
 
 import type { CompanyExperience } from '@/shared/constants/company'
-import { motion } from 'framer-motion'
 import TestimonialsBlock from './TestimonialsBlock'
 import Questions from './Questions'
 import Social from './Social'
@@ -19,12 +18,7 @@ import CompanyCard from '@/components/common/CompanyCard/CompanyCard'
 
 const AboutPage = ({ experience }: { experience: CompanyExperience }) => {
     return (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="bg-gradient-to-b from-white to-gray-50"
-        >
+        <div className="bg-gradient-to-b from-white to-gray-50">
             <div className="container mx-auto px-4 py-16">
                 <Breadcrumbs items={ABOUT_BREADCRUMBS} />
                 <HeroBlock />
@@ -40,7 +34,7 @@ const AboutPage = ({ experience }: { experience: CompanyExperience }) => {
             <FAQAbout />
             <Questions />
             <ContactsBlock />
-        </motion.div>
+        </div>
     )
 }
 

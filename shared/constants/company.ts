@@ -1,4 +1,4 @@
-export const COMPANY_CLIENTS = 700
+export const COMPANY_CLIENTS = 270
 export const COMPANY_START_YEAR = 2022
 
 export function companyExperience(now = new Date()) {

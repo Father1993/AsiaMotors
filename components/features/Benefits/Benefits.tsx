@@ -15,7 +15,7 @@ const Benefits = () => {
                         Почему выбирают AsiaMotors
                     </h2>
                     <p className="text-lg text-gray-600">
-                        Более {COMPANY_CLIENTS} довольных клиентов доверили нам покупку
+                        Уже {COMPANY_CLIENTS}+ довольных клиентов доверили нам покупку
                         автомобиля из Китая
                     </p>
                 </div>

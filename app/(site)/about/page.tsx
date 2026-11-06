@@ -1,4 +1,3 @@
-import { BRAND_ICONS } from '@/shared/constants/branding'
 import { companyExperience } from '@/shared/constants/company'
 
 export const dynamic = 'force-dynamic'
@@ -19,9 +18,10 @@ export const metadata: Metadata = {
         type: 'website',
         images: [
             {
-                url: BRAND_ICONS.icon192,
-                width: 1200,
-                height: 630,
+                url: '/img/about-delivery-map.webp',
+                width: 1672,
+                height: 941,
+                alt: 'Карта маршрутов доставки Asia Motors',
             },
         ],
     },
