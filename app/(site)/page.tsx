@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import Hero from '@/components/features/Hero/Hero'
 import Slider from '@/components/features/Slider/Slider'
+import { listPublishedCars } from '@/shared/lib/server/catalog'
 import SmartSearch from '@/components/features/SmartSearch/SmartSearch'
 import Categories from '@/components/features/Categories/Categories'
 import CTASection from '@/components/features/CTASection/CTASection'
@@ -19,13 +20,14 @@ export const metadata: Metadata = {
         'AsiaMotors — ваш надежный выбор для покупки новых и подержанных автомобилей из Китая. Мы предлагаем широкий ассортимент авто по доступным ценам, от популярных моделей до премиум-класса. Полное сопровождение сделки, выгодные условия и прямые поставки. Откройте для себя лучшие авто из Китая с AsiaMotors и получите качественный сервис на каждом этапе покупки. Узнайте больше!',
 }
 
-export default function Home() {
+export default async function Home() {
+    const cars = await listPublishedCars('popular')
     return (
         <>
             <Hero />
             <SmartSearch />
             <Categories />
-            <Slider />
+            {cars.length > 0 && <Slider cars={cars} />}
             <Benefits />
             <BuyingProcess />
             <TestimonialsBlock />

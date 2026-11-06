@@ -1,152 +1,69 @@
 'use client'
 
-import { useRef } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { motion } from 'framer-motion'
-import { useRouter } from 'next/navigation'
+import { A11y, Navigation } from 'swiper/modules'
+import Link from 'next/link'
 import Image from 'next/image'
-import { Navigation } from 'swiper/modules'
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
-import { CARS_DATA } from '@/shared/constants/cars'
+import { CarAvailability } from '@/components/common/CarAvailability'
+import type { Car } from '@/shared/types/adminTypes'
+import { formatPrice, generateCarSlug } from '@/shared/utils/catalog'
 import 'swiper/css'
 import 'swiper/css/navigation'
 
-const Slider = () => {
-    const swiperRef = useRef(null)
-    const router = useRouter()
-    const handleGoCatalog = () => {
-        router.push('/catalog')
-    }
-
+export default function Slider({ cars }: { cars: Car[] }) {
     return (
-        <section className="py-20 bg-gradient-to-b from-white to-gray-50">
+        <section className="py-20 bg-gradient-to-b from-white to-gray-50" aria-labelledby="popular-cars-heading">
             <div className="container">
                 <div className="text-center mb-12">
-                    <h2 className="text-4xl font-bold text-gray-900 mb-4">
+                    <h2 id="popular-cars-heading" className="text-4xl font-bold text-gray-900 mb-4">
                         Популярные модели
                     </h2>
-                    <p className="text-xl text-gray-600">
-                        Откройте для себя лучшие автомобили из Китая
-                    </p>
+                    <p className="text-xl text-gray-600">Откройте для себя лучшие автомобили из Китая</p>
                 </div>
-
-                <div className="relative">
-                    <Swiper
-                        ref={swiperRef}
-                        modules={[Navigation]}
-                        spaceBetween={30}
-                        slidesPerView={3}
-                        navigation={{
-                            prevEl: '.swiper-button-prev',
-                            nextEl: '.swiper-button-next',
-                        }}
-                        breakpoints={{
-                            320: {
-                                slidesPerView: 1,
-                                spaceBetween: 20,
-                            },
-                            768: {
-                                slidesPerView: 2,
-                                spaceBetween: 30,
-                            },
-                            1024: {
-                                slidesPerView: 3,
-                                spaceBetween: 30,
-                            },
-                        }}
-                    >
-                        {CARS_DATA.map((car) => (
-                            <SwiperSlide key={car.name}>
-                                <div
-                                    onClick={handleGoCatalog}
-                                    className="bg-white rounded-2xl shadow-lg overflow-hidden transition-transform duration-300 hover:scale-[1.02] cursor-pointer"
-                                >
-                                    <div className="relative h-64">
-                                        <Image
-                                            src={car.image}
-                                            alt={car.name}
-                                            fill
-                                            className="object-cover"
-                                            sizes="(max-width: 768px) 100vw, 50vw"
-                                            quality={75}
-                                            loading="lazy"
-                                        />
-                                    </div>
-                                    {car.bestseller && (
-                                        <div className="absolute top-4 right-4 z-10">
-                                            <motion.span
-                                                initial={{
-                                                    opacity: 0,
-                                                    scale: 0.8,
-                                                }}
-                                                animate={{
-                                                    opacity: 1,
-                                                    scale: 1,
-                                                }}
-                                                transition={{
-                                                    duration: 0.3,
-                                                    ease: 'easeOut',
-                                                }}
-                                                className="bg-gradient-to-r from-green-500 to-emerald-500 text-xs font-bold text-white px-2 py-1 rounded-full shadow-lg shadow-green-600/30 animate-pulse inline-block"
-                                            >
-                                                Выгодно!
-                                            </motion.span>
-                                        </div>
-                                    )}
-                                    <div className="p-6">
-                                        <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                                            {car.name}
-                                        </h3>
-                                        <div className="flex justify-between items-center mb-4">
-                                            <span className="text-xl font-semibold text-red-600">
-                                                {car.price}
-                                            </span>
-                                            <span className="text-sm text-gray-500">
-                                                цена под ключ в РФ
-                                            </span>
-                                        </div>
-                                        <div className="grid grid-cols-3 gap-4 pt-4 border-t">
-                                            <div className="text-center">
-                                                <span className="block text-sm text-gray-500">
-                                                    Год
-                                                </span>
-                                                <span className="font-medium">
-                                                    {car.specs.year}
-                                                </span>
-                                            </div>
-                                            <div className="text-center">
-                                                <span className="block text-sm text-gray-500">
-                                                    Двигатель
-                                                </span>
-                                                <span className="font-medium">
-                                                    {car.specs.engine}
-                                                </span>
-                                            </div>
-                                            <div className="text-center">
-                                                <span className="block text-sm text-gray-500">
-                                                    Мощность
-                                                </span>
-                                                <span className="font-medium">
-                                                    {car.specs.power}
-                                                </span>
-                                            </div>
-                                        </div>
+                <Swiper
+                    modules={[Navigation, A11y]}
+                    navigation
+                    a11y={{ prevSlideMessage: 'Предыдущий автомобиль', nextSlideMessage: 'Следующий автомобиль' }}
+                    spaceBetween={20}
+                    slidesPerView={1}
+                    breakpoints={{
+                        768: { slidesPerView: 2, spaceBetween: 24 },
+                        1024: { slidesPerView: 3, spaceBetween: 24 },
+                    }}
+                    className="!pb-4"
+                >
+                    {cars.map((car) => (
+                        <SwiperSlide key={car.id}>
+                            <Link
+                                href={`/catalog/${generateCarSlug(car)}`}
+                                prefetch={false}
+                                className="block rounded-2xl shadow-md overflow-hidden bg-white focus-visible:outline focus-visible:-outline-offset-2 focus-visible:outline-red-600"
+                            >
+                                <div className="relative aspect-[16/9]">
+                                    <Image
+                                        src={car.images[0]}
+                                        alt={`${car.brand} ${car.model}`}
+                                        fill
+                                        className="object-cover"
+                                        sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                                    />
+                                    <div className="absolute top-3 left-3">
+                                        <CarAvailability value={car.availability} />
                                     </div>
                                 </div>
-                            </SwiperSlide>
-                        ))}
-                    </Swiper>
-
-                    <button className="swiper-button-prev absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10  backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center transition-all z-10">
-                        <ChevronLeftIcon className="w-5 h-5" />
-                    </button>
-                    <button className="swiper-button-next absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10  backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center  transition-all z-10">
-                        <ChevronRightIcon className="w-5 h-5" />
-                    </button>
-                </div>
+                                <div className="p-5">
+                                    <h3 className="text-xl font-bold text-gray-900">{car.brand} {car.model}</h3>
+                                    <p className="text-sm text-gray-600 mt-2">
+                                        {car.year} г. · {car.specs.fuelType} · {car.specs.horsePower} л.с.
+                                    </p>
+                                    <p className="text-xl font-semibold text-red-600 mt-3">{formatPrice(car.price)}</p>
+                                    <p className="text-sm text-gray-600">Цена под ключ в РФ</p>
+                                </div>
+                            </Link>
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
             </div>
         </section>
     )
 }
-
-export default Slider

@@ -4,10 +4,16 @@ import { publicCarInput, carAvailabilitySchema } from '../car-schema'
 import type { AdminCarRecord } from '@/shared/types/database.types'
 import type { Car, Country } from '@/shared/types/adminTypes'
 import { z } from 'zod'
+import { POPULAR_CARS_LIMIT } from '@/shared/constants/popular-cars'
 
-export async function listPublishedCars(): Promise<Car[]> {
+export async function listPublishedCars(scope: 'catalog' | 'popular' = 'catalog'): Promise<Car[]> {
+    const selection = scope === 'popular'
+        ? `AND (featured_position IS NOT NULL OR NOT EXISTS (
+            SELECT 1 FROM cars WHERE status = 'published' AND featured_position IS NOT NULL
+        )) ORDER BY featured_position NULLS LAST, created_at DESC, id LIMIT ${POPULAR_CARS_LIMIT}`
+        : 'ORDER BY created_at DESC, id'
     const { rows } = await database().query(`SELECT id,country_id,brand,model,year,category,price,equipment,
-        images,specs,available,availability,created_at,updated_at FROM cars WHERE status='published' ORDER BY created_at DESC, id`)
+        images,specs,available,availability,created_at,updated_at FROM cars WHERE status='published' ${selection}`)
     return rows.map(row => ({ ...publicCarInput.parse(row), id: row.id,
         created_at: row.created_at.toISOString(), updated_at: row.updated_at.toISOString() }))
 }

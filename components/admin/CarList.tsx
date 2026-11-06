@@ -224,12 +224,17 @@ export function CarList({ countries }: { countries: CountryRecord[] }) {
                     <h1>Автомобили</h1>
                     <p className="admin-muted">Каталог, фотографии и публикация на сайте</p>
                 </div>
-                <Link
-                    className="admin-button admin-button-primary"
-                    href={'/admin/cars/new' + returnQuery}
-                >
-                    + Добавить автомобиль
-                </Link>
+                <div className="flex flex-wrap gap-2">
+                    <Link className="admin-button" href="/admin/cars/popular">
+                        Популярные модели
+                    </Link>
+                    <Link
+                        className="admin-button admin-button-primary"
+                        href={'/admin/cars/new' + returnQuery}
+                    >
+                        + Добавить автомобиль
+                    </Link>
+                </div>
             </div>
             <section className="admin-panel car-list-filters" aria-label="Поиск и фильтры">
                 <form
